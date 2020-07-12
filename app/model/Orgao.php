@@ -1,5 +1,5 @@
 <?php
-class OrgaoPagador extends Modelo{        
+class Orgao extends Modelo{        
     const TABELA = 'orgao_pagador';
     
     public function __construct($id = null) {                
