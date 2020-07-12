@@ -1,0 +1,17 @@
+.efeito_hover{
+     border: solid #ccc 2px;
+     font-weight: bold;
+     background-color: #EEE;
+}
+
+.tela_exclusao{
+    display: none;
+    width: 300px;
+    height: 300px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: #FFF;
+    z-index: 10px;
+    border-radius: 10px;
+}
