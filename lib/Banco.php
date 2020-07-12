@@ -7,7 +7,7 @@ class Banco {
     private $driver = "mysql";
     private $host = "localhost";
     private $db = "orcamentos";
-    private $user = "fernando";
+    private $user = "orcames";
     private $pass = "SENHA_REMOVIDA";
 
     /*
