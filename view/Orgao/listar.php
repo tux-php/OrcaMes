@@ -12,12 +12,12 @@
                 <th>Descrição</th>                
             </tr>            
             <?php            
-            if($dados['orgaoPagador']){
-                foreach($dados['orgaoPagador'] as $orgao){ ?>
+            if($dados['Orgao']){
+                foreach($dados['Orgao'] as $orgao){ ?>
                     <tr>
                         <td><?php echo $orgao['id_orgao_pagador'];?></td>
                         <td>
-                            <a href="?action=orgaoPagador&id=<?php echo $orgao['id_orgao_pagador'];?>">
+                            <a href="?action=Orgao&id=<?php echo $orgao['id_orgao_pagador'];?>">
                             <?php echo $orgao['descricao'];?>
                             </a>
                         </td>

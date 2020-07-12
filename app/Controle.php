@@ -2,7 +2,7 @@
 
 class Controle extends Acao {
     private $classeNow;
-    private $orgaoPagador;
+    private $Orgao;
     private $usuario;
     private $tipoPagamento;
     private $tipoSaldo;
@@ -29,7 +29,7 @@ class Controle extends Acao {
     }
 
     private function loadClasses() {
-        $this->orgaoPagador = new OrgaoPagador();
+        $this->Orgao = new Orgao();
         $this->usuario = new Usuario();
         $this->tipoPagamento = new TipoPagamento();
         $this->classeNow = new CreatorConcrete();
@@ -143,9 +143,9 @@ class Controle extends Acao {
     protected function listaOrgaoPagador() {
         $this->iniciaSessao();
         if (isset($_SESSION['usuario'])) {
-            $orgao_pagador = $this->orgaoPagador;
-            $dados['orgaoPagador'] = $orgao_pagador->listar();
-            $this->view->load('orgaoPagador/listar', $dados);
+            $orgao_pagador = $this->Orgao;
+            $dados['Orgao'] = $orgao_pagador->listar();
+            $this->view->load('Orgao/listar', $dados);
         } else {
             $this->mataSessao();
         }
@@ -350,12 +350,12 @@ class Controle extends Acao {
         if ($_SESSION['usuario']) {
             try {
                 if (isset($_POST['descricao']) && !empty($_POST['descricao'])) {
-                    $this->orgaoPagador->inserir($_POST);
-                    $dados['orgaoPagador'] = $this->orgaoPagador->listar();
-                    $this->view->load("orgaoPagador/listar", $dados);
+                    $this->Orgao->inserir($_POST);
+                    $dados['Orgao'] = $this->Orgao->listar();
+                    $this->view->load("Orgao/listar", $dados);
                     die();
                 }
-                $this->view->load('orgaoPagador/inserir');
+                $this->view->load('Orgao/inserir');
             } catch (Exception $ex) {
                 echo $ex->getMessage();
             }
@@ -369,14 +369,14 @@ class Controle extends Acao {
         if ($_SESSION['usuario']) {
             if ($_POST) {
 
-                $this->orgaoPagador->alterar($id, 'id_orgao_pagador', $_POST);
+                $this->Orgao->alterar($id, 'id_orgao_pagador', $_POST);
                 $this->home();
             }
 
-            $dados = $this->orgaoPagador->buscar('id_orgao_pagador', $id);
+            $dados = $this->Orgao->buscar('id_orgao_pagador', $id);
 
 
-            $this->view->load('orgaoPagador/alterar', $dados);
+            $this->view->load('Orgao/alterar', $dados);
         } else {
             $this->mataSessao();
         }
@@ -389,9 +389,9 @@ class Controle extends Acao {
         if ($_SESSION['usuario']) {
             try {
                 if (isset($id)) {
-                    $this->orgaoPagador->excluir('id_orgao_pagador', $id);
-                    $dados['orgaoPagador'] = $this->orgaoPagador->listar();
-                    $this->view->load("orgaoPagador/listar", $dados);
+                    $this->Orgao->excluir('id_orgao_pagador', $id);
+                    $dados['Orgao'] = $this->Orgao->listar();
+                    $this->view->load("Orgao/listar", $dados);
                 }
             } catch (Exception $ex) {
                 echo $ex->getMessage();
@@ -588,14 +588,14 @@ class Controle extends Acao {
                 $dados['salarioMes'] = $this->salarioMensal->listar();
 
                 for ($i = 0; $i < count($dados['salarioMes']); $i++) {
-                    $orgao = $this->orgaoPagador->buscarOP($dados['salarioMes'][$i]['id_orgao_pagador']);
+                    $orgao = $this->Orgao->buscarOP($dados['salarioMes'][$i]['id_orgao_pagador']);
 
                     $dados['salarioMes'][$i]['orgao'] = $orgao["descricao"];
                 }
 
                 $this->view->load('salarioMes/listar', $dados);
             }
-            $dados = $this->orgaoPagador->listar();
+            $dados = $this->Orgao->listar();
             $this->view->load("salarioMes/inserir", $dados);
         } else {
             $this->mataSessao();
@@ -623,13 +623,13 @@ class Controle extends Acao {
                 $dados['user'] = $this->usuario->listar();
 
                 for ($i = 0; $i < count($dados['user']); $i++) {
-                    $fp = $this->orgaoPagador->buscar('id_orgao_pagador', $dados['user'][$i]['id_orgao_pagador']);
+                    $fp = $this->Orgao->buscar('id_orgao_pagador', $dados['user'][$i]['id_orgao_pagador']);
                     $dados['user'][$i]['id_orgao_pagador'] = $fp['descricao'];
                 }
 
                 $this->view->load('usuario/lista_usuario', $dados);
             }
-            $dados['OrgaoPagador'] = $this->orgaoPagador->listar();
+            $dados['OrgaoPagador'] = $this->Orgao->listar();
             $dados['StatusUsuario'] = $this->statusUsuario->listar();
             $this->view->load('usuario/inserir_usuario', $dados);
         } else {
@@ -699,7 +699,7 @@ class Controle extends Acao {
             $dados['user'] = $this->usuario->listar();
 
             for ($i = 0; $i < count($dados['user']); $i++) {
-                $op = $this->orgaoPagador->buscar('id_orgao_pagador', $dados['user'][$i]['id_orgao_pagador']);
+                $op = $this->Orgao->buscar('id_orgao_pagador', $dados['user'][$i]['id_orgao_pagador']);
 
                 $dados['user'][$i]['id_orgao_pagador'] = $op["descricao"];
             }
@@ -751,7 +751,7 @@ class Controle extends Acao {
             }
             $dados['user'] = $this->usuario->buscar('id_usuario', $id);
             $dados['op'] = $dados['user']['id_orgao_pagador'];
-            $dados['OrgaoPagador'] = $this->orgaoPagador->listar();
+            $dados['OrgaoPagador'] = $this->Orgao->listar();
             $dados['StatusUsuario'] = $this->statusUsuario->listar();
 
             $this->view->load('usuario/editar_usuario', $dados);
