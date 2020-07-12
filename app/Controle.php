@@ -68,7 +68,7 @@ class Controle extends Acao {
                 $_SESSION['usuario'] = (int) $usuario;
                 $this->home();
             } else {
-                throw new Exception("Usuário ou Senha estão incorretos XXXX");
+                throw new Exception("Usuário ou Senha estão incorretos.");
             }
         } catch (Exception $exc) {
             echo $exc->getMessage();
