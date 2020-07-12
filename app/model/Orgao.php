@@ -4,7 +4,11 @@ class Orgao extends Modelo{
     
     public function __construct($id = null) {                
         $this->id = $id;
-        $this->banco = Banco::Instanciar();
+        parent::__construct();
+    }
+    
+     public function getOrgaoPagador($id) {
+        return $this->banco->pesquisar('orgao_pagador', "id_orgao_pagador=$id");
     }
     
 }

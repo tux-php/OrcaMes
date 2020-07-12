@@ -9,6 +9,8 @@ class Banco {
     private $db = "orcamentos";
     private $user = "orcames";
     private $pass = "c0ns0letux";
+//    private $user = "fernando";
+//    private $pass = "123456";
 
     /*
      * Padrão singleton

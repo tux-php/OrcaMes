@@ -5,7 +5,7 @@ class StatusUsuario extends Modelo{
     
     public function __construct($id = null) {        
         $this->id = $id;
-        $this->banco = Banco::Instanciar();
+       parent::__construct();
     }
     
 }

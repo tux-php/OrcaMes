@@ -3,7 +3,7 @@ class UsuarioTipoPagamento extends Modelo{
     const TABELA = 'usuario_tipo_pagamento';
     
     public function __construct() {
-        $this->banco = Banco::Instanciar();
+        parent::__construct();
     }
     
     public function inserirUTP($user,$tp){        

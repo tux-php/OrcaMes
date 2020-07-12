@@ -3,7 +3,7 @@ class PagamentoIR extends Modelo{
     const TABELA = 'imposto_renda';
     
     public function __construct() {
-        $this->banco = Banco::Instanciar();
+        parent::__construct();
     }
     
     public function inserirPagamentoIR($id_usuario,$id_tipo_despesa,$descricao,$valor,$img,$data_proc){        

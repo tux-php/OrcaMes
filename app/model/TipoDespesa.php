@@ -3,7 +3,7 @@ class TipoDespesa extends Modelo{
     const TABELA = 'tipo_despesa';
     
     public function __construct() {
-        $this->banco = Banco::Instanciar();
+        parent::__construct();
     }
     
     final public function inserirTD($id_user,$ch,$desc){

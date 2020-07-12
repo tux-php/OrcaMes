@@ -4,7 +4,7 @@ class SalarioMensal extends Modelo {
     const TB_REF_ORGAO_PAGADOR = "orgao_pagador";
     
     public function __construct() {
-        $this->banco = Banco::Instanciar();
+        parent::__construct();
     }
     
 }

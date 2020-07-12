@@ -3,7 +3,7 @@ class PagamentoExtra extends Modelo{
     const TABELA = 'pagamento_extra';
     
     public function __construct() {
-        $this->banco = Banco::Instanciar();
+        parent::__construct();
     }
     
     public function inserirPagExtra($id_user,$mes_ref,$valor){

@@ -5,7 +5,7 @@ class MesReferencia extends Modelo {
     const TABELA = 'mes_referencia';
 
     public function __construct() {
-        $this->banco = Banco::Instanciar();
+        parent::__construct();
     }
 
     public function listarMes() {

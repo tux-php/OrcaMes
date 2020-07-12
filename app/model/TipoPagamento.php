@@ -5,7 +5,7 @@ class TipoPagamento extends Modelo {
     const TABELA = 'tipo_pagamento';
 
     public function __construct() {
-        $this->banco = Banco::Instanciar();
+        parent::__construct();
     }
     
     final public function listarTP($id_usuario) {        

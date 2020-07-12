@@ -6,7 +6,7 @@ class Pagamento extends Modelo {
 
     public function __construct($id = NULL) {
         $this->id = $id;
-        $this->banco = Banco::Instanciar();
+        parent::__construct();
     }
 
     final public function listarPagamentoMes($id_mes, $id_usuario) {
