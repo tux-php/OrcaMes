@@ -7,8 +7,8 @@ class Banco {
     private $driver = "mysql";
     private $host = "localhost";
     private $db = "orcamentos";
-    private $user = "fernando";
-    private $pass = "123456";
+    private $user = "orcames";
+    private $pass = "c0ns0letux";
 
     /*
      * Padrão singleton
