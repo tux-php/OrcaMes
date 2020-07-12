@@ -8,21 +8,6 @@ abstract class Modelo {
         $this->banco = Banco::Instanciar();
     }
 
-    public function getOrgaoPagador($id) {
-        return $this->banco->pesquisar('orgao_pagador', "id_orgao_pagador=$id");
-    }
-
-    public function getPagamento($id) {
-        return $this->banco->pesquisar('pagamentos', "id_pagamento = $id");
-    }
-
-    public function getContent() {
-        $conteudo['orgaoPagador'] = $this->banco->listar('orgao_pagador');
-        $conteudo['usuario'] = $this->banco->listar('usuario');
-
-        return $conteudo;
-    }
-
     final public function listar() {
         return $this->banco->listar(static::TABELA);
     }
@@ -35,37 +20,47 @@ abstract class Modelo {
         $this->banco->alterar(static::TABELA, $id_tabela, $id, $dados);
     }
 
-    final public function buscar($identificador_id, $id) {        
+    final public function buscar($identificador_id, $id) {
         return $this->banco->buscar(static::TABELA, $identificador_id, $id);
     }
 
-    final public function buscarPagamento($id_usuario, $id_mes_referencia) {
-        return $this->banco->buscarPagamento(static::TABELA, $id_usuario, $id_mes_referencia);
-    }
-
-    final public function excluir($campo, $id) { 
-        //var_dump($campo);die();
+    final public function excluir($campo, $id) {
         return $this->banco->excluir(static::TABELA, $campo, $id);
     }
+
+    /*
+     * @pegaValorItem contempla Mês de Referencia
+     * avaliar sua classe de origem
+     */
 
     public function pegaValorItem($mes_referencia, $id_usuario, $id_status_pagamento) {
         $lista_valor = $this->banco->listarValorItem(static::TABELA, $mes_referencia, $id_usuario, $id_status_pagamento);
         return $lista_valor;
     }
-
+    /*
+     * @pegaValorSubtotal contempla Mês de Referencia
+     * avaliar sua classe de origem
+     */
     public function pegaValorSubtotal($mes_referencia, $id_usuario) {
         $lista_valor = $this->banco->listarValorSubtotal(static::TABELA, $mes_referencia, $id_usuario);
         return $lista_valor;
     }
-
+    /*
+     * @SomarSubtotal contempla Mês de Referencia
+     * avaliar sua classe de origem
+     */
     public function SomarSubtotal($mes, $usuario) {
-        $subtotal = 0;  
+        $subtotal = 0;
         foreach ($this->pegaValorSubtotal($mes, $usuario) as $chave => $valor) {
             $subtotal += $valor["valor_pagamento"];
         }
         return $subtotal;
     }
-
+    
+    /*
+     * @SomarTotal contempla Mês de Referencia
+     * avaliar sua classe de origem
+     */
     public function SomarTotal($mes, $usuario, $id_status_pagamento) {
         $total = 0;
         foreach ($this->pegaValorItem($mes, $usuario, $id_status_pagamento) as $chave => $valor) {
@@ -74,29 +69,10 @@ abstract class Modelo {
         return $total;
     }
 
-    public function pegaSalario($id) {
-        return $this->banco->pegaSalarioPorUser(static::TABELA, $id);
-    }
-
-    public function pegaMesAnterior($id_mes_ref) {
-        return $this->banco->pegaMesAnterior(static::TABELA, $id_mes_ref);
-    }
-
-    public function pegaStatusPago($ch) {   
-        
-        return $this->banco->pegaStatusPago('status_pagamento', $ch);
-    }
-
     public function pegaStatus($chave) {
         return $this->banco->pegaStatus('status_pagamento', $chave);
     }
-
-   
-
-    public function pegaValorUnidade($id) {
-        return $this->banco->pegaValorUnidade(static::TABELA, $id);
-    }
-
+    
     public function clonarPag(array $dados) {
         try {
             $dados['data_lancamento'] = date('Y-m-d');
@@ -124,13 +100,6 @@ abstract class Modelo {
         return $this->banco->pegaLogado('autenticacao_user', $email, $senha);
     }
 
-    final function pegaSeguranca($sessao) {
-        if ($sessao == null) {
-            return session_destroy();
-        } else {
-            return $sessao;
-        }
-    }
     public function gerarRelatorio() {
         return $this->banco->gerarRelatorio();
     }

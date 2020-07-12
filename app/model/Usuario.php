@@ -5,7 +5,7 @@ class Usuario extends Modelo {
     const TABELA = 'usuario';
 
     public function __construct() {
-        $this->banco = Banco::Instanciar();
+        parent::__construct();
     }
 
     final public function inserirUsuario($dados) {
@@ -38,7 +38,7 @@ class Usuario extends Modelo {
         return $this->banco->pegaUltimoUsuarioInserido();
     }
 
-    public function pegaSalario($id) {
+    public function pegaSalario($id) {        
         return $this->banco->pegaSalarioPorUser(static::TABELA, $id);
     }
 
