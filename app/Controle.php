@@ -1,6 +1,7 @@
 <?php
 
 class Controle extends Acao {
+
     private $classeNow;
     private $Orgao;
     private $usuario;
@@ -79,7 +80,7 @@ class Controle extends Acao {
     protected function home() {
         $this->iniciaSessao();
         if (isset($_SESSION['usuario'])) {
-            $id_usuario = (int) $_SESSION['usuario'];            
+            $id_usuario = (int) $_SESSION['usuario'];
             $listaTP = $this->tipoPagamento;
             $dados['tipo_pagamento'] = $listaTP->listarTP($id_usuario);
             $this->view->load('home', $dados);
@@ -156,7 +157,7 @@ class Controle extends Acao {
         return $classeAg;
     }
 
-    protected function listarPagamentoMes($dados = Array()) {        
+    protected function listarPagamentoMes($dados = Array()) {
         $this->iniciaSessao();
         if (isset($_SESSION['usuario'])) {
             $dados['meses'] = $this->mesReferencia->listarMes();
@@ -166,7 +167,7 @@ class Controle extends Acao {
         }
     }
 
-    protected function pegaListaPagamantoMes($mes_referencia, $usuario) {  
+    protected function pegaListaPagamantoMes($mes_referencia, $usuario) {
         $this->iniciaSessao();
         if (isset($_SESSION['usuario'])) {
             $dados['pagamentos'] = $this->pagamento->listarPagamentoMes($mes_referencia, $usuario);
@@ -191,9 +192,9 @@ class Controle extends Acao {
         }
     }
 
-    protected function pegaMesRefNow() {        
+    protected function pegaMesRefNow() {
         $this->iniciaSessao();
-        $mes_referencia = (int) $this->mesReferencia->pegaMesRef();        
+        $mes_referencia = (int) $this->mesReferencia->pegaMesRef();
         if ($mes_referencia != 0) {
             $this->pagamento->buscar('id_mes_referencia', $mes_referencia);
         } else {
@@ -202,12 +203,12 @@ class Controle extends Acao {
         return $mes_referencia;
     }
 
-    protected function listarPagamento() {           
+    protected function listarPagamento() {
         $this->iniciaSessao();
         if (isset($_SESSION['usuario'])) {
             $usuario = (int) $_SESSION['usuario'];
-            $mes_referencia = $this->pegaMesRefNow();            
-            $_SESSION['id_mes_ref'] = $mes_referencia;            
+            $mes_referencia = $this->pegaMesRefNow();
+            $_SESSION['id_mes_ref'] = $mes_referencia;
             $dados = $this->pegaListaPagamantoMes($mes_referencia, $usuario);
             $id_usuario = $this->usuario->pegaIdLogado();
             $status_pg = $this->pagamento->pegaStatus('PG');
@@ -227,14 +228,14 @@ class Controle extends Acao {
         }
     }
 
-    protected function processarPagamento($id) {        
+    protected function processarPagamento($id) {
         $this->iniciaSessao();
         if (isset($_SESSION['usuario'])) {
-            
+
             $id_usuario = $_SESSION['usuario'];
-            if ($id) {                
+            if ($id) {
                 $this->usuario->pegaSalario($id_usuario);
-                $this->pagamento->processarPag($id);                
+                $this->pagamento->processarPag($id);
                 $this->listarPagamento();
             }
         } else {
@@ -269,32 +270,43 @@ class Controle extends Acao {
         }
     }
 
+    protected function validarMesEmClonagem() {
+        $mes_ref = $_REQUEST['id_mes_referencia'];
+        $processo = $this->pagamento->validandoMesReferenciaVazio($mes_ref);        
+        if ($processo) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     /*
      * Clonar Pagamentos do Mês Anterior
      */
 
     protected function clonarPagamentoMes() {
-        
         $this->iniciaSessao();
         if ($_SESSION['usuario']) {
-            try {
+            try {                
                 $msg = "";
-                $mes_ant = (int) $this->pegaMesAnterior();                
-                $id_usuario = $_SESSION['usuario'];
-                $dados['id_mes_clone'] = $mes_ant;
-                $dados['id_usuario'] = $id_usuario;
-                $dados['id_mes_referencia'] = (int) $_REQUEST['id_mes_referencia'];        
-                $processo = $this->pagamento->clonarPag($dados);
-                if ($processo == true) {
-                    $msg = "clonagem efetuada com sucesso";
-                } else {
-                    throw new Exception("Clonagem não efetuada!");
+                $MesClonadoVazio = $this->validarMesEmClonagem();                
+                if ($MesClonadoVazio == true) {
+                    $mes_ant = (int) $this->pegaMesAnterior();
+                    $id_usuario = $_SESSION['usuario'];
+                    $dados['id_mes_clone'] = $mes_ant;
+                    $dados['id_usuario'] = $id_usuario;
+                    $dados['id_mes_referencia'] = (int) $_REQUEST['id_mes_referencia'];
+                    $processo = $this->pagamento->clonarPag($dados);
+                    if ($processo == true) {
+                        $msg = "clonagem efetuada com sucesso";
+                    } 
+                }else{
+                    throw new Exception("Mês já encontra-se clonado.");
                 }
             } catch (Exception $exc) {
                 echo $exc->getMessage();
             }
             echo $msg;
-
             $this->listarPagamentoMes();
         } else {
             $this->mataSessao();
@@ -858,10 +870,9 @@ class Controle extends Acao {
     }
 
     final private function iniciaSessao() {
-        if(!isset($_SESSION)){
+        if (!isset($_SESSION)) {
             session_start();
         }
-        
     }
 
     final private function mataSessao() {

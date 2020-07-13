@@ -9,8 +9,8 @@ class Banco {
     private $db = "orcamentos";
     private $user = "orcames";
     private $pass = "c0ns0letux";
-//    private $user = "fernando";
-//    private $pass = "123456";
+    //private $user = "fernando";
+    //private $pass = "123456";
 
     /*
      * Padrão singleton
@@ -49,16 +49,22 @@ class Banco {
         return $rs->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function listarTP($tabela,$id_usuario) {
-        $lista = "SELECT distinct a.* FROM $tabela a, usuario_tipo_pagamento b
-        WHERE(a.d_e_l_e_t_e is null)
-        AND a.id_tipo_pagamento = b.id_tipo_pagamento AND b.id_usuario = $id_usuario order by a.descricao";
-     
+    /*
+     * TABELA E ID_USUARIO
+     */
+
+    public function listarTP($tabela, $id_usuario) {        
+        $lista = "SELECT distinct *  FROM $tabela as a
+                    INNER JOIN usuario_tipo_pagamento as b
+                    WHERE(a.d_e_l_e_t_e is null)
+                    and a.id_tipo_pagamento = b.id_tipo_pagamento
+                    AND b.id_usuario = $id_usuario 
+                    order by a.descricao";
         $rs = $this->conexao->query($lista);
         return $rs->fetchAll(PDO::FETCH_ASSOC);
     }
-    
-    public function listarPorUsuario($tabela,$id_usuario){
+
+    public function listarPorUsuario($tabela, $id_usuario) {
         $sql = "SELECT * FROM $tabela WHERE id_usuario = $id_usuario and d_e_l_e_t_e is null";
         $rs = $this->conexao->query($sql);
         return $rs->fetchAll(PDO::FETCH_ASSOC);
@@ -86,6 +92,7 @@ class Banco {
             $lista .= " and id_usuario = $id_usuario ";
         }
         $lista .= " AND d_e_l_e_t_e IS NULL";
+        //var_dump($lista);die();
         $rs = $this->conexao->query($lista);
         return $rs->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -101,18 +108,7 @@ class Banco {
         $rs = $this->conexao->query("select  valor_pagamento from $tabela where id_usuario = $id_usuario and id_status_pagamento = $id_status_pagamento and id_mes_referencia = $mes_referencia and d_e_l_e_t_e is null");
         return $rs->fetchAll(PDO::FETCH_ASSOC);
     }
-
-    public function pesquisar($tabela, $condicao) {
-        $rs = $this->conexao->query("SELECT * FROM $tabela WHERE $condicao");
-        if (!$rs) {
-            throw new Exception(uft8_decode("Houve erro ao executar pesquisa: ") . mysql_error());
-        }
-        return mysql_fetch_assoc($rs);
-    }
-
     public function query($query) {
-        //var_dump($query);die();
-//var_dump($this->conexao->exec($query));die();
         $result = $this->conexao->exec($query);
         if (!$result) {
             throw new Exception(utf8_decode("Houve um erro ao excluir arquivo: ") . mysql_error());
@@ -258,8 +254,8 @@ class Banco {
         $this->query(("UPDATE $tabela SET d_e_l_e_t_e = 'S' WHERE id_usuario = '$id_user'"));
     }
 
-    public function buscar($tabela, $identificador_id, $id) {  
-        
+    public function buscar($tabela, $identificador_id, $id) {
+
         $results = $this->conexao->query("SELECT * FROM $tabela WHERE $identificador_id = '$id'");
         //var_dump($results);die();
 
@@ -316,7 +312,7 @@ class Banco {
             return 'Falha ao processar pagamento!';
         }
     }
-    
+
     /**
      * 
      * @param type $tabela
@@ -353,6 +349,18 @@ class Banco {
         return false;
     }
 
+    public function validarMesRefVazio($tabela, $mes_ref) {        
+            $sql = $this->conexao->prepare("select * from $tabela where id_mes_referencia = $mes_ref AND d_e_l_e_t_e is NULL");            
+            $sql->execute();
+            $count = $sql->rowcount();
+            
+            if ($count == 0) {
+                return true;
+            }else{
+                return false;
+            }
+    }
+
     public function pegaMesAnterior($tabela, $id_mes_referencia) {
         try {
             $sql = $this->conexao->prepare("select id_mes_referencia FROM $tabela 
@@ -387,8 +395,8 @@ class Banco {
             d.d_e_l_e_t_e is null)
              and a.id_tipo_pagamento = b.id_tipo_pagamento
              and a.id_mes_referencia = c.id_mes_referencia and a.id_usuario = d.id_usuario 
-             and a.id_mes_referencia = $dados[id_mes_clone] and a.id_usuario = $dados[id_usuario]");
-
+             and a.id_mes_referencia = '{$dados['id_mes_clone']}'"
+                    . " and a.id_usuario = '{$dados['id_usuario']}'");
             $sql->execute();
             $num = $sql->rowcount();
             if ($num > 0) {
@@ -403,18 +411,22 @@ class Banco {
     }
 
     private function processarClonagem($tabela, $dados) {
-        $sql = $this->conexao->prepare("update $tabela set "
-                . "data_lancamento = '$dados[data_lancamento]', 
-            id_status_pagamento = $dados[id_status_pagamento], "
-                . "id_mes_referencia = $dados[id_mes_referencia],
-                ch_clone = '$dados[ch_clone]'
-            where data_lancamento = '0000-00-00' and id_usuario = $dados[id_usuario] "
-                . "and d_e_l_e_t_e is null;");
-        $rs = $sql->execute();
-        if ($rs) {
-            return true;
+        try {
+            $sql = $this->conexao->prepare("update $tabela set "
+                    . "data_lancamento = '{$dados['data_lancamento']}', 
+            id_status_pagamento = '{$dados['id_status_pagamento']}', "
+                    . "id_mes_referencia = '{$dados['id_mes_referencia']}',
+                ch_clone = '{$dados['ch_clone']}'
+            where data_lancamento = '0000-00-00' and id_usuario = '{$dados['id_usuario']}' "
+                    . "and d_e_l_e_t_e is null;");
+            $rs = $sql->execute();
+            if ($rs) {
+                return true;
+            }
+            return false;
+        } catch (Exception $exc) {
+            echo "Houve problemas no processo de clonage." . $exc->getMessage();
         }
-        return false;
     }
 
     public function gerarRelatorio() {
