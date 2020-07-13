@@ -73,6 +73,8 @@ abstract class Modelo {
         return $this->banco->pegaStatus('status_pagamento', $chave);
     }
     
+   
+    
     public function clonarPag(array $dados) {
         try {
             $dados['data_lancamento'] = date('Y-m-d');
@@ -81,7 +83,7 @@ abstract class Modelo {
             $dados['ch_clone'] = 'S';
             $clonar = $this->banco->clonarPagamento('pagamentos', $dados);
             if ($clonar == false) {
-                throw new Exception('Falha na clonagem dos dados');
+                throw new Exception('Não foi possível processar a operação!');
             } else {
                 return true;
             }
