@@ -9,18 +9,19 @@ class Usuario extends Modelo {
     }
 
     final public function inserirUsuario($dados) {
+        //var_dump($dados);die();
         try {
-            $usuario[nome] = $dados['nome'];
-            $usuario[sobrenome] = $dados['sobrenome'];
-            $usuario[salario] = $dados['salario'];
-            $usuario[id_orgao_pagador] = $dados['id_orgao_pagador'];
-            $usuario[id_status_usuario] = $dados['id_status_usuario'];
+            $usuario['nome'] = $dados['nome'];
+            $usuario['sobrenome'] = $dados['sobrenome'];
+            $usuario['salario'] = $dados['salario'];
+            $usuario['id_orgao_pagador'] = $dados['id_orgao_pagador'];
+            $usuario['id_status_usuario'] = $dados['id_status_usuario'];
 
             $salvar_usuario = $this->banco->inserir(static::TABELA, $usuario);
             if ($salvar_usuario == true) {
-                $dados_aut[email] = $dados['email'];
-                $dados_aut[senha] = $dados['senha'];
-                $dados_aut[id_usuario] = $this->pegaUltimoUsuarioInserido();
+                $dados_aut['email'] = $dados['email'];
+                $dados_aut['senha'] = $dados['senha'];
+                $dados_aut['id_usuario'] = $this->pegaUltimoUsuarioInserido();
                 $salvar_aut = $this->banco->inserir('autenticacao_user', $dados_aut);
                 //var_dump($salvar_aut);die();
                 if (!$salvar_aut) {
