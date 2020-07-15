@@ -615,6 +615,7 @@ class Controle extends Acao {
     }
 
     protected function inserirUsuario() {
+        
         $this->iniciaSessao();
         if ($_SESSION['usuario']) {
             $dados = array();

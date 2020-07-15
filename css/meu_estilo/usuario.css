@@ -1,0 +1,54 @@
+h2{
+    font-family: "Times New Roman",serif;
+    text-align: center;    
+    height: 30px;    
+    width: 95%;
+    background-color: #2e6da4;
+    color: #761c19;
+    padding: 20px;
+    text-transform: uppercase;
+}
+
+label, input{
+    text-align: left;
+
+}
+label{
+    font-size: 18px;
+    font-family: "Times New Roman", Times, serif;
+    padding: 10px 10px 0 50px;
+    line-height: 40px;  
+    clear: both;
+    
+    
+}
+
+input{
+    width: 70%;
+    height: 25px;
+    margin: 0;    
+    
+    
+    
+}
+
+.conteudo-principal{    
+    display: block;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+#botao-salvar{
+    width: 80px;
+    margin: 30px;
+    position: relative;
+}
+
+fieldset{
+        width: 60%;
+}
+div{
+       display: flex;
+      aling-items: center;
+      justify-content: space-between;
+}
