@@ -2,8 +2,10 @@
 <html lang="en-US">
 <head>
     <link rel="stylesheet" href="././css/bootstrap.min.css" />
-        <script type="text/javascript" src="././jquery/jquery-1.11.3.min.js"></script>
-        <script type="text/javascript" src="././js/bootstrap.min.js"></script> 
+        <link rel="stylesheet" href="././css/meu_estilo/estilo_meu.css" />
+        <script type="text/javascript" src="././jquery/jquery-1.11.3.min.js"></script>        
+        <script type="text/javascript" src="././js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="././js/efeitos.js"></script>
     <meta charset="UTF-8">
     <title></title>
 </head>
