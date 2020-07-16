@@ -349,8 +349,10 @@ class Banco {
         return false;
     }
 
-    public function validarMesRefVazio($tabela, $mes_ref) {        
-            $sql = $this->conexao->prepare("select * from $tabela where id_mes_referencia = $mes_ref AND d_e_l_e_t_e is NULL");            
+    public function validarMesRefVazio($tabela, $mes_ref, $id_usuario) {        
+            $sql = $this->conexao->prepare("select * from $tabela where id_mes_referencia = $mes_ref "
+                    . "AND id_usuario = $id_usuario AND d_e_l_e_t_e is NULL");            
+            //var_dump($sql);die();
             $sql->execute();
             $count = $sql->rowcount();
             

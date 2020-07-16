@@ -42,9 +42,9 @@ class Pagamento extends Modelo {
         return $this->banco->alterarStatusPagamento(static::TABELA, $cod, $data_proc, $id);
     }
     
-     public function validandoMesReferenciaVazio($mes_ref){
+     public function validandoMesReferenciaVazio($mes_ref,$id_usuario){
          
-        return $this->banco->validarMesRefVazio(static::TABELA,$mes_ref);
+        return $this->banco->validarMesRefVazio(static::TABELA,$mes_ref,$id_usuario);
     }
 
 }

@@ -271,8 +271,10 @@ class Controle extends Acao {
     }
 
     protected function validarMesEmClonagem() {
+        $this->iniciaSessao();
+        $id_usuario = $_SESSION['usuario'];        
         $mes_ref = $_REQUEST['id_mes_referencia'];
-        $processo = $this->pagamento->validandoMesReferenciaVazio($mes_ref);        
+        $processo = $this->pagamento->validandoMesReferenciaVazio($mes_ref,$id_usuario);        
         if ($processo) {
             return true;
         } else {

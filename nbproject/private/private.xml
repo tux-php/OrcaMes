@@ -6,7 +6,9 @@
             <file>file:/var/www/OrcaMes/app/model/Pagamento.php</file>
             <file>file:/var/www/OrcaMes/app/Controle.php</file>
             <file>file:/var/www/OrcaMes/view/usuario/inserir_usuario.php</file>
+            <file>file:/var/www/OrcaMes/app/model/Usuario.php</file>
             <file>file:/var/www/OrcaMes/app/Modelo.php</file>
+            <file>file:/var/www/OrcaMes/css/meu_estilo/usuario.css</file>
             <file>file:/var/www/OrcaMes/lib/Banco.php</file>
             <file>file:/var/www/OrcaMes/app/model/TipoPagamento.php</file>
         </group>
