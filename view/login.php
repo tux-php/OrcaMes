@@ -13,6 +13,7 @@
         <meta name="keywords" content="html5, css3, form, switch, animation, :target, pseudo-class" />
         <meta name="author" content="Codrops" />
         <link rel="shortcut icon" href="../favicon.ico"> 
+        <link rel="stylesheet" type="text/css" href="./css/login/css/estilo-fernando.css" />
         <link rel="stylesheet" type="text/css" href="./css/login/css/demo.css" />
         <link rel="stylesheet" type="text/css" href="./css/login/css/style.css" />
         <link rel="stylesheet" type="text/css" href="./css/login/css/animate-custom.css" />
@@ -42,7 +43,8 @@
                     <a class="hiddenanchor" id="tologin"></a>
                     <div id="wrapper">
                         <div id="login" class="animate form">
-                            <form  action="" method="post" autocomplete="on"> 
+                            <img src="./images/autismo.png" alt="Símbolo do autismo" />
+                            <form  action="" method="post" autocomplete="on">                                 
                                 <h1>Log in</h1> 
                                 <p> 
                                     <label for="username" class="uname" data-icon="u" > E-mail</label>
