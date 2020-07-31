@@ -7,21 +7,26 @@
         <script type="text/javascript" src="././js/efeitos.js"></script>
         <script type="text/javascript" src="././js/bootstrap.min.js"></script>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Novo pagamento</title>
     </head>
     <body>
-        <form class="form-horizontal" action="" method="post" >             
-            <h3> <span class="label label-default">Inserir Pagamento</span></h3>  
+        <form class="form-horizontal" action="" method="post" >   
             <div class="container-fluid">
-                <div class="panel panel-default">                
+                <div class="panel-info">
+                    <div class="panel-heading text-uppercase"><h4>Inserir Pagamento</h4></div>
+                </div>
+            </div>                      
+            <div class="container-fluid">
+                <div class="panel panel-default">
                     <div class="panel-body">
                         <label class="control-label"> 
-                            <select name="id_mes_referencia" id="">
+                            <select name="id_mes_referencia" id="" class="form-control">
                                 <option value="<?= $dados['mes_ref']['id_mes_referencia']; ?>"><?= $dados['mes_ref']['descricao']; ?></option>
                             </select>  
                         </label><br />
-                        <label class="control-label"> Tipo Pagamento:</label>                
-                        <select name="id_tipo_pagamento" id="" class="selectpicker control-group">Selecione Tipo Pagamento:
+                        <label class="control-label text-uppercase"> Tipo Pagamento:</label>                
+                        <select name="id_tipo_pagamento" id="" class="form-control text-lowercase">Selecione Tipo Pagamento:
 
                             <?php
                             foreach ($dados['id_tipo_pagamento'] as $tp) {
@@ -49,10 +54,10 @@
                         <input type="hidden" name="ch_clone" value="<?= $dados['ch_clone']; ?>" />                
                     </div>
                 </div>
-                <div class="control-group">
-                    <center><input type="submit" value="Enviar" /></center>
-                </div>
-                <br /><a href="index.php?action=detalharPagamentoMes&id_mes_referencia=<?= $dados['mes_ref']['id_mes_referencia']; ?>">Voltar</a>
+                <div>
+                    <a class="btn btn-primary text-uppercase text-center" role="button" href="index.php?action=detalharPagamentoMes&id_mes_referencia=<?= $dados['mes_ref']['id_mes_referencia']; ?>">Voltar</a>                
+                    <input class="btn btn-success text-uppercase text-center" role="button" type="submit" value="Enviar" />
+                </div>                
             </div>
         </form>
     </body>

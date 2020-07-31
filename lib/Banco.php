@@ -255,8 +255,8 @@ class Banco {
     }
 
     public function buscar($tabela, $identificador_id, $id) {
-
-        $results = $this->conexao->query("SELECT * FROM $tabela WHERE $identificador_id = '$id'");
+        
+        $results = $this->conexao->query("SELECT * FROM $tabela WHERE $identificador_id = '$id' and d_e_l_e_t_e is null");
         //var_dump($results);die();
 
         return $results->fetch();
@@ -322,10 +322,10 @@ class Banco {
      * @throws Exception
      * Funcao responsável pela autenticação de Login
      */
-    final function autenticaoUser($tabela, $email, $senha) {
-        //var_dump("select id_usuario FROM $tabela where email = '{$email}' and senha = '{$senha}'");die();
+    final function autenticaoUser($tabela, $email, $senha) {        
         try {
-            $sql = $this->conexao->prepare("select id_usuario FROM $tabela where email = '{$email}' and senha = '{$senha}'");
+            $sql = $this->conexao->prepare("select id_usuario FROM $tabela where email = '{$email}' and senha = '{$senha}' and d_e_l_e_t_e is null");
+            //var_dump($sql);die();
             $stmt = $sql->execute();
             if ($stmt == false) {
                 throw new Exception('Houve um erro ao executar Autenticação do Usuário.');

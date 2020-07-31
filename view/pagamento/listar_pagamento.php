@@ -10,16 +10,11 @@
         <script type="text/javascript" src="././js/bootstrap.min.js"></script>
         <script type="text/javascript" src="././js/efeitos.js"></script>
     </head>
-    <body>
-        <div style="float: right;">
-            <!--<a href="?action=inserirPagamento" title="Novo Pagamento"><span class="glyphicon glyphicon-plus" style="font-size: 30px; color: #888"></span></a>
-            <br /><a href="?action=listarPagamentoMes" title="voltar"><span class="glyphicon glyphicon-arrow-left" style="font-size: 30px; color: #888"><?php // unset($_SESSION['id_mes_ref']); ?></span></a>-->
-        </div>
-
+    <body>  
         <div class="container-fluid">
             <div class="panel-info">
-                <div class="panel-heading text-uppercase"><strong>Lista de Pagamentos</strong></div>
-            </div>
+            <div class="panel-heading text-uppercase"><strong>Lista de Pagamentos</strong></div>
+        </div>
             <div class="table-responsive">
                     <table class="table table-hover table-striped table-condensed">
                         <thead>
@@ -94,7 +89,7 @@ if (isset($pag['data_processamento']) && $pag['data_processamento']) {
 
 <div class="btn-group btn-group-justified  flex-wrap" role="group" aria-label="Grupos de valores">
   <div class="btn-group" role="group">
-    <button type="button" class="btn btn-primary"><strong><h4>Salário:<?=$dados['salario'];?></h4></strong></button>    
+    <button type="button" class="btn btn-primary"><h4>Salário:<?=$dados['salario'];?></h4></button>    
   </div>
   <div class="btn-group" role="group">
     <button type="button" class="btn btn-success"><h4>Processado:R$ <?=$dados['total'];?></h4></button>
@@ -109,9 +104,9 @@ if (isset($pag['data_processamento']) && $pag['data_processamento']) {
   </div>
 </div>
 <br />
-        <div>
-            <a class="btn btn-success text-uppercase text-center" role="button" href="?action=inserirPagamento" title="Novo Pagamento">Novo</a>
+        <div>           
             <a class="btn btn-primary text-uppercase text-center" role="button" href="?action=listarPagamentoMes" title="voltar">Voltar</a>
+            <a class="btn btn-success text-uppercase text-center" role="button" href="?action=inserirPagamento" title="Novo Pagamento">Novo</a>
             </div>
     </body>
 
