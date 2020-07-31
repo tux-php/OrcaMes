@@ -750,7 +750,7 @@ class Controle extends Acao {
         }
     }
 
-    protected function alterarUsuario($id) {
+    protected function alterarUsuario($id) {        
         $this->iniciaSessao();
         if ($_SESSION['usuario']) {
             if ($_POST) {
@@ -765,6 +765,7 @@ class Controle extends Acao {
                 $this->home();
             }
             $dados['user'] = $this->usuario->buscar('id_usuario', $id);
+            $dados['autenticacao'] = $this->usuario->buscarAutenticacao('id_usuario', $id);
             $dados['op'] = $dados['user']['id_orgao_pagador'];
             $dados['OrgaoPagador'] = $this->Orgao->listar();
             $dados['StatusUsuario'] = $this->statusUsuario->listar();

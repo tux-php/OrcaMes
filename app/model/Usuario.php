@@ -53,6 +53,7 @@ class Usuario extends Modelo {
     }
 
     final function alterarUsuario($id_user, $nome, $salario, $id_orgao_pagador, $id_status_usuario) {
+        //die('oi');
         return $this->banco->alterarUsuario(static::TABELA, $id_user, $nome, $salario, $id_orgao_pagador, $id_status_usuario);
     }
 
@@ -66,6 +67,10 @@ class Usuario extends Modelo {
 
     final function pegaIdLogado() {           
         return $_SESSION['usuario'];
+    }
+
+    public function buscarAutenticacao($identificador_id, $id) {
+        return $this->banco->buscar('autenticacao_user', $identificador_id, $id);
     }
 
 }

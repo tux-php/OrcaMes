@@ -2,46 +2,53 @@
 <html lang="en-US">
 <head>
     <link rel="stylesheet" href="././css/bootstrap.min.css" />
-        <link rel="stylesheet" href="././css/meu_estilo/estilo_meu.css" />
+        <!--<link rel="stylesheet" href="././css/meu_estilo/estilo_meu.css" />-->
         <script type="text/javascript" src="././jquery/jquery-1.11.3.min.js"></script>        
         <script type="text/javascript" src="././js/bootstrap.min.js"></script>
         <script type="text/javascript" src="././js/efeitos.js"></script>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title></title>
 </head>
 <body>
-    <h1>Lista Usuários</h1>
-        <table border="1">
+    <div class="container-fluid">
+        <div class="panel-info">
+        <div class="panel-heading text-uppercase"><strong>Lista de Usuários</strong></div>
+    </div>
+    <div class="table-responsive">
+    <table class="table table-hover table-striped table-condensed">
+        <thead>
             <tr>
-                <td>Nome</td>
-                <td>Órgão Pagador</td>
-                <td>Salário</td>                
-                <td><a href="">Alterar</a></td>
-                <td><a href="">Remover</a></td>
+                <th scope="col" class="text-uppercase text-left">#</th>    
+                <th scope="col" class="text-uppercase text-left">Nome</th>
+                <th scope="col" class="text-uppercase text-left">Instituição Patrocinadora</th>
+                <th scope="col" class="text-uppercase text-left">Salário</th>
+                <th scope="col" class="text-uppercase text-center" colspan="2">Ações</th>
             </tr>
-            <?php
-            //print_r($dados['user']);die();
-            foreach($dados['user'] as $usuario){
-                    
-                ?>
+        </thead>
+        <tbody>
+        <?php foreach($dados['user'] as $ch=>$usuario){ ?>
             <tr>
-                <td><?=$usuario["nome"];?></td>
+                <th scope="row"><?=$ch;?></th>
+                <td class="text-uppercase"><?=$usuario["nome"];?></td>
                 <td>
                     <?php
-                   
-                   echo $usuario["id_orgao_pagador"];
-                    //var_dump($dados['user'][$i]['id_orgao_pagador']);die();
-                    
+                     echo $usuario["id_orgao_pagador"];
                     ?>
                 </td>
                 <td><?=$usuario["salario"];?></td>                
-                <td><a href="?action=alterarUsuario&id_usuario=<?=$usuario['id_usuario'];?>">Alterar</a></td>
-                <td><a href="?action=excluirUsuario&id_usuario=<?=$usuario['id_usuario']?>">Excluir</a></td>
+                <td class="text-center">                    
+                    <a class="btn-sm btn-primary text-uppercase text-center" role="button" href="?action=alterarUsuario&id_usuario=<?=$usuario['id_usuario'];?>">Alterar</a>
+                    <a class="btn-sm btn-danger text-uppercase text-center" role="button"  href="?action=excluirUsuario&id_usuario=<?=$usuario['id_usuario']?>">Excluir</a>
+                </td>                
             </tr>
             <?php } ?>
-        </table>
-        <a href="?action=inserirUsuario">Cadastrar</a><br />
-        <a href="?action=home">VOLTAR</a>
-        
+        </tbody>
+    </table>
+    </div>
+    <div>
+        <a class="btn btn-primary text-uppercase text-center" role="button" href="?action=home">VOLTAR</a>
+        <a class="btn btn-success text-uppercase text-center" role="button" href="?action=inserirUsuario">Novo</a>
+    </div>
 </body>
 </html>

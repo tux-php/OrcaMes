@@ -20,7 +20,7 @@ abstract class Modelo {
         $this->banco->alterar(static::TABELA, $id_tabela, $id, $dados);
     }
 
-    final public function buscar($identificador_id, $id) {
+    public function buscar($identificador_id, $id) {
         return $this->banco->buscar(static::TABELA, $identificador_id, $id);
     }
 
