@@ -698,11 +698,11 @@ class Controle extends Acao {
                 $dados['usuario'] = $this->usuario->listar();
                 $dados['data_lancamento'] = date('Y-m-d');
                 $dados['id_status_pagamento'] = 4;
-                $_POST['valor_pagamento'] = $this->AjusteReal($_POST['valor_pagamento']);
+                $dados['valor_pagamento'] = $this->AjusteReal($_POST['valor_pagamento']);
                 $this->view->load('pagamento/editar', $dados);
                 $this->pagamento->alterar($id, 'id_pagamento', $_POST);
             }
-            return $this->listarPagamento();
+                return $this->listarPagamento();
         } else {
             $this->mataSessao();
         }
