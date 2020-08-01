@@ -10,11 +10,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
    </head>
    <body>
-      <form class="form-horizontal" action="" method="POST">
-      <?php
-      //$id_op = $dados['user']['id_orgao_pagador'];
-        //var_dump($id_op);
-      ?>
+      <form class="form-horizontal" action="" method="POST">      
          <div class="container-fluid">
             <div class="panel-info">
                <div class="panel-heading text-uppercase">
