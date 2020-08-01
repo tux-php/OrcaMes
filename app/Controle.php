@@ -652,7 +652,7 @@ class Controle extends Acao {
         }
     }
 
-    protected function AjusteReal($valor) {
+    protected function AjusteReal($valor) {        
         $salario = str_replace('.', '', $valor);
         $salario_tratado = str_replace(',', '.', $salario);
         return $salario_tratado;
@@ -744,6 +744,10 @@ class Controle extends Acao {
                 $this->usuario->excluirUserAutenticacao('autenticacao_user', $id);
             }
             $dados['user'] = $this->usuario->listar();
+            for ($i = 0; $i < count($dados['user']); $i++) {
+                $op = $this->Orgao->buscar('id_orgao_pagador', $dados['user'][$i]['id_orgao_pagador']);
+                $dados['user'][$i]['id_orgao_pagador'] = $op["descricao"];
+            }
             $this->view->load('usuario/lista_usuario', $dados);
         } else {
             $this->mataSessao();
@@ -754,15 +758,16 @@ class Controle extends Acao {
         $this->iniciaSessao();
         if ($_SESSION['usuario']) {
             if ($_POST) {
-                //var_dump($_POST['email']);die();
-                $_POST['salario'] = $this->AjusteReal($_POST['salario']);
+                //var_dump($_POST['salario']);die();
+                //removi a função AjusteReal($) pois estava causando problemas ao editar
+                $_POST['salario'] = ($_POST['salario']);
                 $alterarUser = $this->usuario->alterarUsuario($id, $_POST['nome'], $_POST['salario'], $_POST['id_orgao_pagador'], $_POST['id_status_usuario']);
                 if ($alterarUser) {
                     $email = $_POST['email'];
                     $senha = md5($_POST['senha']);
                     $this->usuario->alterarUserAut($email, $senha, $id);
                 }
-                $this->home();
+                $this->listarUsuario();
             }
             $dados['user'] = $this->usuario->buscar('id_usuario', $id);
             $dados['autenticacao'] = $this->usuario->buscarAutenticacao('id_usuario', $id);
