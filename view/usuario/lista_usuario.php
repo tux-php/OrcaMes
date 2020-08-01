@@ -46,7 +46,7 @@
         </tbody>
     </table>
     </div>
-    <div>
+    <div class="col-sm-offset-5 col-sm-10">
         <a class="btn btn-primary text-uppercase text-center" role="button" href="?action=home">VOLTAR</a>
         <a class="btn btn-success text-uppercase text-center" role="button" href="?action=inserirUsuario">Novo</a>
     </div>

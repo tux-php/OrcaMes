@@ -213,7 +213,8 @@ class Banco {
     public function alterarUsuario($tabela, $id_user, $nome, $salario, $id_orgao_pagador, $id_status_usuario) {
         $sql = "UPDATE $tabela set nome = '$nome', salario = '$salario', id_orgao_pagador = $id_orgao_pagador,"
                 . "id_status_usuario = $id_status_usuario where id_usuario = $id_user";
-        $rs = $this->conexao->query($sql);
+        //var_dump($sql);die();
+                $rs = $this->conexao->query($sql);
         if ($rs)
             return true;
         return false;
