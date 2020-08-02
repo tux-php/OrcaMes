@@ -37,16 +37,11 @@
                                     <tr class="mes_referencia">
                                         <th scope="row"><?=$ch;?></th>                                    
                                         <td><?= $mes['chave']; ?></td>
-                                        <td class="text-center">
-                                            <a href="?action=detalharPagamentoMes&id_mes_referencia=<?php echo $mes['id_mes_referencia'] ?>" title="Detalhar Pagamento"><span class="glyphicon glyphicon-edit" style="color: #777"></span></a>
-                                        <td class="text-center">
-                                            <a href="?action=adicionarSalarioExtra&id_mes_referencia=<?php echo $mes['id_mes_referencia']; ?>" title="Adicionar Salário Extra"><span class="glyphicon glyphicon-plus" style="color: #777"></span></a>
-                                        </td>                                    
-                                        <td class="text-center">
-                                            <a href="?action=clonarPagamentoMes&id_mes_referencia=<?php echo $mes['id_mes_referencia']; ?>" title="Clonar Pagamento do Mês Anterior"><span class="glyphicon glyphicon-copy" style="color: #777"></span></a>
+                                        <td class="text-center col-sm-5">
+                                            <a class="btn-sm btn-success text-uppercase text-center" style="margin:1%;" role="button" href="?action=detalharPagamentoMes&id_mes_referencia=<?php echo $mes['id_mes_referencia'] ?>" title="Detalhar Pagamento">Detalhar</a>                                        
+                                            <a class="btn-sm btn-primary text-uppercase text-center" style="margin:1%;" role="button" href="?action=adicionarSalarioExtra&id_mes_referencia=<?php echo $mes['id_mes_referencia']; ?>" title="Adicionar Salário Extra">Adicionar R$</a>
+                                            <a class="btn-sm btn-danger text-uppercase text-center" style="margin:1%;"  role="button" href="?action=clonarPagamentoMes&id_mes_referencia=<?php echo $mes['id_mes_referencia']; ?>" title="Clonar Pagamento do Mês Anterior">Clonar</a>                                        
                                         </td>
-                                        </td>
-
                                     </tr>     
                                 
                                 <?php
@@ -58,7 +53,7 @@
                     
                 </div>          
             </div>
-            <div>            
+            <div class="col-sm-offset-5 col-sm-10">            
             <a class="btn btn-primary text-uppercase text-center" href="?action=home" role="button" title="voltar">Voltar</span></a>
             <a class="btn btn-danger text-uppercase text-center" href="logout.php">Sair</a>
             </div>

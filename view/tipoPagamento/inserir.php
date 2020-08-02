@@ -1,29 +1,57 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link rel="stylesheet" href="././css/bootstrap.min.css" />    
-    <script type="text/javascript" src="././jquery/jquery-1.11.3.min.js"></script>
-    <script type="text/javascript" src="././js/bootstrap.min.js"></script>        
-    <meta charset="utf-8" />
-</head>
+    <link rel="stylesheet" href="././css/bootstrap.min.css" />
+      <script type="text/javascript" src="././jquery/jquery-1.11.3.min.js"></script>
+      <!--<script type="text/javascript" src="././js/bootstrap.min.js"></script> -->
+      <script type="text/javascript" src="././jquery/jquery.maskMoney.min.js"></script>
+      <script type="text/javascript" src="././js/efeitos.js"></script>
+      <meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
 
-<body>
-    <h2>Novo Tipo Pagamento</h2>
-    <fieldset>
-        <form action="" method="POST"> 
-            <div class="form-group">
-                <label for="descricao">Descrição:</label>
-                <input type="text" name="descricao" id="" class="form-control"/><br />     
-                <label for="tipo_despesa">Tipo de Despesa:</label>
-                <select name="id_tipo_despesa" id="" class="form-control form-control-sm">                    
-                    <?php foreach ($dados['tipo_despesa'] as $td) { ?>
-                        <option value="<?= $td['id_tipo_despesa'] ?>"><?= $td['descricao'] ?></option>
-                    <?php } ?>
-                </select>
+    <body>
+    <form class="form-horizontal" action="" method="post" >
+        <div class="container-fluid">
+            <div class="panel-info">
+               <div class="panel-heading text-uppercase">
+                  <h4>Novo Tipo Pagamento</h4>
+               </div>
             </div>
-            <input type="submit" class="btn btn-primary" value="Salvar" />
-        </form>
-    </fieldset>
-    <br /><a href="?action=listaTipoPagamento">Voltar</a>
-</body>
+         </div>
+
+         <div class="container-fluid">
+            <div class="panel panel-default">
+               <div class="panel-body">
+
+               <div class="form-group">
+                     <label for="valor"  class="col-sm-2 control-label">Descrição:</label>
+                     <div class="col-sm-3">                        
+                        <input type="text" class="form-control text-uppercase" name="descricao"  required="" id="descricao" >
+                     </div>
+                </div>
+
+                <div class="form-group">
+                     <label for="id_tipo_despesa" class="col-sm-2 control-label">Tipo de Despesa:</label>
+                     <div class="col-sm-5">
+                        <select class="form-control text-uppercase" name="id_tipo_despesa" id="id_tipo_despesa">
+                           <?php 
+                           foreach ($dados['tipo_despesa'] as $tipo) {
+                               
+                                   ?>              
+                           <option value="<?= $tipo['id_tipo_despesa'];?>" name="id_tipo_despesa"><?= $tipo['descricao']; ?>
+                           </option>
+                           <?php } ?>
+                        </select>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="col-sm-offset-5 col-sm-10">
+            <a class="btn btn-primary text-uppercase text-center" role="button" href="?action=listaTipoPagamento">Voltar</a>                
+            <input class="btn btn-success text-uppercase text-center" role="button" type="submit" value="Salvar" />
+         </div>
+        </div>
+    </form>
+    </body>
 </html>

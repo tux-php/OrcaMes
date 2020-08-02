@@ -69,23 +69,7 @@ if (isset($pag['data_processamento']) && $pag['data_processamento']) {
                         </tbody>
                     </table>
                 </div>
-            <!--<div id="calculo" class="input-group">
-                <span class="input-group-addon" id="basic-addon1">Salário:</span>
-                <input type="text" class="form-control" disabled="true" placeholder="Salario" aria-describedby="basic-addon1" id="salario2" value="R$ <?=$dados['salario'];?>">
-
-                <span class="input-group-addon" id="basic-addon1">Total Processado:</span>
-                <input type="text" class="form-control" disabled="true" placeholder="Total" aria-describedby="basic-addon1" id="total" value="R$ <?=$dados['total'];?>">
-
-                <span class="input-group-addon" id="basic-addon1">Sobra:</span>
-                <input type="text" class="form-control" disabled="true" placeholder="Sobra" aria-describedby="basic-addon1" id="sobra" value="R$ <?=$dados['sobra'];?>">
-                <input type="hidden" name="" id="salario" value="R$ <?=$dados['salario'];?>" />
-            </div>
-            <div class="input-group">
-                <span class="input-group-addon" id="basic-addon1">Subtotal:</span>
-                <input type="text" class="form-control" disabled="true" placeholder="Subtotal" aria-describedby="basic-addon1" id="subtotal" value="R$ <?=$dados['subtotal'];?>">
-            </div>
-        </div>
-        <br />-->
+         
 
 <div class="btn-group btn-group-justified  flex-wrap" role="group" aria-label="Grupos de valores">
   <div class="btn-group" role="group">
@@ -104,10 +88,9 @@ if (isset($pag['data_processamento']) && $pag['data_processamento']) {
   </div>
 </div>
 <br />
-        <div>           
+        <div class="col-sm-offset-5 col-sm-10">           
             <a class="btn btn-primary text-uppercase text-center" role="button" href="?action=listarPagamentoMes" title="voltar">Voltar</a>
             <a class="btn btn-success text-uppercase text-center" role="button" href="?action=inserirPagamento" title="Novo Pagamento">Novo</a>
             </div>
     </body>
-
 </html>
