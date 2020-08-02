@@ -81,8 +81,8 @@ class Controle extends Acao {
         $this->iniciaSessao();
         if (isset($_SESSION['usuario'])) {
             $id_usuario = (int) $_SESSION['usuario'];
-            $listaTP = $this->tipoPagamento;
-            $dados['tipo_pagamento'] = $listaTP->listarTP($id_usuario);
+            $dados['meses'] = $this->mesReferencia->listarMes();
+            //$this->view->load('pagamento/listar_pagamento_mes', $dados);
             $this->view->load('home', $dados);
         } else {
             header('Location:index.php');
@@ -261,6 +261,7 @@ class Controle extends Acao {
             $id_mes = (int) $_REQUEST['id_mes_referencia'];
             $id_user = $_SESSION['usuario'];
             $dados['meses'] = $this->mesReferencia->listarPagamentoMes($id_mes);
+            //var_dump($dados['meses']);die();
             $valor_extra = $_POST['salario_extra'];
             $this->pagamentoExtra->inserirPagExtra($id_user, $id_mes, $valor_extra);
             $this->view->load('mesReferencia/salarioExtra', $dados);

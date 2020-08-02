@@ -203,11 +203,13 @@ class Banco {
     }
 
     public function alterar($tabela, $id_tabela, $id, $dados) {
+        //var_dump("UPDATE $tabela SET $sets WHERE $id_tabela='$id'");die();
         foreach ($dados as $campo => $valor) {
             $set[] = "$campo='$valor'";
         }
         $sets = strtoupper(implode(',', $set));
-        $this->query("UPDATE $tabela SET $sets WHERE $id_tabela='$id'");
+        $sql = $this->query("UPDATE $tabela SET $sets WHERE $id_tabela='$id'");
+        
     }
 
     public function alterarUsuario($tabela, $id_user, $nome, $salario, $id_orgao_pagador, $id_status_usuario) {

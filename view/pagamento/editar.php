@@ -51,8 +51,7 @@
                   </div>
                   <div class="form-group">
                      <label for="valor"  class="col-sm-2 control-label">Valor(R$):</label>
-                     <div class="col-sm-3">
-                        
+                     <div class="col-sm-3">                        
                         <input type="text" class="form-control" name="valor_pagamento"  required="" id="valor_pagamento" placeholder="R$.." value="<?= $dados['pagamento']['valor_pagamento']; ?>">
                      </div>
                   </div>
