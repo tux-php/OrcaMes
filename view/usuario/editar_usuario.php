@@ -47,7 +47,7 @@
                                
                                    ?>              
                            <option value="<?= $fp['id_orgao_pagador'];?>"<?=($fp['id_orgao_pagador']==$id_op)?'selected':''?>
-                                     name="id_orgao_pagador"><?= $fp['descricao']; ?>
+                                     name="id_orgao_pagador" class="text-uppercase"><?= $fp['descricao']; ?>
                            </option>
                            <?php } ?>
                         </select>
