@@ -40,7 +40,7 @@
                         <select class="form-control" name="id_orgao_pagador" id="id_orgao_pagador">
                            <?php foreach ($dados['OrgaoPagador'] as $fp) { ?>                    
                            <option value="<?= $fp['id_orgao_pagador'] ?>"
-                              name="id_orgao_pagador"><?= $fp['descricao']; ?>
+                              name="id_orgao_pagador" class="text-uppercase"><?= $fp['descricao']; ?>
                            </option>
                            <?php } ?>
                         </select>
