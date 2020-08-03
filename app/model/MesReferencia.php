@@ -12,7 +12,7 @@ class MesReferencia extends Modelo {
         return $this->banco->listarMes(static::TABELA);
     }
 
-    final public function inserirMesRef($ch, $valor) {
+    final public function inserirMesRef($ch, $valor) {        
 
         $this->banco->inserirMesRef(static::TABELA, $ch, $valor);
     }
@@ -27,8 +27,7 @@ class MesReferencia extends Modelo {
         }
     }
 
-    public function listarPagamentoMes($id_mes, $id_usuario = null) {
-        //die('oi');
+    public function listarPagamentoMes($id_mes, $id_usuario = null) {        
         return $this->banco->listarPagamentoMes(static::TABELA, $id_mes, $id_usuario);
     }
 
@@ -50,7 +49,7 @@ class MesReferencia extends Modelo {
         return $meses_anos;
     }
 
-    public function pegaMesAutomatico() {
+    public function pegaMesAutomatico() {        
         $ano_atual = date('Y');
         $gerador_ma = $this->geradorMA();
         if ($gerador_ma) {

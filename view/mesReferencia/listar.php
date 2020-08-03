@@ -1,50 +1,51 @@
 <!DOCTYPE HTML>
 <html lang="en-US">
     <head>
-        <link rel="stylesheet" href="././css/bootstrap.min.css" />
-        <link rel="stylesheet" href="././css/meu_estilo/estilo_meu.css" />
+    <link rel="stylesheet" href="././css/bootstrap.min.css" />
+        <!--<link rel="stylesheet" href="././css/meu_estilo/estilo_meu.css" />-->
         <script type="text/javascript" src="././jquery/jquery-1.11.3.min.js"></script>
         <script type="text/javascript" src="././js/bootstrap.min.js"></script> 
-        <script type="text/javascript" src="././js/efeitos.js"></script>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <title></title>
-    </head>
-    <div id="back">
-        <a href="?action=inserirMesRef"><span class="glyphicon glyphicon-plus" ></span></a>
-        <br /><a href="?action=home"><span class="glyphicon glyphicon-arrow-left"></span></a>
+    </head>    
+    <body> 
 
-    </div>
-    <body>        
-        <div class="panel panel-default">
-            <div class="panel-heading">Meses/Ano</div>
-            <table class="table">
-                <tr>
-                    <th>Id</th>
-                    <th>Descrição</th>    
-                    <th colspan="2">Ações</th>
-                </tr>            
-                <?php
-                if ($dados['meses']) {
-                    foreach ($dados['meses'] as $mes) {
-                        ?>
-                        <tr>
-                            <td><?php echo $mes['id_mes_referencia']; ?></td>
-                            <td>                            
-                                <?php echo $mes['descricao']; ?>
-                                </a>
-                            </td>
-                            <td>
-                                <a href="?action=alterarMesRef&id_mes_referencia=<?php echo $mes['id_mes_referencia'] ?>">Alterar</a>
-                            </td>
-                            <td>
-                                <a href="?action=excluirMesRef&id_mes_referencia=<?php echo $mes['id_mes_referencia'] ?>">Excluir</a>
-                            </td>
-                        </tr>                                   
-                    <?php }
-                };
-                ?>            
-            </table>
+        <div class="panel panel-info">
+            <div class="panel-heading text-uppercase" ><strong>Meses/Ano</strong> </div>
         </div>
 
+        <div class="table-responsive">
+            <table class="table table-striped table-hover table-condensed">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>                        
+                        <th scope="col" class="text-uppercase">Descrição</th>                    
+                        <th scope="col" colspan="2" class="text-uppercase text-center">Ações</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <?php
+                        if ($dados['meses']) {
+                            foreach ($dados['meses'] as $ch=>$mes) {
+                            //var_dump($tp);
+                            ?>
+                    <tr>
+                        <th scope="row"><?= $ch;?></th>                  
+                        <td class="text-uppercase"><?= $mes['descricao'] ?></td>
+                        <td class="text-center">                    
+                            <a class="btn-sm btn-warning text-uppercase text-center" role="button" href="#">Geração Autormática</a>
+                            <!--<a class="btn-sm btn-danger text-uppercase text-center" role="button"  href="?action=excluirMesRef&id_mes_referencia=<?php echo $mes['id_mes_referencia'] ?>">Excluir</a>-->
+                        </td>
+                    </tr>
+                    <?php }} ?>
+            </tbody>
+            </table>
+        </div>        
+        <div class="col-sm-offset-5 col-sm-10">
+            <a class="btn btn-primary text-uppercase text-center" role="button" href="?action=home">Voltar</a>
+            <a class="btn btn-success text-uppercase text-center" role="button" href="?action=inserirMesRef">Processar</a>
+        </div>
     </body>
 </html>

@@ -792,8 +792,7 @@ class Controle extends Acao {
         }
     }
 
-    protected function inserirMesRef() {
-
+    protected function inserirMesRef() {        
         $this->listarMesRef();
 
         //$this->view->load('mesReferencia/inserir');

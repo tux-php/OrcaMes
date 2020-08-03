@@ -44,6 +44,7 @@ class Banco {
 
     public function listarMes($tabela) {
         $lista = "SELECT * FROM $tabela WHERE d_e_l_e_t_e is null and id_mes_referencia between 253 and 265";
+        //var_dump($lista);die();
 //Inserir uma páginacao aqui
         $rs = $this->conexao->query($lista);
         return $rs->fetchAll(PDO::FETCH_ASSOC);
@@ -280,6 +281,7 @@ class Banco {
 
     public function buscarMesAno($tabela, $chave) {
         $rs = $this->conexao->query("SELECT * FROM $tabela WHERE chave = '$chave' and d_e_l_e_t_e is null");
+        //var_dump($rs);die();
         if ($rs->rowCount() > 0) {
             return true;
         }
