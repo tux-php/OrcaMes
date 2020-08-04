@@ -55,7 +55,7 @@
                 </div>          
             </div>
             <div class="col-sm-offset-5 col-sm-10">                        
-            <a class="btn btn-danger text-uppercase btn-lg text-center" href="logout.php">Sair</a>
+            <!--<a class="btn btn-danger text-uppercase btn-lg text-center" href="logout.php">Sair</a>-->
             </div>
 
         </div>

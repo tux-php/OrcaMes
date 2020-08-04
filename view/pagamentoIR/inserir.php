@@ -10,6 +10,9 @@
     </head>
 
     <body>
+        <?php
+                include('menu.php');
+        ?>
         <h2>Novo Pagamento IR</h2>
         <form action="" method="POST">     
             <fieldset>

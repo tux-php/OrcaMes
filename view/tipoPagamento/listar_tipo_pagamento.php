@@ -10,6 +10,9 @@
       <title></title>
    </head>
    <body>
+   <?php
+        include('menu.php');
+    ?>
       <div class="panel panel-info">
          <div class="panel-heading text-uppercase" ><strong>Tipos de Pagamentos</strong> </div>
       </div>
