@@ -11,6 +11,9 @@
     <title></title>
 </head>
 <body>
+        <?php
+            include("menu.php");
+        ?>
     <div class="container-fluid">
         <div class="panel-info">
         <div class="panel-heading text-uppercase"><strong>Lista de Usuários</strong></div>
