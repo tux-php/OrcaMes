@@ -12,7 +12,7 @@
 
     <body>
     <?php
-        include('menu.php');
+        include('./menu.php');
     ?>
     <form class="form-horizontal" action="" method="post" >
         <div class="container-fluid">
