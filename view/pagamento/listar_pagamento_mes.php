@@ -11,6 +11,9 @@
         <script type="text/javascript" src="././js/efeitos.js"></script>
     </head>
     <body>
+    <?php
+        include("menu.php");
+    ?>
         <div class="container-fluid">
 
             <div class="panel panel-info">
