@@ -11,7 +11,7 @@
    </head>
    <body>
    <?php
-        include("menu.php");
+        include("./menu.php");
     ?>
       <form class="form-horizontal" action="" method="POST">      
          <div class="container-fluid">

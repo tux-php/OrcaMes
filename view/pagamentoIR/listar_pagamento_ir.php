@@ -10,7 +10,7 @@
     </head>
     <body>
         <?php
-                include('menu.php');
+                include('./menu.php');
         ?>
         <div id="back">
             <a href="?action=inserirPagamentoIR" title="Novo PagamentoIR"><span class="glyphicon glyphicon-plus" ></span></a>
