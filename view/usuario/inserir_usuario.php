@@ -28,13 +28,13 @@
                   <div class="form-group">
                      <label for="nome"  class="col-sm-2 control-label">Nome:</label>
                      <div class="col-sm-10">
-                        <input type="text" class="form-control" name="nome" autofocus="" required="" id="nome" placeholder="João">
+                        <input type="text" class="form-control text-uppercase" name="nome" autofocus="" required="" id="nome" placeholder="João">
                      </div>
                   </div>
                   <div class="form-group">
                      <label for="sobrenome"  class="col-sm-2 control-label">Sobrenome:</label>
                      <div class="col-sm-10">
-                        <input type="text" class="form-control" id="sobrenome" required="" name="sobrenome" placeholder="Silva">
+                        <input type="text" class="form-control text-uppercase" id="sobrenome" required="" name="sobrenome" placeholder="Silva">
                      </div>
                   </div>
                   <div class="form-group">
