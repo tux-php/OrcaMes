@@ -258,6 +258,10 @@ class Controle extends Acao {
     protected function adicionarSalarioExtra() {
         $this->iniciaSessao();
         if (isset($_SESSION['usuario']) || $_POST) {
+            /*if($_POST){
+                $this->listarPagamentoMes();
+                die();
+            }*/
             $id_mes = (int) $_REQUEST['id_mes_referencia'];
             $id_user = $_SESSION['usuario'];
             $dados['meses'] = $this->mesReferencia->listarPagamentoMes($id_mes);
@@ -360,7 +364,7 @@ class Controle extends Acao {
         }
     }
 
-    protected function inserirOP() {
+    protected function inserirOP() {          
         $this->iniciaSessao();
         if ($_SESSION['usuario']) {
             try {
@@ -370,7 +374,8 @@ class Controle extends Acao {
                     $this->view->load("Orgao/listar", $dados);
                     die();
                 }
-                $this->view->load('Orgao/inserir');
+                    $this->view->load('Orgao/inserir');
+                
             } catch (Exception $ex) {
                 echo $ex->getMessage();
             }
@@ -379,19 +384,21 @@ class Controle extends Acao {
         }
     }
 
-    protected function editarOP($id) {
+    protected function editarOP($id) {        
         $this->iniciaSessao();
         if ($_SESSION['usuario']) {
-            if ($_POST) {
+            try{
+                if ($_POST) {
+                    $this->Orgao->alterar($id, 'id_orgao_pagador', $_POST);
+                    $this->listaOrgaoPagador();
+                    die();
+                }
+                $dados = $this->Orgao->buscar('id_orgao_pagador', $id);
+                $this->view->load('Orgao/alterar', $dados);
 
-                $this->Orgao->alterar($id, 'id_orgao_pagador', $_POST);
-                $this->home();
+            }catch(Exception $msg){
+                echo $msg->getMessage();
             }
-
-            $dados = $this->Orgao->buscar('id_orgao_pagador', $id);
-
-
-            $this->view->load('Orgao/alterar', $dados);
         } else {
             $this->mataSessao();
         }
@@ -485,6 +492,7 @@ class Controle extends Acao {
                     $this->usuarioTipoPagamento->inserirUTP($id_user, $idTP);
                 }
                 $this->listarTP();
+                die();
             }
             $dados['tipo_despesa'] = $this->tipoDespesa->listarTD($id_user);
             $this->view->load('tipoPagamento/inserir', $dados);
@@ -515,6 +523,7 @@ class Controle extends Acao {
                 $desc = $_POST['descricao'];
                 $this->tipoDespesa->inserirTD($id_user, $ch, $desc);
                 $this->listarTD();
+                die();
             }
             $dados['tipo_despesa'] = $this->tipoDespesa->listar();
             $this->view->load('tipoDespesa/inserir');
@@ -543,6 +552,7 @@ class Controle extends Acao {
             if ($_POST) {
                 $this->tipoDespesa->alterar($id, 'id_tipo_despesa', $_POST);
                 $this->listarTD();
+                die();
             }
             $dados = $this->tipoDespesa->buscar('id_tipo_despesa', $id);
             $this->view->load('tipoDespesa/alterar', $dados);
@@ -559,6 +569,7 @@ class Controle extends Acao {
             if ($_POST) {
                 $objTP->alterar($id, 'id_tipo_pagamento', $_POST);
                 $this->listarTP();
+                die();
             }
             $dados['tp'] = $objTP->buscar('id_tipo_pagamento', $id);
             $dados['td'] = $tipo_despesa->listar();
@@ -644,6 +655,7 @@ class Controle extends Acao {
                 }
 
                 $this->view->load('usuario/lista_usuario', $dados);
+                die();
             }
             $dados['OrgaoPagador'] = $this->Orgao->listar();
             $dados['StatusUsuario'] = $this->statusUsuario->listar();
@@ -659,7 +671,7 @@ class Controle extends Acao {
         return $salario_tratado;
     }
 
-    protected function inserirPagamento() {
+    protected function inserirPagamento() {        
         $this->iniciaSessao();
         if ($_SESSION['usuario']) {
             if ($_POST) {
@@ -671,6 +683,7 @@ class Controle extends Acao {
                     echo 'Tipo Pagamento incluído com Sucesso!';
                 }
                 $this->listarPagamento();
+                die();
             }
             $id_user = $_SESSION['usuario'];
             $status_nao_pago = $this->statusPagamento->pegaStatus('NPG');
@@ -689,10 +702,12 @@ class Controle extends Acao {
 
     protected function alterarPagamento($id) {
         $this->iniciaSessao();
-
         if ($_SESSION['usuario']) {
-
             if (isset($id)) {
+                if($_POST){
+                    $this->listarPagamento();
+                    die();
+                }
                 $dados['id_mes_ref'] = $_SESSION['id_mes_ref'];
                 $dados['pagamento'] = $this->pagamento->buscar('id_pagamento', $id);
                 $dados['tipo_pagamento'] = $this->tipoPagamento->listar();
@@ -703,7 +718,7 @@ class Controle extends Acao {
                 $this->view->load('pagamento/editar', $dados);
                 $this->pagamento->alterar($id, 'id_pagamento', $_POST);
             }
-                return $this->listarPagamento();
+                
         } else {
             $this->mataSessao();
         }
@@ -769,6 +784,7 @@ class Controle extends Acao {
                     $this->usuario->alterarUserAut($email, $senha, $id);
                 }
                 $this->listarUsuario();
+                die();
             }
             $dados['user'] = $this->usuario->buscar('id_usuario', $id);
             $dados['autenticacao'] = $this->usuario->buscarAutenticacao('id_usuario', $id);

@@ -165,6 +165,7 @@ class Banco {
 
     final public function inserirPagExtra($tabela, $id_user, $id_mes_ref, $valor_extra) {
         $sql = $this->conexao->prepare("INSERT INTO $tabela (id_usuario,id_mes_referencia,valor_extra) VALUES ('$id_user','$id_mes_ref','$valor_extra')");
+        //var_dump($sql);die();
         $stmt = $sql->execute();
         if ($stmt) {
             return true;
