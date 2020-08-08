@@ -703,20 +703,23 @@ class Controle extends Acao {
     protected function alterarPagamento($id) {
         $this->iniciaSessao();
         if ($_SESSION['usuario']) {
-            if (isset($id)) {
-                if($_POST){
-                    $this->listarPagamento();
-                    die();
-                }
+            if (isset($id)) {                
                 $dados['id_mes_ref'] = $_SESSION['id_mes_ref'];
                 $dados['pagamento'] = $this->pagamento->buscar('id_pagamento', $id);
                 $dados['tipo_pagamento'] = $this->tipoPagamento->listar();
                 $dados['usuario'] = $this->usuario->listar();
                 $dados['data_lancamento'] = date('Y-m-d');
                 $dados['id_status_pagamento'] = 4;
-                $dados['valor_pagamento'] = $this->AjusteReal($_POST['valor_pagamento']);
+                $dados['valor_pagamento'] = $this->AjusteReal($_POST['valor_pagamento']);                
                 $this->view->load('pagamento/editar', $dados);
                 $this->pagamento->alterar($id, 'id_pagamento', $_POST);
+                $this->listarPagamento();
+                //var_dump($obj_salvo);die();
+                /*if($obj_salvo){
+                    die('oi');
+                    $this->listarPagamento();
+                    die();
+                }*/
             }
                 
         } else {
