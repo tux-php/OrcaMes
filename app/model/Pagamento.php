@@ -47,4 +47,9 @@ class Pagamento extends Modelo {
         return $this->banco->validarMesRefVazio(static::TABELA,$mes_ref,$id_usuario);
     }
 
+    public function alterarPagamento($id, $id_tab, $dados){
+        //var_dump($dados);die();
+        return $this->banco->alterarPagamento(static::TABELA,$id,$id_tab,$dados);
+    }
+
 }

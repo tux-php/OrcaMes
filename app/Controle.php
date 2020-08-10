@@ -257,19 +257,18 @@ class Controle extends Acao {
 
     protected function adicionarSalarioExtra() {
         $this->iniciaSessao();
-        if (isset($_SESSION['usuario']) || $_POST) {
-            /*if($_POST){
+        if (isset($_SESSION['usuario'])) {
+            $id_mes = (int) $_REQUEST['id_mes_referencia'];
+            if($_POST){
+                $id_user = $_SESSION['usuario'];
+                $valor_extra = $_POST['salario_extra'];
+                $this->pagamentoExtra->inserirPagExtra($id_user, $id_mes, $valor_extra);
                 $this->listarPagamentoMes();
                 die();
-            }*/
-            $id_mes = (int) $_REQUEST['id_mes_referencia'];
-            $id_user = $_SESSION['usuario'];
-            $dados['meses'] = $this->mesReferencia->listarPagamentoMes($id_mes);
-            //var_dump($dados['meses']);die();
-            $valor_extra = $_POST['salario_extra'];
-            $this->pagamentoExtra->inserirPagExtra($id_user, $id_mes, $valor_extra);
+            }
+            $dados['meses'] = $this->mesReferencia->listarPagamentoMes($id_mes);            
             $this->view->load('mesReferencia/salarioExtra', $dados);
-            $this->listarPagamentoMes();
+            
         } else {
             $this->mataSessao();
         }
@@ -702,26 +701,22 @@ class Controle extends Acao {
 
     protected function alterarPagamento($id) {
         $this->iniciaSessao();
-        if ($_SESSION['usuario']) {
+        if ($_SESSION['usuario']) {            
             if (isset($id)) {                
+                if($_POST){
+                    $this->pagamento->alterarPagamento($id, 'id_pagamento', $_POST);                    
+                    $this->listarPagamento();
+                    die();
+                }
                 $dados['id_mes_ref'] = $_SESSION['id_mes_ref'];
                 $dados['pagamento'] = $this->pagamento->buscar('id_pagamento', $id);
                 $dados['tipo_pagamento'] = $this->tipoPagamento->listar();
                 $dados['usuario'] = $this->usuario->listar();
                 $dados['data_lancamento'] = date('Y-m-d');
                 $dados['id_status_pagamento'] = 4;
-                $dados['valor_pagamento'] = $this->AjusteReal($_POST['valor_pagamento']);                
+                $dados['valor_pagamento'] = $this->AjusteReal($_POST['valor_pagamento']);                                
                 $this->view->load('pagamento/editar', $dados);
-                $this->pagamento->alterar($id, 'id_pagamento', $_POST);
-                $this->listarPagamento();
-                //var_dump($obj_salvo);die();
-                /*if($obj_salvo){
-                    die('oi');
-                    $this->listarPagamento();
-                    die();
-                }*/
-            }
-                
+        }
         } else {
             $this->mataSessao();
         }
