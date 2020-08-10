@@ -17,6 +17,7 @@ abstract class Modelo {
     }
 
     final public function alterar($id, $id_tabela, $dados) {
+        //die('oi');
         $this->banco->alterar(static::TABELA, $id_tabela, $id, $dados);
     }
 

@@ -164,8 +164,7 @@ class Banco {
     }
 
     final public function inserirPagExtra($tabela, $id_user, $id_mes_ref, $valor_extra) {
-        $sql = $this->conexao->prepare("INSERT INTO $tabela (id_usuario,id_mes_referencia,valor_extra) VALUES ('$id_user','$id_mes_ref','$valor_extra')");
-        //var_dump($sql);die();
+        $sql = $this->conexao->prepare("INSERT INTO $tabela (id_usuario,id_mes_referencia,valor_extra) VALUES ('$id_user','$id_mes_ref','$valor_extra')");        
         $stmt = $sql->execute();
         if ($stmt) {
             return true;
@@ -204,14 +203,13 @@ class Banco {
         }
     }
 
-    public function alterar($tabela, $id_tabela, $id, $dados) {
-        //var_dump("UPDATE $tabela SET $sets WHERE $id_tabela='$id'");die();
+    public function alterar($tabela, $id_tabela, $id, $dados) {        
         foreach ($dados as $campo => $valor) {
             $set[] = "$campo='$valor'";
         }
         $sets = strtoupper(implode(',', $set));
-        $sql = $this->query("UPDATE $tabela SET $sets WHERE $id_tabela='$id'");
-        
+        //var_dump("UPDATE $tabela SET $sets WHERE $id_tabela='$id'");die();
+        $this->query("UPDATE $tabela SET $sets WHERE $id_tabela='$id'");
     }
 
     public function alterarUsuario($tabela, $id_user, $nome, $salario, $id_orgao_pagador, $id_status_usuario) {
@@ -227,6 +225,20 @@ class Banco {
     public function alterarUserAut($email, $senha, $id_user) {
         $sql = "UPDATE autenticacao_user SET email = '$email', senha = '$senha' where id_usuario = $id_user";
         //var_dump($sql);die();
+        $rs = $this->conexao->query($sql);
+        if ($rs)
+            return true;
+        return false;
+    }
+
+    public function alterarPagamento($tab,$id,$id_tab, $dados) {        
+        $sql = "UPDATE $tab SET 
+                    ID_USUARIO='{$dados['id_usuario']}',
+                    ID_TIPO_PAGAMENTO='{$dados['id_tipo_pagamento']}',
+                    VALOR_PAGAMENTO='{$dados['valor_pagamento']}',
+                    DATA_LANCAMENTO='{$dados['data_lancamento']}',
+                    ID_STATUS_PAGAMENTO='{$dados['id_status_pagamento']}' 
+                    WHERE $id_tab='$id'";        
         $rs = $this->conexao->query($sql);
         if ($rs)
             return true;
@@ -262,8 +274,7 @@ class Banco {
     public function buscar($tabela, $identificador_id, $id) {
         
         $results = $this->conexao->query("SELECT * FROM $tabela WHERE $identificador_id = '$id' and d_e_l_e_t_e is null");
-        //var_dump($results);die();
-
+        
         return $results->fetch();
     }
 
