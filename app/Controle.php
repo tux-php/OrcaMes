@@ -1,7 +1,6 @@
 <?php
 
 class Controle extends Acao {
-
     private $classeNow;
     private $Orgao;
     private $usuario;
@@ -703,7 +702,8 @@ class Controle extends Acao {
         $this->iniciaSessao();
         if ($_SESSION['usuario']) {            
             if (isset($id)) {                
-                if($_POST){
+                if($_POST){                    
+                    $_POST['valor_pagamento'] = $this->AjusteReal($_POST['valor_pagamento']);                    
                     $this->pagamento->alterarPagamento($id, 'id_pagamento', $_POST);                    
                     $this->listarPagamento();
                     die();
@@ -713,8 +713,8 @@ class Controle extends Acao {
                 $dados['tipo_pagamento'] = $this->tipoPagamento->listar();
                 $dados['usuario'] = $this->usuario->listar();
                 $dados['data_lancamento'] = date('Y-m-d');
-                $dados['id_status_pagamento'] = 4;
-                $dados['valor_pagamento'] = $this->AjusteReal($_POST['valor_pagamento']);                                
+                $dados['id_status_pagamento'] = 4;                  
+                $dados['valor_pagamento'] = $this->AjusteReal($_POST['valor_pagamento']);
                 $this->view->load('pagamento/editar', $dados);
         }
         } else {
