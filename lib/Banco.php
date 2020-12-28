@@ -7,10 +7,10 @@ class Banco {
     private $driver = "mysql";
     private $host = "localhost";
     private $db = "orcamentos";
-    //private $user = "orcames";
-    //private $pass = "SENHA_REMOVIDA";
-    private $user = "fernando";
+    private $user = "orcames";
     private $pass = "SENHA_REMOVIDA";
+    //private $user = "fernando";
+    //private $pass = "SENHA_REMOVIDA";
 
     /*
      * Padrão singleton
@@ -247,10 +247,7 @@ class Banco {
 
     public function buscarSalarioExtra($tabela, $id_mes_referencia, $id_usuario) {
         $sql = $this->conexao->prepare("SELECT valor_extra FROM $tabela"
-                . " WHERE id_mes_referencia = $id_mes_referencia AND id_usuario = $id_usuario"
-                . " ORDER BY id_pag_extra DESC limit 1");
-        $stmt = $sql->execute();
-        if ($stmt) {
+                . " WHERE id_mes_referencia = $id_mes_referencia AN65
             while ($linha = $sql->fetch()) {
                 return $linha['valor_extra'];
             }
