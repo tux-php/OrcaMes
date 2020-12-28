@@ -11,6 +11,7 @@ class Banco {
     private $pass = "c0ns0letux";
     //private $user = "fernando";
     //private $pass = "123456";
+    //teste fernando
 
     /*
      * Padrão singleton
