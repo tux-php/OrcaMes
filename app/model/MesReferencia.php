@@ -50,13 +50,15 @@ class MesReferencia extends Modelo {
     }
 
     public function pegaMesAutomatico() {        
-        $ano_atual = date('Y');
+        //$ano_atual = date('Y');
+        $ano_atual = 2021;
         $gerador_ma = $this->geradorMA();
         if ($gerador_ma) {
             foreach ($gerador_ma as $chave => $valor) {
                 $ch = $chave . '/' . $ano_atual;
                 $val = $valor . '/' . $ano_atual;
                 $validaMes = $this->validarMesAno($ch);
+                //var_dump($validaMes);die();
                 if ($validaMes == false) {
                     $this->inserirMesRef($ch, $val);
                 }
