@@ -1,14 +1,28 @@
 <?php
-class Orgao extends Modelo{        
-    const TABELA = 'orgao_pagador';
+class Orgao{        
+    private int $id;
+    private string $chave;
+    private string $descricao;
+    private OrgaoDAO $orgaoDao;
     
-    public function __construct($id = null) {                
-        $this->id = $id;
-        parent::__construct();
+    public function __construct(string $chave='', string $descriao='') {        
+        $this->chave = $chave;
+        $this->descricao = $descriao;        
+    }
+    public function carregaId():int
+    {
+        return $this->id;
     }
     
-     public function getOrgaoPagador($id) {
-        return $this->banco->pesquisar('orgao_pagador', "id_orgao_pagador=$id");
+    public function carregaChave():string
+    {
+        return $this->chave;
     }
+    public function carregaDescricao():string
+    {
+        return $this->descricao;
+    }
+
+     
     
 }

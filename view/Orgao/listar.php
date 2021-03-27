@@ -30,9 +30,8 @@
 
             <tbody>
                <?php
-                  if ($dados['Orgao']) {
-                      foreach ($dados['Orgao'] as $ch=>$orgao) {
-                      //var_dump($tp);
+                  if ($dados['Orgao']>0) {
+                      foreach ($dados['Orgao'] as $ch=>$orgao) {                      
                       ?>
                <tr>
                   <th scope="row"><?= $ch;?></th>
@@ -43,7 +42,10 @@
                      <a class="btn-sm btn-danger text-uppercase text-center" role="button"  href="?action=excluirOP&id_orgao_pagador=<?php echo $orgao['id_orgao_pagador']?>">Excluir</a>
                   </td>
                </tr>
-               <?php }} ?>
+               <?php }}else { ?>
+               <p class = "alert alert-warning">LISTAGEM <strong>INSTITUCIONAL</strong> ENCONTRA-SE VAZIA.</p>
+               <?php } ?>
+                           
             </tbody>
          </table>
         </div>

@@ -1,36 +1,30 @@
 <?php
+include_once 'config.php';
 
 class Banco {
 
-    private static $instance;
+    public static $instance;
     private $conexao;
-    private $driver = "mysql";
-    private $host = "localhost";
-    private $db = "orcamentos";
-    private $user = "orcames";
-    private $pass = "c0ns0letux";
-    //private $user = "fernando";
-    //private $pass = "123456";
-    //teste fernando
-
     /*
      * Padrão singleton
      */
 
-    public static function Instanciar() {
-        if (!self::$instance) {
-            self::$instance = new Banco();
-            self::$instance->conectar();
+    public static function Instanciar() {                
+        try{
+            if (!self::$instance) {
+                self::$instance = new Banco();
+                self::$instance->conectar();
+            }
+            return self::$instance;
+        }catch(Exception $e){
+            echo "Problemas ao comunicar com a base".$e->getMessage();
         }
-        return self::$instance;
     }
 
     private function conectar() {
         try {
-            $this->conexao = new PDO("{$this->driver}:host={$this->host};dbname={$this->db}", "$this->user", "$this->pass");
-
-            $this->conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $this->conexao->setAttribute(PDO::ATTR_ORACLE_NULLS, PDO::NULL_EMPTY_STRING);
+            $this->conexao = new PDO(DB_DRIVER.":host=".DB_HOST.";dbname=".DB_BASE, DB_USER, DB_SENHA);
+            $this->conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);            
         } catch (PDOException $e) {
             print "Erro: " . $e->getMessage() . "\n";
             die();
@@ -173,6 +167,23 @@ class Banco {
         return false;
     }
 
+    public function inserirOP(Orgao $orgao)
+    {
+        try{
+            $query = $this->conexao->prepare("INSERT INTO orgao_pagador(chave,descricao) VALUES('{$orgao->carregaChave()}','{$orgao->carregaDescricao()}')");        
+            $stmt = $query->execute();            
+            if(!$stmt)
+            {
+                throw new Exception("Falha ao inserir os campos na base de dados!");
+            }
+            return $stmt;            
+        }catch(Exception $e){
+            echo $e->getMessage() . " - Detalhe:" . $exc->getTraceAsString();
+
+        }
+        
+    }
+
     public function inserir($tabela, $dados) {
 
         try {
@@ -184,6 +195,7 @@ class Banco {
             $campos = implode(',', $campos);
             $holders = implode(',', $holders);
             $st = $this->conexao->prepare("INSERT INTO $tabela ($campos) VALUES ($holders)");
+            //var_dump($st);die();
             $rs = $st->execute($valores);
 
             if (!$rs) {
@@ -258,9 +270,8 @@ class Banco {
         }
     }
 
-    public function excluir($tabela, $id_tabela, $id) {
-        $sql = "UPDATE $tabela SET d_e_l_e_t_e = 'S' WHERE $id_tabela = '$id'";
-
+    public function excluir($tabela, $id_tabela, $id) {        
+        $sql = "DELETE FROM $tabela WHERE $id_tabela = '$id'";
         $rs = $this->conexao->query($sql);
         if ($rs) {
             return true;
