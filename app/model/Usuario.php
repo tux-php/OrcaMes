@@ -1,65 +1,64 @@
 <?php
 
-class Usuario extends Modelo {
+class Usuario{
+    
+    private string $nome;
+    private string $sobrenome;
+    private $salario;
+    private int $orgaoId;
+    private int $statusId;    
+    private UsuarioDAO $usuarioDAO;
+    private AutenticaoUsuario $AutenticacaoUsuario;
 
-    const TABELA = 'usuario';
-
-    public function __construct() {
-        parent::__construct();
+    public function __construct(string $nome='',string $sobrenome='', $salario=false,int $orgaoId=0,int $statusId=0) {
+        $this->nome = $nome;
+        $this->sobrenome = $sobrenome;
+        $this->salario = $salario;
+        $this->orgaoId = $orgaoId;
+        $this->statusId = $statusId;   
+             
+        $this->usuarioDAO = new UsuarioDAO();
     }
 
-    final public function inserirUsuario($dados) {
-        //var_dump($dados);die();
-        try {
-            $usuario['nome'] = $dados['nome'];
-            $usuario['sobrenome'] = $dados['sobrenome'];
-            $usuario['salario'] = $dados['salario'];
-            $usuario['id_orgao_pagador'] = $dados['id_orgao_pagador'];
-            $usuario['id_status_usuario'] = $dados['id_status_usuario'];
-
-            $salvar_usuario = $this->banco->inserir(static::TABELA, $usuario);
-            if ($salvar_usuario == true) {
-                $dados_aut['email'] = $dados['email'];
-                $dados_aut['senha'] = $dados['senha'];
-                $dados_aut['id_usuario'] = $this->pegaUltimoUsuarioInserido();
-                $salvar_aut = $this->banco->inserir('autenticacao_user', $dados_aut);
-                //var_dump($salvar_aut);die();
-                if (!$salvar_aut) {
-                    throw new Exception("Houve um erro ao salvar autenticação do usuário!");
-                }
-            } else {
-                throw new Exception("Houve uma falha ao salvar usuário!");
-            }
-        } catch (Exception $e) {
-            echo $e->getMessage();
-        }
+    public function carregaNome():string
+    {
+        return $this->nome;
+    }
+    public function carregaSobrenome():string
+    {
+        return $this->sobrenome;
+    }
+    public function carregaSalario()
+    {
+        return $this->salario;
+    }
+    public function carregaOrgaoId():int
+    {
+        return $this->orgaoId;
+    }
+    public function carregaStatusId():int
+    {
+        return $this->statusId;
+    }
+    public function carregaEmailUsuario():string
+    {
+        return $this->AutenticacaoUsuario->carregaEmail();
+    }
+    public function carregaSenhaUsuario():string
+    {
+        return $this->AutenticacaoUsuario->carregaSenha();
     }
 
-    public function pegaUltimoUsuarioInserido() {
-        return $this->banco->pegaUltimoUsuarioInserido();
-    }
+   public function autenticacaoUser(string $email, string $senha)
+   {       
+       return $this->usuarioDAO->autenticacaoUser($email,$senha);
+   }
 
-    public function pegaSalario($id) {        
-        return $this->banco->pegaSalarioPorUser(static::TABELA, $id);
-    }
+   public function pegaLogado(string $email, string $senha)
+   {
+       return $this->usuarioDAO->pegaLogado($email,$senha);
+   }
 
-    final function autenticacaoUser($email, $senha) {
-
-        return $this->banco->autenticaoUser('autenticacao_user', $email, $senha);
-    }
-
-    final function excluirUserAutenticacao($tabela, $id_user) {
-        return $this->banco->excluirUserAutenticacao($tabela, $id_user);
-    }
-
-    final function alterarUsuario($id_user, $nome, $salario, $id_orgao_pagador, $id_status_usuario) {
-        //die('oi');
-        return $this->banco->alterarUsuario(static::TABELA, $id_user, $nome, $salario, $id_orgao_pagador, $id_status_usuario);
-    }
-
-    final function alterarUserAut($email, $senha, $id_user) {
-        return $this->banco->alterarUserAut($email, $senha, $id_user);
-    }
 
     public function getUsuario($id) {
         return $this->banco->pesquisar('usuario', "id_usuario=$id");
@@ -69,8 +68,6 @@ class Usuario extends Modelo {
         return $_SESSION['usuario'];
     }
 
-    public function buscarAutenticacao($identificador_id, $id) {
-        return $this->banco->buscar('autenticacao_user', $identificador_id, $id);
-    }
+   
 
 }

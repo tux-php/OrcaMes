@@ -1,0 +1,9 @@
+<?php 
+define('DB_DRIVER','mysql');
+define('DB_HOST','localhost');
+define('DB_BASE','orcamentos');
+//define('DB_USER','orcames');
+//define('DB_SENHA','SENHA_REMOVIDA');
+define('DB_USER','fernando');
+define('DB_SENHA','SENHA_REMOVIDA');
+?>

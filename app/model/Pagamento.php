@@ -1,6 +1,6 @@
 <?php
 
-class Pagamento extends Modelo {
+class Pagamento extends Modelo {    
 
     const TABELA = 'pagamentos';
 
