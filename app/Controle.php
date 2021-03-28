@@ -5,7 +5,8 @@ class Controle extends Acao {
     private OrgaoDAO $orgaoDAO;
     private Usuario $usuario;
     private UsuarioDAO $usuarioDAO;
-    private $tipoPagamento;
+    private TipoPagamento $tipoPagamento;
+    private TipoPagamentoDAO $tipoPagamentoDAO;
     private $tipoSaldo;
     private $salarioMensal;
     private $pagamento;
@@ -15,7 +16,8 @@ class Controle extends Acao {
     private $statusPagamento;
     private $statusUsuario;
     private $mesReferencia;
-    private $tipoDespesa;
+    private TipoDespesa $tipoDespesa;
+    private TipoDespesaDAO $tipoDespesaDAO;
     private $despesa;
     private $relatorio;
     private $usuarioTipoPagamento;
@@ -35,6 +37,7 @@ class Controle extends Acao {
         $this->usuario = new Usuario();
         $this->usuarioDAO = new UsuarioDAO();
         $this->tipoPagamento = new TipoPagamento();
+        $this->tipoPagamentoDAO = new TipoPagamentoDAO();
         $this->classeNow = new CreatorConcrete();
         $this->salarioMensal = new SalarioMensal();
         $this->pagamento = new Pagamento();
@@ -45,6 +48,7 @@ class Controle extends Acao {
         $this->statusUsuario = new StatusUsuario();
         $this->mesReferencia = new MesReferencia();
         $this->tipoDespesa = new TipoDespesa();
+        $this->tipoDespesaDAO = new TipoDespesaDAO();
         $this->despesa = new Despesa();
         $this->relatorio = new Relatorio();
         $this->usuarioTipoPagamento = new UsuarioTipoPagamento();
@@ -111,9 +115,9 @@ class Controle extends Acao {
         $this->iniciaSessao();
         if (isset($_SESSION['usuario'])) {
             $id_usuario = (int) $_SESSION['usuario'];
-            $dados['tipoPagamentos'] = $this->tipoPagamento->listarTP($id_usuario);
+            $dados['tipoPagamentos'] = $this->tipoPagamentoDAO->listarTP($id_usuario);
             foreach ($dados['tipoPagamentos'] as $chave => $valor) {
-                $td = $this->tipoDespesa->buscar('id_tipo_despesa', $valor['id_tipo_despesa']);
+                $td = $this->tipoDespesaDAO->buscar($valor['id_tipo_despesa']);
                 $dados['tipoPagamentos'][$chave]['id_tipo_despesa'] = $td['descricao'];
             }
             $this->view->load('tipoPagamento/listar_tipo_pagamento', $dados);
@@ -431,8 +435,7 @@ class Controle extends Acao {
     protected function excluirTP($id) {
         $this->iniciaSessao();
         if ($_SESSION['usuario']) {
-            $this->tipoPagamento->excluir('id_tipo_pagamento', $id);
-            $this->tipoPagamento->listar();
+            $this->tipoPagamentoDAO->excluir($id);            
             $this->listarTP();
         } else {
             $this->mataSessao();
@@ -489,17 +492,18 @@ class Controle extends Acao {
             if ($_POST) {
                 $dados['descricao'] = $_POST['descricao'];
                 $dados['id_tipo_despesa'] = $_POST['id_tipo_despesa'];
-                $salvarTP = $this->tipoPagamento->inserirTP($dados['descricao'], $dados['id_tipo_despesa']);
+                $tipoPagamento = new TipoPagamento($dados['descricao'], $dados['id_tipo_despesa']);
+                $salvarTP = $this->tipoPagamentoDAO->inserirTP($tipoPagamento);
                 //var_dump($salvarTP);die();
                 if ($salvarTP) {
-                    $idTP = $this->tipoPagamento->recuperarIdTP();
+                    $idTP = $this->tipoPagamentoDAO->recuperarIdTP();
 
                     $this->usuarioTipoPagamento->inserirUTP($id_user, $idTP);
                 }
                 $this->listarTP();
                 die();
             }
-            $dados['tipo_despesa'] = $this->tipoDespesa->listarTD($id_user);
+            $dados['tipo_despesa'] = $this->tipoDespesaDAO->listarTD($id_user);
             $this->view->load('tipoPagamento/inserir', $dados);
         } else {
             $this->mataSessao();
@@ -569,14 +573,14 @@ class Controle extends Acao {
     protected function alterarTP($id) {
         $this->iniciaSessao();
         if ($_SESSION['usuario']) {
-            $objTP = $this->tipoPagamento;
-            $tipo_despesa = $this->tipoDespesa;
+            $objTP = $this->tipoPagamentoDAO;
+            $tipo_despesa = $this->tipoDespesaDAO;
             if ($_POST) {
                 $objTP->alterar($id, 'id_tipo_pagamento', $_POST);
                 $this->listarTP();
                 die();
             }
-            $dados['tp'] = $objTP->buscar('id_tipo_pagamento', $id);
+            $dados['tp'] = $objTP->buscar($id);
             $dados['td'] = $tipo_despesa->listar();
             $this->view->load('tipoPagamento/editar', $dados);
         } else {

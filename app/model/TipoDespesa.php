@@ -1,16 +1,26 @@
 <?php
-class TipoDespesa extends Modelo{    
-    const TABELA = 'tipo_despesa';
-    
-    public function __construct() {
-        parent::__construct();
+class TipoDespesa{        
+    private string $chave;
+    private string $descricao;
+    private $usuarioId;
+
+    public function __construct(string $chave = '',string $descricao = '',int $usuarioId = 0) {
+        $this->chave = $chave;
+        $this->descricao = $descricao;
+        $this->usuarioId = $usuarioId;
+    }
+
+    public function carregaChave():string
+    {
+        return $this->chave;
+    }
+    public function carregaDescricao():string
+    {
+        return $this->descricao;
+    }
+    public function carregaUsuarioId():int
+    {
+        return $this->usuarioId;
     }
     
-    final public function inserirTD($id_user,$ch,$desc){
-        return $this->banco->inserirTD(static::TABELA,$id_user,$ch,$desc);
-    }
-    
-    final public function listarTD($id_user){
-        return $this->banco->listarPorUsuario(static::TABELA,$id_user);
-    }
 }
