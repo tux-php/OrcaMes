@@ -39,8 +39,10 @@ class OrgaoDAO{
                 $set[] = "$campo='$valor'";
             }
             $sets = strtoupper(implode(',', $set));
+            $query = "UPDATE orgao_pagador SET $sets WHERE $id_tabela='$id'";
             $conexao = Conexao::pegaConexao();
-            $conexao->query("UPDATE orgao_pagador SET $sets WHERE $id_tabela='$id'");
+            $stmt = $conexao->prepare($query);
+            $stmt->execute();            
         }catch(Exception $e){
             echo $e->getMessage() . " - Detalhe:" . $exc->getTraceAsString();
         }   

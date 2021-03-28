@@ -1,23 +1,23 @@
 <?php
 
-class TipoPagamento extends Modelo {
+class TipoPagamento{
+    private string $descricao;
+    private $tipoDespesa;
 
-    const TABELA = 'tipo_pagamento';
+    public function __construct(string $descricao = '', $tipoDespesa = '') {
+        $this->descricao = $descricao;        
+        $this->tipoDespesa = $tipoDespesa;
+    }
 
-    public function __construct() {
-        parent::__construct();
+    public function carregaDescricao():string
+    {
+        return $this->descricao;
+    }
+    public function carregaTipoDespesaId()
+    {
+        return $this->tipoDespesa;
     }
     
-    final public function listarTP($id_usuario) {        
-        return $this->banco->listarTP(static::TABELA,$id_usuario);
-    }
     
-    final public function recuperarIdTP(){        
-        return $this->banco->recuperarIdTP();
-    }
-    
-    final public function inserirTP($desc,$id_tp_desp){
-        return $this->banco->inserirTP(static::TABELA,$desc,$id_tp_desp);
-    }
 
 }
