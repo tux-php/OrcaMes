@@ -1,10 +1,10 @@
 <?php
 class TipoDespesa{        
+    private int $usuarioId;
     private string $chave;
-    private string $descricao;
-    private $usuarioId;
+    private string $descricao;    
 
-    public function __construct(string $chave = '',string $descricao = '',int $usuarioId = 0) {
+    public function __construct(int $usuarioId = 0, string $chave = '',string $descricao = '') {
         $this->chave = $chave;
         $this->descricao = $descricao;
         $this->usuarioId = $usuarioId;

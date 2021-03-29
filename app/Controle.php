@@ -140,7 +140,7 @@ class Controle extends Acao {
         $this->iniciaSessao();
         if (isset($_SESSION['usuario'])) {
             $id_user = $_SESSION['usuario'];
-            $dados['tipoDespesa'] = $this->tipoDespesa->listarTD($id_user);
+            $dados['tipoDespesa'] = $this->tipoDespesaDAO->listarTD($id_user);
             $this->view->load('tipoDespesa/listar', $dados);
         } else {
             $this->mataSessao();
@@ -455,7 +455,7 @@ class Controle extends Acao {
     public function excluirTD($id) {
         $this->iniciaSessao();
         if ($_SESSION['usuario']) {
-            $this->tipoDespesa->excluir('id_tipo_despesa', $id);
+            $this->tipoDespesaDAO->excluir($id);
             $this->listarTD();
         } else {
             $this->mataSessao();
@@ -530,11 +530,11 @@ class Controle extends Acao {
                 $id_user = $_SESSION['usuario'];
                 $ch = $_POST['chave'];
                 $desc = $_POST['descricao'];
-                $this->tipoDespesa->inserirTD($id_user, $ch, $desc);
+                $tipoDespesa = new TipoDespesa($id_user,$ch,$desc);
+                $this->tipoDespesaDAO->inserirTD($tipoDespesa);
                 $this->listarTD();
                 die();
-            }
-            $dados['tipo_despesa'] = $this->tipoDespesa->listar();
+            }            
             $this->view->load('tipoDespesa/inserir');
         } else {
             $this->mataSessao();
@@ -559,11 +559,13 @@ class Controle extends Acao {
         $this->iniciaSessao();
         if ($_SESSION['usuario']) {
             if ($_POST) {
-                $this->tipoDespesa->alterar($id, 'id_tipo_despesa', $_POST);
+                $chave = $_POST['chave'];
+                $descricao = $_POST['descricao'];
+                $this->tipoDespesaDAO->alterar($id, $chave, $descricao);
                 $this->listarTD();
                 die();
             }
-            $dados = $this->tipoDespesa->buscar('id_tipo_despesa', $id);
+            $dados = $this->tipoDespesaDAO->buscar($id);
             $this->view->load('tipoDespesa/alterar', $dados);
         } else {
             $this->mataSessao();

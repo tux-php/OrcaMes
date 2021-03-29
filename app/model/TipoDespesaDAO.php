@@ -1,10 +1,12 @@
 <?php
 class TipoDespesaDAO{
     
-    final public function inserirTD($id_user,$ch,$desc){ 
+    final public function inserirTD(tipoDespesa $td){ 
         try {
             $query = "INSERT INTO tipo_despesa(id_usuario,chave,descricao)
-                            VALUES ('$id_usuario','$ch','$descricao')";
+                            VALUES ('{$td->carregaUsuarioId()}',
+                                    '{$td->carregaChave()}',
+                                    '{$td->carregaDescricao()}')";                                    
                 $conexao = Conexao::pegaConexao();
                 $stmt = $conexao->prepare($query);
                 $rs = $stmt->execute();
@@ -19,7 +21,7 @@ class TipoDespesaDAO{
     
     final public function listarTD($id_user){
         try {
-            $query = "SELECT * FROM tipo_despesa WHERE id_usuario = $id_user and d_e_l_e_t_e is null";
+            $query = "SELECT * FROM tipo_despesa WHERE id_usuario = $id_user AND d_e_l_e_t_e IS NULL";
             $conexao = Conexao::pegaConexao();        
             $rs = $conexao->query($query);
             if($rs){
@@ -30,19 +32,42 @@ class TipoDespesaDAO{
         }
     }
 
-    final public function listar(){
-        try {
-            $query = "SELECT * FROM tipo_despesa WHERE d_e_l_e_t_e is null";
-            $conexao = Conexao::pegaConexao();        
-            $rs = $conexao->query($query);
+    final public function alterar($id,$ch,$desc)
+    {
+        try{
+            $query = "UPDATE tipo_despesa SET chave = '{$ch}', descricao = '{$desc}' WHERE id_tipo_despesa = $id";           
+            $conexao = Conexao::pegaConexao();
+            $stmt = $conexao->prepare($query);
+            $rs = $stmt->execute();
             if($rs){
-                return $rs->fetchAll(PDO::FETCH_ASSOC);
+                return TRUE;
+                exit;
             }
-        } catch (Exception $e) {
-            echo "Falha ao carregar Lista tipo de Despesa. ".$e->getMessage();
+
+        }catch(Exception $e){
+            echo "Falha ao alterar tipo de despesa $desc .".$e->getMessage();
         }
+        
     }
 
+    final public function excluir($id)
+    {
+        try{
+            $query = "DELETE from tipo_despesa WHERE id_tipo_despesa = $id";
+            $conexao = Conexao::pegaConexao();
+            $stmt = $conexao->prepare($query);
+            $rs = $stmt->execute();
+            if($rs){
+                return TRUE;
+                exit;
+            }
+
+        }catch(Exception $e){
+            echo "Falha ao excluir Tipo de Despesa. ".$e->getMessage();
+        }
+        
+    }
+    
     public function buscar($id) {
         try{
             $conexao = Conexao::pegaConexao();
