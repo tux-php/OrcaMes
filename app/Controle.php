@@ -453,6 +453,7 @@ class Controle extends Acao {
     }
 
     public function excluirTD($id) {
+        //teste
         $this->iniciaSessao();
         if ($_SESSION['usuario']) {
             $this->tipoDespesaDAO->excluir($id);
