@@ -9,7 +9,7 @@ class Banco {
      * Padrão singleton
      */
 
-    public static function Instanciar() {                
+    public static function Instanciar() {                 
         try{
             if (!self::$instance) {
                 self::$instance = new Banco();

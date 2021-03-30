@@ -70,12 +70,16 @@ class UsuarioDAO
         
     }
 
-    public function pegaSalario($id) {      
+    public function carregarSalario($id) {      
         try
-        {
+        {            
+            $query = "SELECT salario FROM usuario WHERE id_usuario = '$id'";        
             $conexao = Conexao::pegaConexao();
-            $rs = $conexao->query("SELECT salario FROM usuario WHERE id_usuario = '$id'");        
-            return $rs->fetch();
+            $rs = $conexao->query($query);
+            if($rs){
+                return $rs->fetch();
+                exit;
+            }            
         }catch(Exception $e){
             echo "Não foi possível recuperar salário do usuário. ".$e->getMessage();
         }  
@@ -162,6 +166,22 @@ class UsuarioDAO
         }
         
     }
+
+    public function pegaSalario($id) {        
+        try {
+            $query = "SELECT salario FROM usuario WHERE id_usuario = '$id'";
+            $conexao = Conexao::pegaConexao();
+            $rs = $conexao->query($query);
+            if($rs){
+                return $rs->fetch();
+                exit;
+            }
+        } catch (Exception $e) {
+            echo "Falha ao retornar salário do usuário .".$e->getMessage();
+        }
+        
+    }
+
 
 }
 
