@@ -1,34 +1,74 @@
 <?php
 
-class MesReferencia extends Modelo {
-
-    const TABELA = 'mes_referencia';
-
-    public function __construct() {
-        parent::__construct();
-    }
+class MesReferencia{    
 
     public function listarMes() {
-        return $this->banco->listarMes(static::TABELA);
+        try {
+            $query = "SELECT * FROM mes_referencia WHERE d_e_l_e_t_e IS NULL
+                           AND id_mes_referencia BETWEEN 265 and 277";        
+            //Inserir uma paginação aqui
+                    $conexao = Conexao::pegaConexao();
+                    $rs = $conexao->query($query);
+                    if($rs){
+                        return $rs->fetchAll(PDO::FETCH_ASSOC);
+                        exit;
+            }
+        }catch(Exception $e){
+            echo "Falha ao carregar listagem mês referência .".$e->getMessage();
+        }
     }
 
-    final public function inserirMesRef($ch, $valor) {        
+    final public function inserirMesRef($ch, $valor) {   
+        try {
+            $query = "INSERT INTO mes_referencia(chave,descricao) VALUES ('$chave','$valor')";
+            $conexao = Conexao::pegaConexao();
+            $stmt = $conexao->prepare($query);
+            $rs = $stmt->execute();
+            if ($rs) {
+                return true;
+                exit;
+            }
+        } catch (Exception $e) {
+            echo "Falha ao inserir Mês Referência. ".$e->getMessage();
+        }     
 
-        $this->banco->inserirMesRef(static::TABELA, $ch, $valor);
+        
     }
 
     public function pegaMesAnterior($id_mes_ref) {
         try {
             if (isset($id_mes_ref)) {
-                return $this->banco->pegaMesAnterior(static::TABELA, $id_mes_ref);
+                $query = "SELECT id_mes_referencia FROM mes_referencia 
+                                WHERE id_mes_referencia = (SELECT max(id_mes_referencia) from mes_referencia 
+                                WHERE id_mes_referencia < $id_mes_ref)";
+            //var_dump($sql);die();
+            $conexao = Conexao::pegaConexao();
+            $stmt = $conexao->prepare($query);
+            $stmt->execute();
+            $rs = $stmt->fetch();
+            $num = $stmt->rowcount();
+            if ($num > 0) {
+                return $rs['id_mes_referencia'];
+            } else {
+                throw new Exception("Não existe mês precedente!");
+            }
             } throw new Exception('Falha ao selecionar mês anterior!');
-        } catch (Exception $msg) {
-            echo $msg->getMessage() . '<br />';
+        } catch (Exception $e) {
+            echo "Falha ao recuperar mês precedente. ".$e->getMessage() . '<br />';
         }
     }
 
     public function listarPagamentoMes($id_mes, $id_usuario = null) {        
-        return $this->banco->listarPagamentoMes(static::TABELA, $id_mes, $id_usuario);
+        $lista = "SELECT * FROM $tabela WHERE id_mes_referencia = $id_mes_ref ";
+        //var_dump($lista);die();
+
+        if (isset($id_usuario)) {
+            $lista .= " and id_usuario = $id_usuario ";
+        }
+        $lista .= " AND d_e_l_e_t_e IS NULL";
+        //var_dump($lista);die();
+        $rs = $this->conexao->query($lista);
+        return $rs->fetchAll(PDO::FETCH_ASSOC);
     }
 
     //Gerador de Meses automático
@@ -68,17 +108,43 @@ class MesReferencia extends Modelo {
         }
     }
 
-    final function validarMesAno($chave) {
-
-        return $this->banco->buscarMesAno('mes_referencia', $chave);
+    public function buscar($id) {
+        try{            
+            $query = "SELECT * FROM mes_referencia WHERE id_mes_referencia = '$id' AND d_e_l_e_t_e IS NULL";
+            //var_dump($query);die();
+            $conexao = Conexao::pegaConexao();
+            $rs = $conexao->query($query);
+            if($rs){
+                return $rs->fetch();
+                exit;
+            }            
+        }catch(Exception $e){
+            echo $e->getMessage() . " - Detalhe:" . $exc->getTraceAsString();
+        }
+        
     }
 
-    final function pegaMesRef() {         
-        //var_dump($_REQUEST);
-        //var_dump($_SESSION);
-        $mes_ref = $_REQUEST['id_mes_referencia'];
-        if(isset($mes_ref)){
-            return $mes_ref;
+    final function validarMesAno($chave) {
+
+        $rs = $this->conexao->query("SELECT * FROM $tabela WHERE chave = '$chave' and d_e_l_e_t_e is null");
+        //var_dump($rs);die();
+        if ($rs->rowCount() > 0) {
+            return true;
         }
+        return false;
+    }
+
+    public function pegaMesRef() {                
+        try{
+            if(!isset($_REQUEST['id_mes_referencia'])){                
+                $mes_ref = $_SESSION['id_mes_ref'];                
+            }
+            $mes_ref = @$_REQUEST['id_mes_referencia'];            
+            return $mes_ref;
+            exit;            
+        }catch(Exception $e){
+            echo "Falha ao recuperar mês de referência. ".$e->getMessage();
+        }        
+        
     }
 }

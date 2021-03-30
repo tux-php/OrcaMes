@@ -9,7 +9,8 @@ class Controle extends Acao {
     private TipoPagamentoDAO $tipoPagamentoDAO;
     private $tipoSaldo;
     private $salarioMensal;
-    private $pagamento;
+    private Pagamento $pagamento;
+    private PagamentoDAO $pagamentoDAO;
     private $pagamentoExtra;
     private $pagamentoIR;
     private $view;
@@ -41,6 +42,7 @@ class Controle extends Acao {
         $this->classeNow = new CreatorConcrete();
         $this->salarioMensal = new SalarioMensal();
         $this->pagamento = new Pagamento();
+        $this->pagamentoDAO = new PagamentoDAO();
         $this->pagamentoExtra = new PagamentoExtra();
         $this->pagamentoIR = new PagamentoIR();
         $this->view = new View();
@@ -172,56 +174,56 @@ class Controle extends Acao {
         }
     }
 
-    protected function pegaListaPagamantoMes($mes_referencia, $usuario) {
+    protected function pegaListaPagamantoMes($mes_referencia, $usuario) {        
         $this->iniciaSessao();
-        if (isset($_SESSION['usuario'])) {
-            $dados['pagamentos'] = $this->pagamento->listarPagamentoMes($mes_referencia, $usuario);
-            foreach ($dados['pagamentos'] as $ch => $value) {
+        if (isset($_SESSION['usuario'])) {            
+            $dados['pagamentos'] = $this->pagamentoDAO->listarPagamentoMes($mes_referencia, $usuario);            
+            foreach ($dados['pagamentos'] as $ch => $value):
                 $data_lancamento = $this->pagamento->ajustarData($value['data_lancamento']);
                 $data_processamento = $this->pagamento->ajustarData($value['data_processamento']);
                 $dados['pagamentos'][$ch]['data_lancamento'] = $data_lancamento;
                 $dados['pagamentos'][$ch]['data_processamento'] = $data_processamento;
-                $tipo_pag = $this->tipoPagamento->buscar('id_tipo_pagamento', $value['id_tipo_pagamento']);
+                $tipo_pag = $this->tipoPagamentoDAO->buscar($value['id_tipo_pagamento']);
                 $dados['pagamentos'][$ch]['id_tipo_pagamento'] = $tipo_pag['descricao'];
-                $mesref = $this->mesReferencia->buscar('id_mes_referencia', $value['id_mes_referencia']);
+                $mesref = $this->mesReferencia->buscar($value['id_mes_referencia']);
                 $dados['pagamentos'][$ch]['id_mes_referencia'] = $mesref['descricao'];
-                $usuario = $this->usuario->buscar('id_usuario', $value['id_usuario']);
+                $usuario = $this->usuarioDAO->buscar($value['id_usuario']);
                 $dados['pagamentos'][$ch]['id_usuario'] = $usuario['nome'];
                 $status = $this->statusPagamento->buscar('id_status_pagamento', $value['id_status_pagamento']);
                 $dados['pagamentos'][$ch]['id_status_pagamento'] = $status['chave'];
-            }
-
-            return $dados;
+            endforeach;
+                return $dados;
         } else {
             $this->mataSessao();
         }
     }
 
     protected function pegaMesRefNow() {
-        $this->iniciaSessao();
-        $mes_referencia = (int) $this->mesReferencia->pegaMesRef();
-        if ($mes_referencia != 0) {
-            $this->pagamento->buscar('id_mes_referencia', $mes_referencia);
-        } else {
-            $mes_referencia = (int) $_SESSION['id_mes_ref'];
-        }
+        /*Analisar a perda de sessão do id_mes_ref*/
+        $this->iniciaSessao();              
+        $mes_referencia = (int) $this->mesReferencia->pegaMesRef();        
+        if ($mes_referencia != 0):
+            $this->pagamentoDAO->buscar($mes_referencia);
+        else:            
+            $mes_referencia = (int) $_SESSION['id_mes_ref'];            
+        endif;
         return $mes_referencia;
     }
 
     protected function listarPagamento() {
-        $this->iniciaSessao();
+        $this->iniciaSessao();        
         if (isset($_SESSION['usuario'])) {
-            $usuario = (int) $_SESSION['usuario'];
+            $usuario = (int) $_SESSION['usuario'];            
             $mes_referencia = $this->pegaMesRefNow();
             $_SESSION['id_mes_ref'] = $mes_referencia;
             $dados = $this->pegaListaPagamantoMes($mes_referencia, $usuario);
             $id_usuario = $this->usuario->pegaIdLogado();
-            $status_pg = $this->pagamento->pegaStatus('PG');
+            $status_pg = $this->pagamentoDAO->pegaStatus('PG');
             $id_status_pg = (int) $status_pg['id_status_pagamento'];
-            $total = $this->pagamento->SomarTotal($mes_referencia, $id_usuario, $id_status_pg);
-            $subtotal = $this->pagamento->SomarSubtotal($mes_referencia, $id_usuario);
+            $total = $this->pagamentoDAO->SomarTotal($mes_referencia, $id_usuario, $id_status_pg);
+            $subtotal = $this->pagamentoDAO->SomarSubtotal($mes_referencia, $id_usuario);
             $salario_extra = $this->pagamentoExtra->pegaSalarioExtra($mes_referencia, $id_usuario);
-            $salario = $this->usuario->pegaSalario($id_usuario);
+            $salario = $this->usuarioDAO->carregarSalario($id_usuario);
             $dados['total'] = $total;
             $dados['salario_extra'] = $salario_extra;
             $dados['salario'] = $salario["salario"] + $salario_extra;
@@ -236,10 +238,10 @@ class Controle extends Acao {
     protected function processarPagamento($id) {
         $this->iniciaSessao();
         if (isset($_SESSION['usuario'])) {
-
+            //print_r($_SESSION);      
             $id_usuario = $_SESSION['usuario'];
             if ($id) {
-                $this->usuario->pegaSalario($id_usuario);
+                $this->usuarioDAO->pegaSalario($id_usuario);
                 $this->pagamento->processarPag($id);
                 $this->listarPagamento();
             }
@@ -251,6 +253,7 @@ class Controle extends Acao {
     protected function cancelarPagamento($id) {
         $this->iniciaSessao();
         if (isset($_SESSION['usuario'])) {
+            //print_r($_SESSION);      
             $this->pagamento->cancelarPag($id);
             $this->listarPagamento();
         } else {
@@ -283,7 +286,8 @@ class Controle extends Acao {
         $this->iniciaSessao();
         $id_usuario = $_SESSION['usuario'];        
         $mes_ref = $_REQUEST['id_mes_referencia'];
-        $processo = $this->pagamento->validandoMesReferenciaVazio($mes_ref,$id_usuario);        
+        $processo = $this->pagamentoDAO->validandoMesReferenciaVazio($mes_ref,$id_usuario);        
+        //corrigir validação
         if ($processo) {
             return true;
         } else {
@@ -345,10 +349,8 @@ class Controle extends Acao {
     protected function excluirPagamento($id) {
         $this->iniciaSessao();
         if (isset($_SESSION['usuario'])) {
-
             if ($id) {
-                $this->pagamento->excluir('id_pagamento', $id);
-
+                $this->pagamentoDAO->excluirPagamento(  $id);
                 $this->listarPagamento();
             }
         } else {
@@ -452,8 +454,7 @@ class Controle extends Acao {
         }
     }
 
-    public function excluirTD($id) {
-        //teste
+    public function excluirTD($id) {        
         $this->iniciaSessao();
         if ($_SESSION['usuario']) {
             $this->tipoDespesaDAO->excluir($id);
@@ -695,8 +696,9 @@ class Controle extends Acao {
             if ($_POST) {
                 $_POST['id_usuario'] = $_SESSION['usuario'];
                 $mes_ref = $_SESSION['id_mes_ref'];
-                $_POST['valor_pagamento'] = $this->AjusteReal($_POST['valor_pagamento']);
-                $salvar_pag = $this->pagamento->inserir($_POST);
+                $_POST['valor_pagamento'] = $this->AjusteReal($_POST['valor_pagamento']);                
+                $pagamento = new Pagamento($_POST['id_tipo_pagamento'],$_POST['valor_pagamento'],$_POST['data_lancamento'],$_POST['id_usuario'],$_POST['id_status_pagamento'],$_POST['id_mes_referencia'],$_POST['ch_clone']);
+                $salvar_pag = $this->pagamentoDAO->inserir($pagamento);
                 if ($salvar_pag) {
                     echo 'Tipo Pagamento incluído com Sucesso!';
                 }
@@ -705,10 +707,10 @@ class Controle extends Acao {
             }
             $id_user = $_SESSION['usuario'];
             $status_nao_pago = $this->statusPagamento->pegaStatus('NPG');
-            $mes_ref = $this->mesReferencia->buscar('id_mes_referencia', $_SESSION['id_mes_ref']);
+            $mes_ref = $this->mesReferencia->buscar($_SESSION['id_mes_ref']);
             $dados['mes_ref'] = $mes_ref;
-            $dados['id_tipo_pagamento'] = $this->tipoPagamento->listarTP($id_user);
-            $dados['id_usuario'] = $this->usuario->listar();
+            $dados['id_tipo_pagamento'] = $this->tipoPagamentoDAO->listarTP($id_user);
+            $dados['id_usuario'] = $this->usuarioDAO->listar();
             $dados['id_status_pagamento'] = $status_nao_pago[0];
             $dados['data_lancamento'] = date('Y-m-d');
             $dados['ch_clone'] = 'S';
