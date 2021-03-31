@@ -64,7 +64,7 @@ abstract class Acao {
                 break;
             case 'clonarPagamentoMes': $metodo->clonarPagamentoMes();
                 break;
-            case 'adicionarSalarioExtra': $metodo->adicionarSalarioExtra($_GET['id_mes_ref']);
+            case 'adicionarSalarioExtra': $metodo->adicionarSalarioExtra($_GET['id_mes_referencia']);
                 break;
             case 'listarStatusUsuario': $metodo->listarStatusUsuario();
                 break;

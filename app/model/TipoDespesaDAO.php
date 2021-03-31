@@ -19,9 +19,13 @@ class TipoDespesaDAO{
         }
     }
     
-    final public function listarTD($id_user){
+    final public function listarTD($id_user = FALSE){                
         try {
-            $query = "SELECT * FROM tipo_despesa WHERE id_usuario = $id_user AND d_e_l_e_t_e IS NULL";
+            $query = "SELECT * FROM tipo_despesa ";
+            if($id_user != FALSE){
+                $query .=  " WHERE id_usuario = $id_user ";
+            }
+            $query .= "ORDER BY descricao";
             $conexao = Conexao::pegaConexao();        
             $rs = $conexao->query($query);
             if($rs){

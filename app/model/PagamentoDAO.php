@@ -21,14 +21,14 @@ class PagamentoDAO{
     public function inserir(Pagamento $pagamento)
     {
         try{
-            $query = "INSERT INTO pagamento(id_tipo_pagamento,valor_pagamento,data_lancamento,id_usuario,id_status_pagamento,id_mes_referencia,ch_clone)
+            $query = "INSERT INTO pagamentos(id_tipo_pagamento,valor_pagamento,data_lancamento,id_usuario,id_status_pagamento,id_mes_referencia,ch_clone)
                          VALUES('{$pagamento->carregarTipoPagamentoId()}',
                                 '{$pagamento->carregarValorPagamento()}',
                                 '{$pagamento->carregarDataLancamento()}',
                                 '{$pagamento->carregarUsuarioId()}',
                                 '{$pagamento->carregarStatusPagamentoId()}',
                                 '{$pagamento->carregarMesReferenciaId()}',
-                                '{$pagamento->carregarClone()}')";
+                                '{$pagamento->carregarClone()}')";                                
                   $conexao = Conexao::pegaConexao();
                   $stmt = $conexao->prepare($query);
                   $rs = $stmt->execute();
@@ -53,20 +53,6 @@ class PagamentoDAO{
         }
         }catch(Exception $e){
             echo "Pagamento não excluído. ".$e->getMessage();
-        }
-        
-    }
-
-    public function pegaStatus($chave) {
-        try {            
-            $query = "SELECT * FROM status_pagamento where chave = '{$chave}'";            
-            $conexao = Conexao::pegaConexao();
-            $rs = $conexao->query($query);
-            if ($rs) {
-                return $rs->fetch();
-         }
-        } catch (Exception $e) {
-            echo "Falha ao recuperar status do pagamento. ".$e->getMessage();
         }
         
     }
@@ -101,25 +87,31 @@ class PagamentoDAO{
                 exit;
             endif;            
          } catch (Exception $e) {
-             echo "Falha no processo de validação do mês precedente." .$e->getMessage();
+             echo "Falha no processo de validação do mês precedente." .$e->getMessage();    
          }
          
         
     }
 
-    public function alterarPagamento($id, $id_tab, $dados){
-        //var_dump($dados);die();
-        $sql = "UPDATE $tab SET 
+    public function alterarPagamento($id, $dados){
+        try {
+            $query = "UPDATE pagamentos SET 
                     ID_USUARIO='{$dados['id_usuario']}',
                     ID_TIPO_PAGAMENTO='{$dados['id_tipo_pagamento']}',
                     VALOR_PAGAMENTO='{$dados['valor_pagamento']}',
                     DATA_LANCAMENTO='{$dados['data_lancamento']}',
                     ID_STATUS_PAGAMENTO='{$dados['id_status_pagamento']}' 
-                    WHERE $id_tab='$id'";        
-        $rs = $this->conexao->query($sql);
-        if ($rs)
-            return true;
-        return false;
+                    WHERE id_pagamento='$id'";  
+                $conexao = Conexao::pegaConexao();
+                $stmt = $conexao->prepare($query);      
+                $rs = $stmt->execute();
+                if ($rs)
+                    return true;
+                return false;
+        } catch (Exception $e) {
+            echo "Falha ao alterar Pagamento .".$e->getMessage();
+        }
+        
     }
 
     public function buscar($id) {

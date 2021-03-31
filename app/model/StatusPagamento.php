@@ -1,8 +1,19 @@
 <?php
-class StatusPagamento extends Modelo{
-    const TABELA = 'status_pagamento';
-    
-    public function __construct() {
-        parent::__construct();
+class StatusPagamento{
+    private string $chave;
+    private string $descricao;
+
+    public function __construct(string $chave = '',string $descricao = ''){
+        $this->chave = $chave;
+        $this->descricao = $descricao;
     }
+    public function carregarChave():string
+    {
+        return $this->chave;
+    }
+    public function carregarDescricao():string
+    {
+        return $this->descricao;
+    }
+    
 }

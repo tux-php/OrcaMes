@@ -2,10 +2,11 @@
 
 class MesReferencia{    
 
+    /*@ Listagem -Mês/Ano presente na aba Processar Calendário */
     public function listarMes() {
         try {
             $query = "SELECT * FROM mes_referencia WHERE d_e_l_e_t_e IS NULL
-                           AND id_mes_referencia BETWEEN 265 and 277";        
+                           AND id_mes_referencia BETWEEN 265 and 277";                             
             //Inserir uma paginação aqui
                     $conexao = Conexao::pegaConexao();
                     $rs = $conexao->query($query);
@@ -20,7 +21,7 @@ class MesReferencia{
 
     final public function inserirMesRef($ch, $valor) {   
         try {
-            $query = "INSERT INTO mes_referencia(chave,descricao) VALUES ('$chave','$valor')";
+            $query = "INSERT INTO mes_referencia(chave,descricao) VALUES ('$ch','$valor')";
             $conexao = Conexao::pegaConexao();
             $stmt = $conexao->prepare($query);
             $rs = $stmt->execute();
@@ -40,8 +41,7 @@ class MesReferencia{
             if (isset($id_mes_ref)) {
                 $query = "SELECT id_mes_referencia FROM mes_referencia 
                                 WHERE id_mes_referencia = (SELECT max(id_mes_referencia) from mes_referencia 
-                                WHERE id_mes_referencia < $id_mes_ref)";
-            //var_dump($sql);die();
+                                WHERE id_mes_referencia < $id_mes_ref)";            
             $conexao = Conexao::pegaConexao();
             $stmt = $conexao->prepare($query);
             $stmt->execute();
@@ -58,21 +58,27 @@ class MesReferencia{
         }
     }
 
-    public function listarPagamentoMes($id_mes, $id_usuario = null) {        
-        $lista = "SELECT * FROM $tabela WHERE id_mes_referencia = $id_mes_ref ";
-        //var_dump($lista);die();
-
-        if (isset($id_usuario)) {
-            $lista .= " and id_usuario = $id_usuario ";
+    public function listarPagamentoMes($id_mes_ref, $id_usuario = null) {        
+        try {
+            $query = "SELECT * FROM mes_referencia WHERE id_mes_referencia = $id_mes_ref ";
+            if (isset($id_usuario)) {
+                $query .= " AND id_usuario = $id_usuario ";
+            }
+            $query .= " AND d_e_l_e_t_e IS NULL";
+            $conexao = Conexao::pegaConexao();            
+            $rs = $conexao->query($query);
+            if($rs):
+                return $rs->fetchAll(PDO::FETCH_ASSOC);
+                exit;
+            endif;            
+        } catch (Exception $e) {
+            echo "Falha ao identificar mês referenciado. ".$e->getMessage();
         }
-        $lista .= " AND d_e_l_e_t_e IS NULL";
-        //var_dump($lista);die();
-        $rs = $this->conexao->query($lista);
-        return $rs->fetchAll(PDO::FETCH_ASSOC);
+        
     }
 
     //Gerador de Meses automático
-    final function geradorMA() {
+    final function gerarMes() {
         $meses_anos = ["JAN" => "JANEIRO",
             "FEV" => "FEVEREIRO",
             "MAR" => "MARÇO",
@@ -89,23 +95,28 @@ class MesReferencia{
         return $meses_anos;
     }
 
-    public function pegaMesAutomatico() {        
-        $ano_atual = date('Y');
-        //$ano_atual = 2021;
-        $gerador_ma = $this->geradorMA();
-        if ($gerador_ma) {
-            foreach ($gerador_ma as $chave => $valor) {
-                $ch = $chave . '/' . $ano_atual;
-                $val = $valor . '/' . $ano_atual;
-                $validaMes = $this->validarMesAno($ch);
-                //var_dump($validaMes);die();
-                if ($validaMes == false) {
-                    $this->inserirMesRef($ch, $val);
-                }
+    //Função responsável pela recuperação do mês automático presente no processamento da formação do calendário anual.
+    public function pegarMesAutomatico() {        
+        try {
+            $ano_atual = date('Y');
+            //$ano_atual = 2022;
+            $meses = $this->gerarMes();
+            if ($meses) {
+                foreach ($meses as $chave => $valor):
+                    $ch = $chave . '/' . $ano_atual;
+                    $val = $valor . '/' . $ano_atual;
+                    $validaMes = $this->validarMesAno($ch);                    
+                    if ($validaMes == false):
+                        $this->inserirMesRef($ch, $val);                        
+                    endif;
+                endforeach;
+            } else {
+                throw new Exception("Houve falha ao recuperar Mês automático.");
             }
-        } else {
-            throw new Exception("Houve falha ao gerar Mês/Ano automaticamente.");
+        } catch (Exception $e) {
+            echo "Falha no processamento do Mês automático. ".$e->getMessage();
         }
+        
     }
 
     public function buscar($id) {
@@ -125,15 +136,21 @@ class MesReferencia{
     }
 
     final function validarMesAno($chave) {
-
-        $rs = $this->conexao->query("SELECT * FROM $tabela WHERE chave = '$chave' and d_e_l_e_t_e is null");
-        //var_dump($rs);die();
-        if ($rs->rowCount() > 0) {
-            return true;
+        try {
+            $query = "SELECT * FROM mes_referencia WHERE chave = '$chave' AND d_e_l_e_t_e IS NULL";            
+            $conexao = Conexao::pegaConexao();
+            $rs = $conexao->prepare($query);            
+            $rs->execute();            
+            if ($rs->rowCount() > 0) {
+                return true;                
+            }
+            return false;
+        } catch (Exception $e) {
+            echo "Falha no processo de validação do Mês/Ano de referência. ".$e->getMessage();
         }
-        return false;
+        
     }
-
+    //Recuperação do Mês de referência por Session ou Request.
     public function pegaMesRef() {                
         try{
             if(!isset($_REQUEST['id_mes_referencia'])){                
