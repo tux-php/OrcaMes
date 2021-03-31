@@ -11,6 +11,7 @@ class Pagamento{
     private int $id_mes_referencia;
     private string $clone;    
     private PagamentoDAO $pagamentoDAO;
+    private StatusPagamentoDAO $statusPDAO;
 
     public function __construct(int $idTipoPagamento = 0, 
                                 $valorPagamento = FALSE,
@@ -20,7 +21,7 @@ class Pagamento{
                                 int $id_mes_referencia = 0,
                                 string $clone = '') 
     {
-        $this->idTipoPagamento = $idTipoPagamento.
+        $this->idTipoPagamento = $idTipoPagamento;
         $this->valorPagamento = $valorPagamento;
         $this->data_lancamento = $data_lancamento;
         $this->id_usuario = $id_usuario;
@@ -74,8 +75,9 @@ class Pagamento{
 
     public function processarPag($id) {  
         try {
-            $this->pagamentoDAO = new PagamentoDAO();            
-            $status = $this->pagamentoDAO->pegaStatus('PG');              
+            $this->pagamentoDAO = new PagamentoDAO();
+            $this->statusPDAO = new StatusPagamentoDAO();            
+            $status = $this->statusPDAO->pegaStatus('PG');              
             $cod = $status['id_status_pagamento'];            
             $data_proc = date('Y-m-d');        
             if (isset($status)) {
@@ -92,7 +94,8 @@ class Pagamento{
 
     public function cancelarPag($id) {
         $this->pagamentoDAO = new PagamentoDAO();
-        $status = $this->pagamentoDAO->pegaStatus('NPG');        
+        $this->statusPDAO = new StatusPagamentoDAO();            
+        $status = $this->statusPDAO->pegaStatus('NPG');        
         $cod = $status['id_status_pagamento'];
         $data_proc = date('Y-m-d');
         $salvar = $this->pagamentoDAO->alterarStatusPagamento($cod, $data_proc, $id);
@@ -105,8 +108,9 @@ class Pagamento{
     public function clonarPag(array $dados) {
         try {
             $pagamentoDAO = new PagamentoDAO();
+            $statusPagDao = new StatusPagamentoDAO();
             $dados['data_lancamento'] = date('Y-m-d');
-            $npg = $pagamentoDAO->pegaStatus('NPG');
+            $npg = $statusPagDao->pegaStatus('NPG');
             $dados['id_status_pagamento'] = (int) $npg['id_status_pagamento'];
             $dados['ch_clone'] = 'S';
             $clonar = $pagamentoDAO->clonarPagamento($dados);

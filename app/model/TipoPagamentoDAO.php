@@ -80,6 +80,19 @@ class TipoPagamentoDAO{
         
     }
 
+    public function listar() {
+        try
+        {
+            $lista = "SELECT * FROM tipo_pagamento WHERE d_e_l_e_t_e is null";
+            $conexao = Conexao::pegaConexao();
+            $rs = $conexao->query($lista);
+            return $rs->fetchAll(PDO::FETCH_ASSOC);                
+        }catch(Exception $e){
+            echo "Houve uma falha ao gerar lista de tipo de pagamentos. ".$e->getMessage();
+        }
+        
+    }
+
     public function excluir($id):string
     {
         try
