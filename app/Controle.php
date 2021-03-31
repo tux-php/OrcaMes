@@ -1,14 +1,11 @@
 <?php
-class Controle extends Acao {
-    private $classeNow;
+class Controle extends Acao {    
     private Orgao $orgao;
     private OrgaoDAO $orgaoDAO;
     private Usuario $usuario;
     private UsuarioDAO $usuarioDAO;
     private TipoPagamento $tipoPagamento;
-    private TipoPagamentoDAO $tipoPagamentoDAO;
-    private $tipoSaldo;
-    private $salarioMensal;
+    private TipoPagamentoDAO $tipoPagamentoDAO;    
     private Pagamento $pagamento;
     private PagamentoDAO $pagamentoDAO;
     private PagamentoExtra $pagamentoExtra;
@@ -17,7 +14,8 @@ class Controle extends Acao {
     private $view;
     private StatusPagamento $statusPagamento;
     private StatusPagamentoDAO $statusPagamentoDAO;
-    private $statusUsuario;
+    private StatusUsuario $statusUsuario;
+    private StatusUsuarioDAO $statusUsuarioDAO;
     private $mesReferencia;
     private TipoDespesa $tipoDespesa;
     private TipoDespesaDAO $tipoDespesaDAO;
@@ -40,9 +38,7 @@ class Controle extends Acao {
         $this->usuario = new Usuario();
         $this->usuarioDAO = new UsuarioDAO();
         $this->tipoPagamento = new TipoPagamento();
-        $this->tipoPagamentoDAO = new TipoPagamentoDAO();
-        $this->classeNow = new CreatorConcrete();
-        $this->salarioMensal = new SalarioMensal();
+        $this->tipoPagamentoDAO = new TipoPagamentoDAO();                
         $this->pagamento = new Pagamento();
         $this->pagamentoDAO = new PagamentoDAO();
         $this->pagamentoExtra = new PagamentoExtra();
@@ -52,6 +48,7 @@ class Controle extends Acao {
         $this->statusPagamento = new StatusPagamento();
         $this->statusPagamentoDAO = new StatusPagamentoDAO();
         $this->statusUsuario = new StatusUsuario();
+        $this->statusUsuarioDAO = new StatusUsuarioDAO();
         $this->mesReferencia = new MesReferencia();
         $this->tipoDespesa = new TipoDespesa();
         $this->tipoDespesaDAO = new TipoDespesaDAO();
@@ -161,11 +158,6 @@ class Controle extends Acao {
         } else {
             $this->mataSessao();
         }
-    }
-
-    protected function pegaClasse($classeAgora) {
-        $classeAg = $this->classeNow->iniciarFabrica($classeAgora);
-        return $classeAg;
     }
 
     protected function listarPagamentoMes($dados = Array()) {
@@ -478,17 +470,7 @@ class Controle extends Acao {
             $this->mataSessao();
         }
     }
-
-    protected function excluirTipoSaldo($id) {
-        $this->iniciaSessao();
-        if ($_SESSION['usuario']) {
-            $this->tipoSaldo->excluir('id_tipo_saldo', $id);
-            $dados['tipoSaldo'] = $this->tipoSaldo->listar();
-            $this->home();
-        } else {
-            $this->mataSessao();
-        }
-    }
+    
 
     /* EXCLUIR FIM */
 
@@ -597,34 +579,7 @@ class Controle extends Acao {
         }
     }
 
-    protected function inserirTipoSaldo() {
-        $this->iniciaSessao();
-        if ($_SESSION['usuario']) {
-            if ($_POST) {
-                $this->tipoSaldo->inserir($_POST);
-                $this->home();
-            }
-            $this->view->load('tipoSaldo/inserir');
-        } else {
-            $this->mataSessao();
-        }
-    }
-
-    protected function alterarTipoSaldo($id) {
-        $this->iniciaSessao();
-        if ($_SESSION['usuario']) {
-            if ($_POST) {
-                $this->tipoSaldo->alterar($id, 'id_tipo_saldo', $_POST);
-                header("Location:home.php");
-            }
-            $dados = $this->tipoSaldo->buscar('id_tipo_saldo', $id);
-            $this->view->load('tipoSaldo/editar', $dados);
-        } else {
-            $this->mataSessao();
-        }
-    }
-
-    protected function inserirSalarioMes() {
+    /*protected function inserirSalarioMes() {
         $this->iniciaSessao();
         if ($_SESSION['usuario']) {
             if (isset($_POST['liquido']) && !empty($_POST['liquido'])) {
@@ -644,7 +599,7 @@ class Controle extends Acao {
         } else {
             $this->mataSessao();
         }
-    }
+    }*/
 
     protected function inserirUsuario() {
         
@@ -682,7 +637,7 @@ class Controle extends Acao {
                 die();
             }            
             $dados['OrgaoPagador'] = $this->orgaoDAO->listarOP();
-            $dados['StatusUsuario'] = $this->statusUsuario->listar();
+            $dados['StatusUsuario'] = $this->statusUsuarioDAO->listar();
             $this->view->load('usuario/inserir_usuario', $dados);
         } else {
             $this->mataSessao();
@@ -815,7 +770,7 @@ class Controle extends Acao {
             $dados['autenticacao'] = $usuarioAutenticacaoDAO->buscarUsuarioAutenticacao($id);
             $dados['op'] = $dados['user']['id_orgao_pagador'];            
             $dados['OrgaoPagador'] = $this->orgaoDAO->listarOP();
-            $dados['StatusUsuario'] = $this->statusUsuario->listar();
+            $dados['StatusUsuario'] = $this->statusUsuarioDAO->listar();
             $this->view->load('usuario/editar_usuario', $dados);
         } else {
             $this->mataSessao();
@@ -825,7 +780,7 @@ class Controle extends Acao {
     protected function listarStatusUsuario() {
         $this->iniciaSessao();
         if ($_SESSION['usuario']) {
-            $dados['statusUsuario'] = $this->statusUsuario->listar();
+            $dados['statusUsuario'] = $this->statusUsuarioDAO->listar();
             $view = $this->view->load('statusUsuario/listar', $dados);
         } else {
             $this->mataSessao();
@@ -842,7 +797,8 @@ class Controle extends Acao {
         $this->iniciaSessao();
         if ($_SESSION['usuario']) {
             if ($_POST) {
-                $this->statusUsuario->inserir($_POST);
+                $statusUsuario = new StatusUsuario($_POST['chave'],$_POST['descricao']);
+                $this->statusUsuarioDAO->inserir($statusUsuario);
                 $this->home();
             }
             $this->view->load('statusUsuario/inserir');
@@ -855,7 +811,7 @@ class Controle extends Acao {
         $this->iniciaSessao();
         if ($_SESSION['usuario']) {
             if ($_POST) {
-                $this->statusUsuario->alterar($id, 'id_status_usuario', $_POST);
+                $this->statusUsuarioDAO->alterar($id, 'id_status_usuario', $_POST);
                 $this->home();
             }
             $dados = $this->statusUsuario->buscar('id_status_usuario', $id);
@@ -911,7 +867,7 @@ class Controle extends Acao {
     protected function excluirSU($id) {
         $this->iniciaSessao();
         if ($_SESSION['usuario']) {
-            $this->statusUsuario->excluir('id_status_usuario', $id);
+            $this->statusUsuarioDAO->excluir('id_status_usuario', $id);
             $this->home();
         } else {
             $this->mataSessao();

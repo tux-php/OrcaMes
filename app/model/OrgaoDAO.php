@@ -49,7 +49,7 @@ class OrgaoDAO{
         
     }
 
-    public function excluir($id):string
+    public function excluir($id)
     {
         try
         {
