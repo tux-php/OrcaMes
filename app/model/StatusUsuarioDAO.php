@@ -1,26 +1,23 @@
 <?php
-
-class OrgaoDAO{       
-
-    public function listarOP()
-    {
+class StatusUsuarioDAO{
+    public function listar() {
         try
         {
-            $lista = "SELECT * FROM orgao_pagador WHERE d_e_l_e_t_e is null";
-            $conexao = Conexao::pegaConexao();        
-            $rs = $conexao->query($lista);        
-        return $rs->fetchAll(PDO::FETCH_ASSOC);
-
+            $lista = "SELECT * FROM status_usuario WHERE d_e_l_e_t_e is null";
+            $conexao = Conexao::pegaConexao();
+            $rs = $conexao->query($lista);
+            return $rs->fetchAll(PDO::FETCH_ASSOC);                
         }catch(Exception $e){
-            echo "Houve um erro na construção da lista .".$e->getMessage();
+            echo "Houve uma falha ao gerar lista de usuários. ".$e->getMessage();
         }
         
     }
-    public function inserirOP(Orgao $orgao)
+
+    public function inserir(StatusUsuario $su)
     {
         try{
             $conexao = Conexao::pegaConexao();
-            $query = $conexao->prepare("INSERT INTO orgao_pagador(chave,descricao) VALUES('{$orgao->carregaChave()}','{$orgao->carregaDescricao()}')");        
+            $query = $conexao->prepare("INSERT INTO status_usuario(chave,descricao) VALUES('{$su->carregarChave()}','{$su->carregarDescricao()}')");        
             $stmt = $query->execute();            
             if(!$stmt)
             {
@@ -32,6 +29,7 @@ class OrgaoDAO{
 
         }
     }
+
     public function alterar($id, $id_tabela, $dados) {  
         try
         {
@@ -39,7 +37,7 @@ class OrgaoDAO{
                 $set[] = "$campo='$valor'";
             }
             $sets = strtoupper(implode(',', $set));
-            $query = "UPDATE orgao_pagador SET $sets WHERE $id_tabela='$id'";
+            $query = "UPDATE status_usuario SET $sets WHERE $id_tabela='$id'";
             $conexao = Conexao::pegaConexao();
             $stmt = $conexao->prepare($query);
             $stmt->execute();            
@@ -49,11 +47,22 @@ class OrgaoDAO{
         
     }
 
+    public function buscar($identificador_id, $id) {
+        try{
+            $conexao = Conexao::pegaConexao();
+            $results = $conexao->query("SELECT * FROM status_usuario WHERE $identificador_id = '$id' and d_e_l_e_t_e is null");            
+            return $results->fetch();
+        }catch(Exception $e){
+            echo $e->getMessage() . " - Detalhe:" . $exc->getTraceAsString();
+        }
+        
+    }
+
     public function excluir($id)
     {
         try
         {
-            $sql = "DELETE FROM orgao_pagador WHERE id_orgao_pagador = '$id'";        
+            $sql = "DELETE FROM status_usuario WHERE id_status_usuario = '$id'";        
             $conexao = Conexao::pegaConexao();
             $rs = $conexao->query($sql);
             if ($rs) {
@@ -65,15 +74,4 @@ class OrgaoDAO{
         }
         
     }
-    public function buscar($identificador_id, $id) {
-        try{
-            $conexao = Conexao::pegaConexao();
-            $results = $conexao->query("SELECT * FROM orgao_pagador WHERE $identificador_id = '$id' and d_e_l_e_t_e is null");            
-            return $results->fetch();
-        }catch(Exception $e){
-            echo $e->getMessage() . " - Detalhe:" . $exc->getTraceAsString();
-        }
-        
-    }
 }
-?>
