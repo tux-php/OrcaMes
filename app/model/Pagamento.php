@@ -123,4 +123,18 @@ class Pagamento{
             echo $exc->getMessage() . '<br>';
         }
     }
-}
+
+    //Ainda não conseguir usar essa função. Reavaliar em outro momento.
+    //Objetivo é transforma o valor do banco na moeda Real.
+    public function convergirParaReal($valor)
+    {
+        //$resultado = substr_replace($valor['valor_pagamento'], '.', -6, 0);                                        
+          //          var_dump($resultado);die();
+        try {
+            $conversao = substr_replace($valor,'.',-6,0);
+            return $conversao;
+        } catch (Exception $e) {
+            echo "Falha ao convergir valor para moeda nacional.".$e->getMessage();
+        }
+    }
+} 

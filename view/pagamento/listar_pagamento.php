@@ -4,8 +4,8 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title></title>
-        <link rel="stylesheet" href="././css/bootstrap.min.css" />
-        <!--<link rel="stylesheet" href="././css/meu_estilo/estilo_meu.css" />-->
+        <link rel="stylesheet" href="././css/bootstrap.min.css" />    
+        <link rel="stylesheet" href="././css/meu_estilo/estilo_meu.css" />   
         <script type="text/javascript" src="././jquery/jquery-1.11.3.min.js"></script>
         <script type="text/javascript" src="././js/bootstrap.min.js"></script>
         <script type="text/javascript" src="././js/efeitos.js"></script>
@@ -24,7 +24,7 @@
                             <tr>
                                 <th scope="col" class="text-uppercase text-left">#</th>
                                 <th scope="col" class="text-uppercase text-left">Tipo Pagamento</th>
-                                <th scope="col" class="text-uppercase text-center">Valor</th>
+                                <th scope="col" class="text-uppercase text-left">Valor</th>
                                 <th scope="col" class="text-uppercase text-center">Lançamento</th>
                                 <th scope="col" class="text-uppercase text-center">Processamento</th>
                                 <th scope="col" class="text-uppercase text-center">Mes Referencia</th>
@@ -34,60 +34,59 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <?php
-if ($dados['pagamentos']) {
-    //var_dump($dados['pagamentos']);
-    foreach ($dados['pagamentos'] as $ch => $pag) {
-        ?>
-                                    <tr>
-                                        <th scope="row"><?=$ch;?></th>
-                                        <td class="text-lowercase"><?=$pag['id_tipo_pagamento'];?></td>
-                                        <td><?=$pag['valor_pagamento'];?></td>
-                                        <td class="text-center"><?=$pag['data_lancamento'];?></td>
-                                        <td class="text-center"><?php
-if (isset($pag['data_processamento']) && $pag['data_processamento']) {
-            echo $pag['data_processamento'];
-            ?></td>
-                                        <?php
-} else {
-            echo '--';
-        }
-        ?>
-                                        <td class="text-center text-lowercase"><?=$pag['id_mes_referencia'];?></td>
-                                        <td class="text-center text-capitalize"><?=$pag['id_usuario'];?></td>
-                                        <td class="text-center">
-                                            <a href="?action=alterarPagamento&id_pagamento=<?php echo $pag['id_pagamento'] ?>" title="Editar"><span class="glyphicon glyphicon-cog" style="color: #777"></span></a>
-                                        </td>
-                                        <td class="text-center">
-                                            <a href="?action=excluirPagamento&id_pagamento=<?php echo $pag['id_pagamento']; ?>" title="Excluir"><span class="glyphicon glyphicon-remove" style="color: #777"></span></a>
-                                        </td>
-                                        <td class="text-center"><a href="?action=processarPagamento&id_pagamento=<?php echo $pag['id_pagamento']; ?>" title="Processar Pagamento" id="processar" rel="<?=$pag['valor_pagamento'];?>"><span class="glyphicon glyphicon-thumbs-up" style="color: #777"></span></a></td>
-                                        <td class="text-center"><a href="?action=cancelarPagamento&id_pagamento=<?php echo $pag['id_pagamento']; ?>" title="Cancelar Pagamento" id="cancelar" rel="<?=$pag['valor_pagamento'];?>"><span class="glyphicon glyphicon-ban-circle" style="color: #777"></span></a></td>
-                                        <td class="text-center"><?=$pag['id_status_pagamento'] == 'PG' ? '<span class="label label-success" id="pag_sucesso">pagamento efetuado</span>' : '<span class="label label-danger" id="pag_nao_processado">pagamento pendente </span>';?></td>
-                                    </tr>
+                <?php 
+                $salario = $dados['salario'];
+                $total = $dados['total'];
+                $sobra = $dados['sobra'];
+                $subtotal = $dados['subtotal'];
+                    if ($dados) :    
+                            foreach ($dados['pagamentos'] as $ch=>$dados):?>
+                            
+                                <tr>
+                                    <th scope="row"><?=$ch;?></th>
+                                    <td class="text-left"><?=$dados['tipo_pagamento'];?></td>
+                                    <td class="text-left"><strong>R$ <?=str_replace('.',',',$dados['valor_pagamento']);?></strong></td>
+                                    <td class="text-center"><?=$dados['data_lancamento'];?></td>
+                                    <td class="text-center"><?php
+                                if (isset($dados['data_processamento']) && $dados['data_processamento']) {
+                                            echo $dados['data_processamento'];?>
+                                    </td>
                                 <?php
-}
-}
+                                } else {echo '--';}?>
+                                    <td class="text-center text-capitalize"><?=$dados['mes_referencia'];?></td>
+                                    <td class="text-center text-capitalize"><?=$dados['nome'];?></td>
+                                    <td class="text-center">
+                                        <a href="?action=alterarPagamento&id_pagamento=<?php echo $dados['id_pagamento'] ?>" title="Editar"><span class="glyphicon glyphicon-cog" style="color: #777"></span></a>
+                                    </td>
+                                    <td class="text-center">
+                                        <a href="?action=excluirPagamento&id_pagamento=<?php echo $dados['id_pagamento']; ?>" title="Excluir"><span class="glyphicon glyphicon-remove" style="color: #777"></span></a>
+                                    </td>
+                                    <td class="text-center"><a href="?action=processarPagamento&id_pagamento=<?php echo $dados['id_pagamento']; ?>" title="Processar Pagamento" id="processar" rel="<?=$dados['valor_pagamento'];?>"><span class="glyphicon glyphicon-thumbs-up" style="color: #777"></span></a></td>
+                                    <td class="text-center"><a href="?action=cancelarPagamento&id_pagamento=<?php echo $dados['id_pagamento']; ?>" title="Cancelar Pagamento" id="cancelar" rel="<?=$dados['valor_pagamento'];?>"><span class="glyphicon glyphicon-ban-circle" style="color: #777"></span></a></td>
+                                    <td class="text-center"><?=$dados['status_pgt'] == 'PG' ? '<span class="label label-success" id="pag_sucesso">pagamento efetuado</span>' : '<span class="label label-danger" id="pag_nao_processado">pagamento pendente </span>';?></td>
+                                </tr>
+                            <?php
+                        endforeach;
+                    endif;
 ?>
                         </tbody>
                     </table>
-                </div>
-         
+                </div>         
 
 <div class="btn-group btn-group-justified  flex-wrap" role="group" aria-label="Grupos de valores">
   <div class="btn-group" role="group">
-    <button type="button" class="btn btn-primary"><h4>Salário:<?=$dados['salario'];?></h4></button>    
+    <button type="button" class="btn btn-primary"><h4>Salário:<?=$salario;?></h4></button>    
   </div>
   <div class="btn-group" role="group">
-    <button type="button" class="btn btn-success"><h4>Processado:R$ <?=$dados['total'];?></h4></button>
+    <button type="button" class="btn btn-success"><h4>Processado:R$ <?=$total;?></h4></button>
   </div>
   <div class="btn-group" role="group">
-    <button type="button" class="btn btn-info"><h4>Sobra:R$ <?=$dados['sobra'];?></h4></button>
+    <button type="button" class="btn btn-info"><h4>Sobra:R$ <?=$sobra;?></h4></button>
   </div> 
 </div>
 <div class="btn-group btn-group-justified flex-wrap" role="group" aria-label="Grupos de valores">
 <div class="btn-group" role="group">
-    <button type="button" class="btn btn-warning"><h4>Subtotal:R$ <?=$dados['subtotal'];?></h4></button>
+    <button type="button" class="btn btn-warning"><h4>Subtotal:R$ <?=$subtotal;?></h4></button>
   </div>
 </div>
 <br />
