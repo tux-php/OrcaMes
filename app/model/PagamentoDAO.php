@@ -2,16 +2,29 @@
 class PagamentoDAO{    
 
     final public function listarPagamentoMes($id_mes_ref, $id_usuario) {        
-        try {
-            $query = "SELECT * FROM pagamentos WHERE id_mes_referencia = $id_mes_ref ";
-            if (isset($id_usuario)) {
-                $query .= " and id_usuario = $id_usuario ";
-            }
-            $query .= " AND d_e_l_e_t_e IS NULL";            
+        try {            
+            $query = "SELECT 
+            concat(Upper(substr(tp.descricao, 1,1)), substr(tp.descricao, 2,length(tp.descricao))) as tipo_pagamento,
+            pgt.id_pagamento,
+            pgt.valor_pagamento,
+            DATE_FORMAT(pgt.data_lancamento,'%d-%m-%Y') as data_lancamento,
+			DATE_FORMAT(pgt.data_processamento,'%d-%m-%Y') as data_processamento,
+            mes_ref.descricao as mes_referencia,
+            user.nome,
+            sts.chave as status_pgt    
+            FROM pagamentos pgt
+            INNER JOIN tipo_pagamento tp ON(pgt.id_tipo_pagamento = tp.id_tipo_pagamento)
+            INNER JOIN usuario user ON(user.id_usuario = pgt.id_usuario)
+            INNER JOIN mes_referencia mes_ref ON(mes_ref.id_mes_referencia = pgt.id_mes_referencia)
+            INNER JOIN status_pagamento sts ON(sts.id_status_pagamento = pgt.id_status_pagamento)
+            WHERE pgt.id_mes_referencia = $id_mes_ref
+            AND pgt.id_usuario = $id_usuario
+            AND pgt.d_e_l_e_t_e IS NULL
+            ORDER BY tp.descricao";            
             $conexao = Conexao::pegaConexao();
             $rs = $conexao->query($query);
-            if($rs){
-                return $rs->fetchAll(PDO::FETCH_ASSOC);
+            if($rs){                                
+                return $rs->fetchAll(PDO::FETCH_ASSOC);                
             }            
         } catch (Exception $e) {
             echo "Falha ao carregar listagem de pagamento por mês. ".$e->getMessage();

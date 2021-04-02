@@ -20,7 +20,7 @@ class Controle extends Acao {
     private TipoDespesa $tipoDespesa;
     private TipoDespesaDAO $tipoDespesaDAO;
     private $despesa;
-    private $relatorio;
+    private Relatorio $relatorio;
     private $usuarioTipoPagamento;
 
     function __construct() {
@@ -173,22 +173,19 @@ class Controle extends Acao {
     protected function pegaListaPagamantoMes($mes_referencia, $usuario) {        
         $this->iniciaSessao();
         if (isset($_SESSION['usuario'])) {            
-            $dados['pagamentos'] = $this->pagamentoDAO->listarPagamentoMes($mes_referencia, $usuario);            
-            foreach ($dados['pagamentos'] as $ch => $value):
-                $data_lancamento = $this->pagamento->ajustarData($value['data_lancamento']);
-                $data_processamento = $this->pagamento->ajustarData($value['data_processamento']);
-                $dados['pagamentos'][$ch]['data_lancamento'] = $data_lancamento;
-                $dados['pagamentos'][$ch]['data_processamento'] = $data_processamento;
-                $tipo_pag = $this->tipoPagamentoDAO->buscar($value['id_tipo_pagamento']);
-                $dados['pagamentos'][$ch]['id_tipo_pagamento'] = $tipo_pag['descricao'];
-                $mesref = $this->mesReferencia->buscar($value['id_mes_referencia']);
-                $dados['pagamentos'][$ch]['id_mes_referencia'] = $mesref['descricao'];
-                $usuario = $this->usuarioDAO->buscar($value['id_usuario']);
-                $dados['pagamentos'][$ch]['id_usuario'] = $usuario['nome'];
-                $status = $this->statusPagamentoDAO->buscar($value['id_status_pagamento']);
-                $dados['pagamentos'][$ch]['id_status_pagamento'] = $status['chave'];
-            endforeach;
-                return $dados;
+            $dados['pagamentos'] = $this->pagamentoDAO->listarPagamentoMes($mes_referencia, $usuario);           
+            /*foreach($dados['pagamentos'] as $valor):                        
+                    
+                    /*$dados['id_pagamento'] = $valor['id_pagamento'];
+                    $dados['tipo_pagamento'] = $valor['tipo_pagamento'];                    
+                    $dados['valor_pagamento'] = $valor['valor_pagamento'];
+                    $dados['data_lancamento'] = $valor['data_lancamento'];  
+                    $dados['data_processamento'] = $valor['data_processamento'];
+                    $dados['mes_referencia'] = $valor['mes_referencia'];
+                    $dados['usuario_nome'] = $valor['nome'];
+                    $dados['status_pagamento'] = $valor['status_pgt'];*/
+              //  endforeach;                
+                return $dados;            
         } else {
             $this->mataSessao();
         }
@@ -206,17 +203,17 @@ class Controle extends Acao {
         return $mes_referencia;
     }
 
-    protected function listarPagamento() {
+    protected function listarPagamento() {        
         $this->iniciaSessao();        
         if (isset($_SESSION['usuario'])) {
             $usuario = (int) $_SESSION['usuario'];            
             $mes_referencia = $this->pegaMesRefNow();
             $_SESSION['id_mes_ref'] = $mes_referencia;
-            $dados = $this->pegaListaPagamantoMes($mes_referencia, $usuario);
+            $dados = $this->pegaListaPagamantoMes($mes_referencia, $usuario);                            
             $id_usuario = $this->usuario->pegaIdLogado();
             $status_pg = $this->statusPagamentoDAO->pegaStatus('PG');
             $id_status_pg = (int) $status_pg['id_status_pagamento'];
-            $total = $this->pagamentoDAO->SomarTotal($mes_referencia, $id_usuario, $id_status_pg);
+            $total = $this->pagamentoDAO->SomarTotal($mes_referencia, $id_usuario, $id_status_pg);            
             $subtotal = $this->pagamentoDAO->SomarSubtotal($mes_referencia, $id_usuario);
             $salario_extra = $this->pagamentoExtraDAO->pegaSalarioExtra($mes_referencia, $id_usuario);
             $salario = $this->usuarioDAO->carregarSalario($id_usuario);
@@ -224,7 +221,11 @@ class Controle extends Acao {
             $dados['salario_extra'] = $salario_extra;
             $dados['salario'] = $salario["salario"] + $salario_extra;
             $dados['sobra'] = (double) ($dados['salario'] - $dados['total']);
-            $dados['subtotal'] = $subtotal;
+            $dados['subtotal'] = $subtotal;     
+            /*echo"<pre>";
+            var_dump($dados);
+            echo"</pre>";
+            die();*/
             $this->view->load('pagamento/listar_pagamento', $dados);
         } else {
             $this->mataSessao();

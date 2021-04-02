@@ -2,7 +2,7 @@
 <html>
     <head>
         <link rel="stylesheet" href="././css/bootstrap.min.css" />
-        <!--<link rel="stylesheet" href="./css/meu_estilo/estilo_meu.css" />-->
+        <link rel="stylesheet" href="././css/meu_estilo/estilo_meu.css" />   
         <script type="text/javascript" src="././jquery/jquery-1.11.3.min.js"></script>
         <script type="text/javascript" src="././js/bootstrap.min.js"></script>
          <meta charset="UTF-8" />
@@ -37,7 +37,7 @@
                             foreach ($dados['meses'] as $ch=>$mes) {
                                 ?>
                                     <tr class="mes_referencia">
-                                        <th scope="row"><?=$ch;?></th>                                    
+                                        <td scope="row"><strong><?=$ch;?></strong></td>                                    
                                         <td class="text-uppercase"><?= $mes['chave']; ?></td>
                                         <td class="text-center col-sm-5">
                                             <a class="btn-sm btn-success text-uppercase text-center" style="margin:1%;" role="button" href="?action=detalharPagamentoMes&id_mes_referencia=<?php echo $mes['id_mes_referencia'] ?>" title="Detalhar Pagamento">Detalhar</a>                                        

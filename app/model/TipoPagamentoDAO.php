@@ -38,7 +38,7 @@ class TipoPagamentoDAO{
         try {
             $query = "INSERT INTO tipo_pagamento(descricao,id_tipo_despesa)
                              VALUES ('{$tipoPagamento->carregaDescricao()}',
-                                    '{$tipoPagamento->carregaTipoDespesaId()}')";                                    
+                                    '{$tipoPagamento->carregaTipoDespesaId()}')";                                      
             $conexao = Conexao::pegaConexao();
             $stmt = $conexao->prepare($query);
             $rs = $stmt->execute();                        
@@ -58,7 +58,7 @@ class TipoPagamentoDAO{
             foreach ($dados as $campo => $valor) {
                 $set[] = "$campo='$valor'";
             }
-            $sets = strtoupper(implode(',', $set));
+            $sets = strtolower(implode(',', $set));
             $conexao = Conexao::pegaConexao();
             $query = "UPDATE tipo_pagamento SET $sets WHERE $id_tabela='$id'";            
             $stmt = $conexao->prepare($query);

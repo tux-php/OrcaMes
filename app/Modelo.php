@@ -29,33 +29,4 @@ abstract class Modelo {
         return $this->banco->excluir(static::TABELA, $campo, $id);
     }
 
-    
-
-    
-    
-   
-    
-    
-    /*
-     * @SomarTotal contempla Mês de Referencia
-     * avaliar sua classe de origem
-     */
-    
-
-    
-    
-   
-    
-    
-
-    
-
-    final function pegaLogado($email, $senha) {
-        return $this->banco->pegaLogado('autenticacao_user', $email, $senha);
-    }
-
-    public function gerarRelatorio() {
-        return $this->banco->gerarRelatorio();
-    }
-
 }

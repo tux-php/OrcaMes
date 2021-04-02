@@ -2,7 +2,7 @@
 <html lang="en-US">
     <head>
         <link rel="stylesheet" href="././css/bootstrap.min.css" />
-        <!--<link rel="stylesheet" href="././css/meu_estilo/estilo_meu.css" />-->
+        <link rel="stylesheet" href="././css/meu_estilo/estilo_meu.css" />   
         <script type="text/javascript" src="././jquery/jquery-1.11.3.min.js"></script>
         <script type="text/javascript" src="././js/bootstrap.min.js"></script> 
         <meta charset="UTF-8">
@@ -35,7 +35,7 @@
                       //var_dump($tp);
                       ?>
                <tr>
-                  <th scope="row"><?= $ch;?></th>
+                  <td scope="row"><strong><?= $ch;?></strong></td>
                   <td class="text-uppercase"><?= $td['chave'] ?></td>
                   <td class="text-uppercase"><?= $td['descricao'] ?></td>
                   <td class="text-center">                    
