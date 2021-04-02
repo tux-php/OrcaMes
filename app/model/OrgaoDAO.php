@@ -42,7 +42,12 @@ class OrgaoDAO{
             $query = "UPDATE orgao_pagador SET $sets WHERE $id_tabela='$id'";
             $conexao = Conexao::pegaConexao();
             $stmt = $conexao->prepare($query);
-            $stmt->execute();            
+            $rs = $stmt->execute();            
+            if($rs){
+                return TRUE;
+                exit;
+            }
+            return FALSE;
         }catch(Exception $e){
             echo $e->getMessage() . " - Detalhe:" . $exc->getTraceAsString();
         }   

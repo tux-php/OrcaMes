@@ -174,17 +174,6 @@ class Controle extends Acao {
         $this->iniciaSessao();
         if (isset($_SESSION['usuario'])) {            
             $dados['pagamentos'] = $this->pagamentoDAO->listarPagamentoMes($mes_referencia, $usuario);           
-            /*foreach($dados['pagamentos'] as $valor):                        
-                    
-                    /*$dados['id_pagamento'] = $valor['id_pagamento'];
-                    $dados['tipo_pagamento'] = $valor['tipo_pagamento'];                    
-                    $dados['valor_pagamento'] = $valor['valor_pagamento'];
-                    $dados['data_lancamento'] = $valor['data_lancamento'];  
-                    $dados['data_processamento'] = $valor['data_processamento'];
-                    $dados['mes_referencia'] = $valor['mes_referencia'];
-                    $dados['usuario_nome'] = $valor['nome'];
-                    $dados['status_pagamento'] = $valor['status_pgt'];*/
-              //  endforeach;                
                 return $dados;            
         } else {
             $this->mataSessao();
@@ -268,9 +257,14 @@ class Controle extends Acao {
                 $id_user = $_SESSION['usuario'];
                 $valor_extra = $_POST['salario_extra'];
                 $pagamento_extra = new PagamentoExtra($id_user,$id_mes,$valor_extra);                
-                $this->pagamentoExtraDAO->inserirPagExtra($pagamento_extra);
+                $salvar = $this->pagamentoExtraDAO->inserirPagExtra($pagamento_extra);
+                if($salvar):
+                    echo Mensagem::dispararSucesso("Valor R$ $valor_extra inserido com sucesso");
+                else:
+                    echo Mensagem::dispararErro("Falha ao inserir R$ $valor_extra!");
+                endif;
                 $this->listarPagamentoMes();
-                die();
+                exit;
             }
             $dados['meses'] = $this->mesReferencia->listarPagamentoMes($id_mes);            
             $this->view->load('mesReferencia/salarioExtra', $dados);
@@ -297,30 +291,29 @@ class Controle extends Acao {
      * Clonar Pagamentos do Mês Anterior
      */
 
-    protected function clonarPagamentoMes() {
+    protected function clonarPagamentoMes() {        
         $this->iniciaSessao();
         if ($_SESSION['usuario']) {
-            try {                
-                $msg = "";
-                $MesClonadoVazio = $this->validarMesEmClonagem();                
-                if ($MesClonadoVazio == true) {
+            try {                                
+                $MesClonadoVazio = $this->validarMesEmClonagem();                                
+                if ($MesClonadoVazio == true) :
                     $mes_ant = (int) $this->pegaMesAnterior();
                     $id_usuario = $_SESSION['usuario'];
                     $dados['id_mes_clone'] = $mes_ant;
                     $dados['id_usuario'] = $id_usuario;
                     $dados['id_mes_referencia'] = (int) $_REQUEST['id_mes_referencia'];
-                    $processo = $this->pagamento->clonarPag($dados);
-                    if ($processo == true) {
-                        $msg = "clonagem efetuada com sucesso";
-                    } 
-                }else{
-                    throw new Exception("Mês já encontra-se clonado.");
-                }
+                    $processo = $this->pagamento->clonarPag($dados);                    
+                    if ($processo == true):                        
+                        echo Mensagem::dispararSucesso("Clonagem efetuada com sucesso!");
+                    endif;
+                else:                    
+                    echo Mensagem::dispararErro("Mês já encontra-se clonado!");
+                endif;
+                $this->listarPagamentoMes();
+                
             } catch (Exception $exc) {
                 echo $exc->getMessage();
-            }
-            echo $msg;
-            $this->listarPagamentoMes();
+            }   
         } else {
             $this->mataSessao();
         }
@@ -375,7 +368,12 @@ class Controle extends Acao {
             try {
                 if (isset($_POST['descricao']) && !empty($_POST['descricao'])) {
                     $orgaoPagadorDAO = new OrgaoDAO();
-                    $orgaoPagadorDAO->inserirOP(new Orgao($_POST['chave'],$_POST['descricao']));
+                    $salvar = $orgaoPagadorDAO->inserirOP(new Orgao($_POST['chave'],$_POST['descricao']));
+                    if($salvar):
+                        echo Mensagem::dispararSucesso("Órgão inserido com sucesso!");
+                    else:
+                        echo Mensagem::dispararErro("Órgão não inserido!");
+                    endif;
                     $dados['Orgao'] = $orgaoPagadorDAO->listarOP();
                     $this->view->load("Orgao/listar", $dados);
                     die();
@@ -396,7 +394,12 @@ class Controle extends Acao {
             try{
                 if ($_POST) {
                     $orgaoPagadorDAO = new OrgaoDAO();
-                    $orgaoPagadorDAO->alterar($id, 'id_orgao_pagador', $_POST);
+                    $alterar = $orgaoPagadorDAO->alterar($id, 'id_orgao_pagador', $_POST);
+                    if($alterar):
+                        echo Mensagem::dispararSucesso("Órgão alterado com sucesso!");
+                    else:
+                        echo Mensagem::dispararErro("Órgão não alterado!");
+                    endif;
                     $this->listaOrgaoPagador();
                     die();
                 }
@@ -420,9 +423,14 @@ class Controle extends Acao {
             try {
                 if (isset($id)) {
                     $orgaoPagadorDAO = new OrgaoDAO();
-                    $orgaoPagadorDAO->excluir( $id);
+                    $apagaOP = $orgaoPagadorDAO->excluir($id);
+                    if($apagaOP):                        
+                        echo Mensagem::dispararSucesso("Órgão excluído com sucesso!");
                     $dados['Orgao'] = $orgaoPagadorDAO->listarOP();
                     $this->view->load("Orgao/listar", $dados);
+                    else:
+                        echo Mensagem::dispararErro("Órgão não excluído!");
+                    endif;
                 }
             } catch (Exception $ex) {
                 echo $ex->getMessage();
@@ -435,8 +443,14 @@ class Controle extends Acao {
     protected function excluirTP($id) {
         $this->iniciaSessao();
         if ($_SESSION['usuario']) {
-            $this->tipoPagamentoDAO->excluir($id);            
+            $apagaTP = $this->tipoPagamentoDAO->excluir($id);            
+            if($apagaTP):
+                echo Mensagem::dispararSucesso("Tipo pagamentos excluído com sucesso!");                
+            else:
+                echo Mensagem::dispararErro("Tipo pagamento não excluído!");
+            endif;
             $this->listarTP();
+            
         } else {
             $this->mataSessao();
         }
@@ -485,13 +499,15 @@ class Controle extends Acao {
                 $tipoPagamento = new TipoPagamento($dados['descricao'], $dados['id_tipo_despesa']);
                 $salvarTP = $this->tipoPagamentoDAO->inserirTP($tipoPagamento);
                 //var_dump($salvarTP);die();
-                if ($salvarTP) {
+                if ($salvarTP):
                     $idTP = $this->tipoPagamentoDAO->recuperarIdTP();
-
-                    $this->usuarioTipoPagamento->inserirUTP($id_user, $idTP);
-                }
+                    $this->usuarioTipoPagamento->inserirUTP($id_user, $idTP);                
+                    echo Mensagem::dispararSucesso("Tipo de pagamento inserido com sucesso!");
+                else:
+                    echo Mensagem::dispararErro("Tipo de pagamento não inserido!");
+                endif;
                 $this->listarTP();
-                die();
+                exit;
             }
             $dados['tipo_despesa'] = $this->tipoDespesaDAO->listarTD($id_user);
             $this->view->load('tipoPagamento/inserir', $dados);
@@ -521,7 +537,12 @@ class Controle extends Acao {
                 $ch = $_POST['chave'];
                 $desc = $_POST['descricao'];
                 $tipoDespesa = new TipoDespesa($id_user,$ch,$desc);
-                $this->tipoDespesaDAO->inserirTD($tipoDespesa);
+                $salvar = $this->tipoDespesaDAO->inserirTD($tipoDespesa);
+                if($salvar):
+                    echo Mensagem::dispararSucesso("Tipo Despesa inserida com sucesso!");
+                else:
+                    echo Mensagem::dispararErro("Tipo Despesa não inserida!");
+                endif;
                 $this->listarTD();
                 die();
             }            
@@ -551,9 +572,14 @@ class Controle extends Acao {
             if ($_POST) {
                 $chave = $_POST['chave'];
                 $descricao = $_POST['descricao'];
-                $this->tipoDespesaDAO->alterar($id, $chave, $descricao);
+                $alteraTD = $this->tipoDespesaDAO->alterar($id, $chave, $descricao);
+                if($alteraTD):
+                    echo Mensagem::dispararSucesso("Tipo de Despesa alterada com sucesso!");                    
+                else:
+                    echo Mensagem::dispararErro("Tipo de Despesa não alterada!");
+                endif;
                 $this->listarTD();
-                die();
+                exit;
             }
             $dados = $this->tipoDespesaDAO->buscar($id);
             $this->view->load('tipoDespesa/alterar', $dados);
@@ -568,7 +594,12 @@ class Controle extends Acao {
             $objTP = $this->tipoPagamentoDAO;
             $tipo_despesa = $this->tipoDespesaDAO;
             if ($_POST) {
-                $objTP->alterar($id, 'id_tipo_pagamento', $_POST);
+                $alterar = $objTP->alterar($id, 'id_tipo_pagamento', $_POST);
+                if($alterar):
+                    echo Mensagem::dispararSucesso("Tipo Pagamento alterado com sucesso!");
+                else:
+                    echo Mensagem::dispararErro("Tipo Pagamento não alterado!");
+                endif;
                 $this->listarTP();
                 die();
             }
@@ -623,10 +654,14 @@ class Controle extends Acao {
 
                 $usuario = new Usuario($dados['nome'],$dados['sobrenome'],
                                                     $dados['salario'],$dados['id_orgao_pagador'],
-                                                    $dados['id_status_usuario']);
-                
+                                                    $dados['id_status_usuario']);                
                 $autenticacaoUsuario = new AutenticacaoUsuario($dados['email'],$dados['senha']);
-                $this->usuarioDAO->inserirUsuario($usuario,$autenticacaoUsuario);
+                $salvar = $this->usuarioDAO->inserirUsuario($usuario,$autenticacaoUsuario);
+                if($salvar):
+                    echo Mensagem::dispararSucesso("Usuário inserido com sucesso!");
+                else:
+                    echo Mensagem::dispararErro("Usuário não inserido!");
+                endif;
                 $dados['user'] = $this->usuarioDAO->listar();
 
                 for ($i = 0; $i < count($dados['user']); $i++) {                    
@@ -659,9 +694,11 @@ class Controle extends Acao {
                 $mes_ref = $_SESSION['id_mes_ref'];
                 $_POST['valor_pagamento'] = $this->AjusteReal($_POST['valor_pagamento']);                  
                 $pagamento = new Pagamento($_POST['id_tipo_pagamento'],$_POST['valor_pagamento'],$_POST['data_lancamento'],$_POST['id_usuario'],$_POST['id_status_pagamento'],$_POST['id_mes_referencia'],$_POST['ch_clone']);                
-                $salvar_pag = $this->pagamentoDAO->inserir($pagamento);
+                $salvar_pag = $this->pagamentoDAO->inserir($pagamento);                
                 if ($salvar_pag) {
-                    echo 'Tipo Pagamento incluído com Sucesso!';
+                    echo Mensagem::dispararSucesso("Novo pagamento inserido com sucesso!");
+                }else{
+                    echo Mensagem::dispararErro("Pagamento não inserido!");
                 }
                 $this->listarPagamento();
                 die();
@@ -681,23 +718,29 @@ class Controle extends Acao {
         }
     }
 
-    protected function alterarPagamento($id) {
+    protected function alterarPagamento($id) {        
         $this->iniciaSessao();
         if ($_SESSION['usuario']) {            
             if (isset($id)) {                
                 if($_POST){                    
                     $_POST['valor_pagamento'] = $this->AjusteReal($_POST['valor_pagamento']);                    
-                    $this->pagamentoDAO->alterarPagamento($id,$_POST);                    
+                    $salvar_pag = $this->pagamentoDAO->alterarPagamento($id,$_POST);
+                    if ($salvar_pag):
+                        echo Mensagem::dispararSucesso("Pagamento alterado com sucesso!");                                           
+                    else:
+                    echo Mensagem::dispararErro("Pagamento não alterado!");
+                    endif;  
                     $this->listarPagamento();
                     die();
-                }
+                }                
                 $dados['id_mes_ref'] = $_SESSION['id_mes_ref'];
                 $dados['pagamento'] = $this->pagamentoDAO->buscar($id);
                 $dados['tipo_pagamento'] = $this->tipoPagamentoDAO->listar();
                 $dados['usuario'] = $this->usuarioDAO->listar();
                 $dados['data_lancamento'] = date('Y-m-d');
                 $dados['id_status_pagamento'] = 4;                  
-                $dados['valor_pagamento'] = $this->AjusteReal($_POST['valor_pagamento']);
+                $dados['valor_pagamento'] = @$_POST['valor_pagamento'];
+                
                 $this->view->load('pagamento/editar', $dados);
         }
         } else {
@@ -737,7 +780,7 @@ class Controle extends Acao {
             //var_dump($userDel);die();
             if ($userDel) {       
                 $usuarioAutenticacaoDAO = new AutenticacaoUsuarioDAO();         
-                $usuarioAutenticacaoDAO->excluirUserAutenticacao($id);
+                $usuarioAutenticacaoDAO->excluirUserAutenticacao($id);  
             }
             $dados['user'] = $this->usuarioDAO->listar();
             for ($i = 0; $i < count($dados['user']); $i++) {                
@@ -762,7 +805,12 @@ class Controle extends Acao {
                 if ($alterarUser) {
                     $email = $_POST['email'];
                     $senha = md5($_POST['senha']);
-                    $usuarioAutenticacaoDAO->alterarUserAut($email, $senha, $id);
+                    $alterar = $usuarioAutenticacaoDAO->alterarUserAut($email, $senha, $id);
+                    if($alterar):
+                        echo Mensagem::dispararSucesso("Usuário alterado com sucesso!");
+                    else:
+                        echo Mensagem::dispararErro("Usuário não alterado!");
+                    endif;
                 }                
                 $this->listarUsuario();
                 die();
