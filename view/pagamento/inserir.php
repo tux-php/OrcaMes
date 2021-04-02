@@ -12,12 +12,13 @@
     </head>
     <body>
         <?php
-            include("./menu.php");
+            include("./menu.php");            
         ?>
         <form class="form-horizontal" action="" method="post" >   
             <div class="container-fluid">
                 <div class="panel-info">
                     <div class="panel-heading text-uppercase"><h4>Inserir Pagamento</h4></div>
+                    
                 </div>
             </div>  
 
@@ -31,7 +32,7 @@
                                     <select name="id_mes_referencia" id="" class="form-control">
                                                 <option value="<?= $dados['mes_ref']['id_mes_referencia']; ?>"><?= $dados['mes_ref']['descricao']; ?></option>
                                             </select> 
-                                    </div>
+                                    </div>                                    
                                 </div>
 
 
@@ -71,7 +72,7 @@
                 </div>
                 <div class="col-sm-offset-5 col-sm-10">
                     <a class="btn btn-primary text-uppercase text-center" role="button" href="index.php?action=detalharPagamentoMes&id_mes_referencia=<?= $dados['mes_ref']['id_mes_referencia']; ?>">Voltar</a>                
-                    <input class="btn btn-success text-uppercase text-center" role="button" type="submit" value="Salvar" />
+                    <input class="btn btn-success text-uppercase text-center" role="button" type="submit" value="Salvar" />                    
                 </div>                
             </div>
         </form>

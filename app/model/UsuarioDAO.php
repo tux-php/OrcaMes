@@ -1,7 +1,7 @@
 <?php
 class UsuarioDAO
 {
-    final public function inserirUsuario(Usuario $usuario, AutenticacaoUsuario $userAutenticacao):void {        
+    final public function inserirUsuario(Usuario $usuario, AutenticacaoUsuario $userAutenticacao) {        
         try {            
             $query = "INSERT INTO usuario(nome,sobrenome,salario,id_orgao_pagador,id_status_usuario)
                              VALUES('{$usuario->carregaNome()}',
@@ -12,15 +12,16 @@ class UsuarioDAO
             $conexao = Conexao::pegaConexao();
             $stmt = $conexao->prepare($query);
             $salvar_usuario = $stmt->execute();
-            if ($salvar_usuario == true) {  
+            if ($salvar_usuario) {  
                 $autenticacaoUsuarioDAO = new AutenticacaoUsuarioDAO();
                 $idUltimoUsuario = $this->pegaUltimoUsuarioInserido();
                 $salvaUsuarioAutenticado = $autenticacaoUsuarioDAO->inserirUsuarioAutenticacao($userAutenticacao,$idUltimoUsuario);                
                 if (!$salvaUsuarioAutenticado) {
                     throw new Exception("Houve um erro ao salvar autenticação do usuário!");
                 }
+                return true;
             } else {
-                throw new Exception("Houve uma falha ao salvar usuário!");
+                return false;
             }
         } catch (Exception $e) {
             echo "Não foi possível salvar Usuário. Informe o Admnistrador do Sistema. ".$e->getMessage();

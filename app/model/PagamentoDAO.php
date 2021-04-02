@@ -44,8 +44,8 @@ class PagamentoDAO{
                                 '{$pagamento->carregarClone()}')";                                
                   $conexao = Conexao::pegaConexao();
                   $stmt = $conexao->prepare($query);
-                  $rs = $stmt->execute();
-                  if($rs){
+                  $rs = $stmt->execute();                  
+                  if($rs){                    
                       return TRUE;
                       exit;
                   }              
@@ -114,7 +114,7 @@ class PagamentoDAO{
                     VALOR_PAGAMENTO='{$dados['valor_pagamento']}',
                     DATA_LANCAMENTO='{$dados['data_lancamento']}',
                     ID_STATUS_PAGAMENTO='{$dados['id_status_pagamento']}' 
-                    WHERE id_pagamento='$id'";  
+                    WHERE id_pagamento='$id'";                      
                 $conexao = Conexao::pegaConexao();
                 $stmt = $conexao->prepare($query);      
                 $rs = $stmt->execute();
@@ -123,6 +123,7 @@ class PagamentoDAO{
                 return false;
         } catch (Exception $e) {
             echo "Falha ao alterar Pagamento .".$e->getMessage();
+            exit;
         }
         
     }
