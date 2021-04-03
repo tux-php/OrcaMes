@@ -114,13 +114,13 @@ class Pagamento{
             $dados['id_status_pagamento'] = (int) $npg['id_status_pagamento'];
             $dados['ch_clone'] = 'S';
             $clonar = $pagamentoDAO->clonarPagamento($dados);
-            if ($clonar == false) {
-                throw new Exception('Não foi possível processar a operação!');
-            } else {
-                return true;
-            }
-        } catch (Exception $exc) {
-            echo $exc->getMessage() . '<br>';
+            if($clonar):
+                return TRUE;
+            else:
+                return FALSE;
+            endif;
+        } catch (Exception $e) {
+            echo $e->getMessage();
         }
     }
 

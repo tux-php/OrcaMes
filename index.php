@@ -21,16 +21,8 @@ function modLoad($classe) {
     }
 }
 
-function factoryLoad($classe){
-    $arquivo = "app/factory_method/$classe.php";
-    if(file_exists($arquivo)){
-        require_once ($arquivo);
-    }
-}
-
 spl_autoload_register('appLoad');
 spl_autoload_register('libLoad');
 spl_autoload_register('modLoad');
-spl_autoload_register('factoryLoad');
 
 new Controle();

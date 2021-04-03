@@ -90,8 +90,7 @@ class PagamentoDAO{
      public function validandoMesReferenciaVazio($mes_ref,$id_usuario){
          try {
             $query = "SELECT * FROM pagamentos WHERE id_mes_referencia = $mes_ref 
-                                AND id_usuario = $id_usuario AND d_e_l_e_t_e IS NULL";  
-                                //var_dump($query);die();          
+                                AND id_usuario = $id_usuario AND d_e_l_e_t_e IS NULL";                                  
             $conexao = Conexao::pegaConexao();
             $stmt = $conexao->query($query);                        
             $count = $stmt->rowCount();                        
@@ -244,10 +243,10 @@ class PagamentoDAO{
                 $this->processarClonagem($dados);
                 return true;
             } else {
-                throw new Exception("Mês precedente encontra-se vazio!");
+                throw new Exception("Mês precedente <strong>encontra-se vazio!</strong>");
             }
         } catch (Exception $exc) {
-            echo $exc->getMessage() . '<br>';
+            echo Mensagem::dispararErro($exc->getMessage());
         }
     }
 
