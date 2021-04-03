@@ -78,10 +78,10 @@ class Controle extends Acao {
                 $_SESSION['usuario'] = (int) $usuario;
                 $this->home();
             } else {
-                throw new Exception("Usuário ou Senha estão incorretos.");
+                throw new Exception("<strong>Atenção!</strong> Usuário ou Senha estão incorretos.");
             }
-        } catch (Exception $exc) {
-            echo $exc->getMessage();
+        } catch (Exception $exc) {            
+            echo "<div class='alerta error'>".$exc->getMessage()."</div>";
             $this->view->load('login');
         }
     }
@@ -294,7 +294,7 @@ class Controle extends Acao {
     protected function clonarPagamentoMes() {        
         $this->iniciaSessao();
         if ($_SESSION['usuario']) {
-            try {                                
+            try {                                   
                 $MesClonadoVazio = $this->validarMesEmClonagem();                                
                 if ($MesClonadoVazio == true) :
                     $mes_ant = (int) $this->pegaMesAnterior();
@@ -307,12 +307,12 @@ class Controle extends Acao {
                         echo Mensagem::dispararSucesso("Clonagem efetuada com sucesso!");
                     endif;
                 else:                    
-                    echo Mensagem::dispararErro("Mês já encontra-se clonado!");
+                    echo Mensagem::dispararErro("Mês já <strong>encontra-se clonado!</strong>");
                 endif;
                 $this->listarPagamentoMes();
                 
             } catch (Exception $exc) {
-                echo $exc->getMessage();
+                echo Mensagem::dispararErro($exc->getMessage());
             }   
         } else {
             $this->mataSessao();

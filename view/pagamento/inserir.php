@@ -68,7 +68,7 @@
                         <input type="hidden" name="data_lancamento" value="<?= $dados['data_lancamento']; ?>" />
                         <input type="hidden" name="id_status_pagamento" value="<?= $dados['id_status_pagamento']; ?>" />                
                         <input type="hidden" name="ch_clone" value="<?= $dados['ch_clone']; ?>" />                
-                    </div>
+                    </div>  
                 </div>
                 <div class="col-sm-offset-5 col-sm-10">
                     <a class="btn btn-primary text-uppercase text-center" role="button" href="index.php?action=detalharPagamentoMes&id_mes_referencia=<?= $dados['mes_ref']['id_mes_referencia']; ?>">Voltar</a>                
