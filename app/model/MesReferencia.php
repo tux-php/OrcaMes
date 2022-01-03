@@ -6,8 +6,7 @@ class MesReferencia{
     public function listarMes() {
         try {
             $query = "SELECT * FROM mes_referencia WHERE d_e_l_e_t_e IS NULL
-                           AND id_mes_referencia BETWEEN 277 and 289";   
-                           //var_dump($query);die();                          
+                           AND id_mes_referencia BETWEEN 277 and 289";                              
             //Inserir uma paginação aqui
                     $conexao = Conexao::pegaConexao();
                     $rs = $conexao->query($query);
