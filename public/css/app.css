@@ -1,0 +1,155 @@
+/* Padrão visual do OrcaMes. Toda lista é uma tabela dentro de um .card e segue
+   as regras abaixo sem precisar de classes próprias em cada tela. */
+
+:root {
+    --orca-borda: #e4e7ec;
+    --orca-borda-suave: #eef0f3;
+    --orca-fundo-suave: #f8fafc;
+    --orca-rotulo: #667085;
+    --orca-texto: #1d2939;
+}
+
+body {
+    color: var(--orca-texto);
+}
+
+/* Cartões ------------------------------------------------------------------ */
+
+main .card {
+    border: 1px solid var(--orca-borda);
+    border-radius: .75rem;
+    box-shadow: 0 1px 2px rgba(16, 24, 40, .05) !important;
+    overflow: hidden;
+}
+
+main .card-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: .5rem;
+    padding: .875rem 1.25rem;
+    background: #fff;
+    border-bottom: 1px solid var(--orca-borda);
+}
+
+main .card-header .lista-nota {
+    color: var(--orca-rotulo);
+    font-size: .8125rem;
+}
+
+main .card-footer {
+    padding: 1rem 1.25rem;
+    background: var(--orca-fundo-suave);
+    border-top: 1px solid var(--orca-borda);
+}
+
+/* Listas ------------------------------------------------------------------- */
+
+main .table {
+    margin-bottom: 0;
+    color: var(--orca-texto);
+}
+
+/* Cabeçalho e dados centralizados na mesma coluna; vence text-start/text-end. */
+main .table > :not(caption) > tr > th,
+main .table > :not(caption) > tr > td {
+    padding: .75rem 1rem;
+    text-align: center !important;
+    vertical-align: middle;
+    border-color: var(--orca-borda-suave);
+}
+
+main .table > thead > tr > th {
+    background: var(--orca-fundo-suave);
+    border-bottom: 1px solid var(--orca-borda);
+    color: var(--orca-rotulo);
+    font-size: .75rem;
+    font-weight: 600;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+main .table > tbody > tr > td {
+    font-variant-numeric: tabular-nums;
+}
+
+main .table > tbody > tr:hover > td {
+    background: var(--orca-fundo-suave);
+}
+
+main .table > tbody > tr:last-child > td,
+main .table > tfoot > tr:last-child > td {
+    border-bottom: 0;
+}
+
+main .table > tfoot > tr > td {
+    background: var(--orca-fundo-suave);
+    border-top: 1px solid var(--orca-borda);
+    font-weight: 600;
+}
+
+main .table .lista-vazia > td {
+    padding: 2.25rem 1rem;
+    color: var(--orca-rotulo);
+    background: #fff !important;
+}
+
+main .table .lista-detalhe {
+    color: var(--orca-rotulo);
+    font-size: .8125rem;
+}
+
+main .table .lista-inativa > td {
+    color: #98a2b3;
+}
+
+main .table a {
+    text-decoration: none;
+    font-weight: 500;
+}
+
+main .table a:hover {
+    text-decoration: underline;
+}
+
+/* Ações de cada linha: sempre o mesmo espaçamento, em qualquer lista. */
+main .table .acoes {
+    display: inline-flex;
+    flex-wrap: nowrap;
+    gap: .375rem;
+}
+
+/* Selos de situação -------------------------------------------------------- */
+
+.selo {
+    display: inline-block;
+    padding: .2rem .625rem;
+    border-radius: 999px;
+    font-size: .75rem;
+    font-weight: 600;
+    line-height: 1.4;
+    white-space: nowrap;
+}
+
+.selo + .selo {
+    margin-left: .25rem;
+}
+
+.selo-ok { background: #e7f6ec; color: #0a6b2d; }
+.selo-atencao { background: #fff4d6; color: #8a5a00; }
+.selo-neutro { background: #eef0f3; color: #475467; }
+.selo-info { background: #e6f0fe; color: #1849a9; }
+.selo-destaque { background: #efe9fd; color: #5b3cc4; }
+
+/* Paginação ---------------------------------------------------------------- */
+
+main .card-footer nav .pagination {
+    margin-bottom: 0;
+}
+
+main .card-footer nav p {
+    margin-bottom: 0;
+    color: var(--orca-rotulo);
+}
