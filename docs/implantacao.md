@@ -70,7 +70,10 @@ deve aparecer. Ainda não há usuários; eles vêm da importação.
 Faça no dia da troca, para não perder lançamentos:
 
 1. Pare de usar o sistema antigo.
-2. No servidor antigo, exporte o banco: `mysqldump -u USUARIO -p orcamentos > orcamentos.sql`.
+2. Exporte o banco do sistema antigo pelo phpMyAdmin (aba *Exportar*, formato SQL), que é o
+   formato com que a importação foi testada. Pelo terminal, o equivalente é
+   `mysqldump --complete-insert -u USUARIO -p orcamentos > orcamentos.sql`; sem `--complete-insert`
+   o arquivo sai sem os nomes das colunas e a importação não o lê.
 3. Leve o arquivo para o droplet novo (do seu computador):
    `scp orcamentos.sql root@IP-DO-DROPLET:/root/`
 4. Importe:
