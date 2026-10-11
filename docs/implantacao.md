@@ -39,23 +39,16 @@ cd /opt/orcames
 cp .env.producao.example .env
 ```
 
-Edite o `.env` (`nano .env`):
-
-- `DB_PASSWORD` e `DB_ROOT_PASSWORD`: duas senhas novas e diferentes entre si.
-  Gere cada uma com `openssl rand -base64 24`.
-- Para o primeiro teste, pelo IP e ainda sem domínio:
-
-  ```
-  SERVER_NAME=:80
-  APP_URL=http://IP-DO-DROPLET
-  SESSION_SECURE_COOKIE=false
-  ```
-
-Gere a chave da aplicação e cole o resultado em `APP_KEY=` no `.env`:
+Preencha o `.env` para o primeiro teste, pelo IP e ainda sem domínio. Os comandos abaixo geram as
+duas senhas do banco e a chave da aplicação:
 
 ```sh
+IP=$(curl -4 -s ifconfig.me)
+sed -i "s#^SERVER_NAME=.*#SERVER_NAME=:80#; s#^APP_URL=.*#APP_URL=http://$IP#; s#^SESSION_SECURE_COOKIE=.*#SESSION_SECURE_COOKIE=false#; s#^DB_PASSWORD=.*#DB_PASSWORD=$(openssl rand -hex 16)#; s#^DB_ROOT_PASSWORD=.*#DB_ROOT_PASSWORD=$(openssl rand -hex 16)#" .env
+
 dc build
-dc run --rm --no-deps app php artisan key:generate --show
+sed -i "s#^APP_KEY=.*#APP_KEY=$(dc run --rm --no-deps -T app php artisan key:generate --show --no-ansi 2>/dev/null)#" .env
+grep -c '^APP_KEY=base64:' .env    # deve responder 1
 ```
 
 A `APP_KEY` não pode mudar depois: guarde uma cópia do `.env` em lugar seguro, fora do servidor.
