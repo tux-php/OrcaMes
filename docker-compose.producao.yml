@@ -1,0 +1,45 @@
+# Produção. Uso: docker compose -f docker-compose.producao.yml up -d --build
+# Passo a passo em docs/implantacao.md.
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/producao/Dockerfile
+    restart: unless-stopped
+    env_file: ${ARQUIVO_ENV:-.env}
+    ports:
+      - "${PORTA_HTTP:-80}:80"
+      - "${PORTA_HTTPS:-443}:443"
+      - "${PORTA_HTTPS:-443}:443/udp"
+    volumes:
+      - storage:/app/storage      # comprovantes, sessões e logs
+      - caddy_data:/data          # certificados HTTPS
+      - caddy_config:/config
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: mysql:8.4
+    restart: unless-stopped
+    # Sem "ports": o banco só é alcançado pela aplicação, por dentro do Docker.
+    # Os ajustes de memória deixam o MySQL confortável em um droplet de 2 GB.
+    command: ["--innodb-buffer-pool-size=256M", "--performance-schema=OFF"]
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    volumes:
+      - dbdata:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u root -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  storage:
+  caddy_data:
+  caddy_config:
+  dbdata:

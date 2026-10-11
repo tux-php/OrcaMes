@@ -35,6 +35,11 @@ no primeiro acesso. As regras da importação estão descritas em `app/Importaca
 docker compose exec app php artisan test
 ```
 
+## Produção
+
+O ambiente acima é de desenvolvimento. Para colocar no ar (droplet, HTTPS, importação e backup),
+siga [docs/implantacao.md](docs/implantacao.md).
+
 ## Como o sistema pensa
 
 - **Conta**: o que se paga (ex.: "Escola"). Pertence a uma pessoa e pode ser recorrente.
