@@ -203,12 +203,12 @@ class MesTest extends TestCase
             \App\Models\Categoria::factory()->create(['nome' => sprintf('Categoria %02d', $n)]);
         }
 
-        $this->get('/contas')->assertSee('Conta 20')->assertDontSee('Conta 21')->assertSee('Mostrando');
-        $this->get('/contas?page=2')->assertSee('Conta 21')->assertDontSee('Conta 20');
+        $this->get('/contas')->assertSee('Conta 10')->assertDontSee('Conta 11')->assertSee('Mostrando');
+        $this->get('/contas?page=2')->assertSee('Conta 11')->assertDontSee('Conta 10');
 
         $this->actingAs(Usuario::factory()->admin()->create());
-        $this->get('/categorias')->assertSee('Categoria 20')->assertDontSee('Categoria 21');
-        $this->get('/categorias?page=2')->assertSee('Categoria 25');
+        $this->get('/categorias')->assertSee('Categoria 10')->assertDontSee('Categoria 11');
+        $this->get('/categorias?page=3')->assertSee('Categoria 25');
     }
 
     public function test_contas_podem_ser_filtradas_por_categoria(): void

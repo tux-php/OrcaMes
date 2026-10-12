@@ -13,7 +13,7 @@ class CategoriaController extends Controller
     public function index(): View
     {
         return view('categorias.index', [
-            'categorias' => Categoria::query()->withCount('contas')->orderBy('nome')->paginate(20),
+            'categorias' => Categoria::query()->withCount('contas')->orderBy('nome')->paginate(10),
         ]);
     }
 

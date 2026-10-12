@@ -24,7 +24,7 @@ class ContaController extends Controller
                 ->when($categoria, fn ($query) => $query->where('categoria_id', $categoria->id))
                 ->orderByDesc('ativa')
                 ->orderBy('nome')
-                ->paginate(20)
+                ->paginate(10)
                 ->withQueryString(),
         ]);
     }
