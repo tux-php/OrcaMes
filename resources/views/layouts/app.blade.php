@@ -2,8 +2,14 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>@yield('titulo', 'OrcaMes')</title>
+    <link rel="manifest" href="{{ asset('manifest.json') }}">
+    <meta name="theme-color" content="#0d6efd">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="OrcaMes">
+    <link rel="apple-touch-icon" href="{{ asset('icones/icone-apple-180.png') }}">
+    <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('icones/icone-192.png') }}">
     <link rel="stylesheet" href="{{ asset('vendor/bootstrap/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     @stack('estilos')
@@ -67,5 +73,11 @@
 <script src="{{ asset('js/mascara-reais.js') }}"></script>
 <script src="{{ asset('js/contagem.js') }}"></script>
 @stack('scripts')
+<script>
+    // Torna o site instalável como app; ver public/sw.js.
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js');
+    }
+</script>
 </body>
 </html>

@@ -41,7 +41,7 @@
             ['Sobra hoje', $resumo['sobra'], 'info'],
             ['Sobra prevista', $resumo['sobra_prevista'], 'secondary'],
         ] as [$rotulo, $valor, $cor])
-            <div class="col-6 col-md">
+            <div class="{{ $loop->last ? 'col-12' : 'col-6' }} col-md">
                 <div class="card border-{{ $cor }} h-100">
                     <div class="card-body py-2">
                         <div class="small text-muted">{{ $rotulo }}</div>
@@ -68,7 +68,33 @@
                 <button class="btn btn-sm btn-outline-primary text-nowrap" title="Cria as contas recorrentes e o salário que ainda faltam neste mês, repetindo os últimos valores">Gerar mês</button>
             </form>
         </div>
-        <div class="table-responsive">
+        {{-- No celular cada lançamento é um bloco, com o valor e o botão de pagar à vista. --}}
+        <div class="lancamentos-celular d-md-none">
+            {{-- Os que ainda estão em aberto vêm primeiro, para pagar sem rolar a tela. --}}
+            @forelse ($lancamentos->sortBy(fn ($lancamento) => $lancamento->estaPago()) as $lancamento)
+                <div class="lancamento-celular">
+                    <div class="d-flex justify-content-between align-items-baseline gap-3">
+                        <div class="fw-semibold">{{ $lancamento->conta->nome }}</div>
+                        <div class="fw-semibold text-nowrap">R$ {{ Dinheiro::br($lancamento->valor) }}</div>
+                    </div>
+                    <div class="lista-detalhe">
+                        {{ $lancamento->conta->categoria?->nome ?? 'Sem categoria' }}@if ($admin) · {{ $lancamento->conta->usuario->nome }}@endif
+                        @if ($lancamento->observacao)<div>{{ $lancamento->observacao }}</div>@endif
+                    </div>
+                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mt-2">
+                        @if ($lancamento->estaPago())
+                            <span class="selo selo-ok">Pago em {{ $lancamento->pago_em->format('d/m/Y') }}</span>
+                        @else
+                            <span class="selo selo-atencao">Em aberto</span>
+                        @endif
+                        @include('painel.acoes-lancamento', ['celular' => true])
+                    </div>
+                </div>
+            @empty
+                <div class="lancamento-celular text-center text-muted py-4">Nenhum lançamento neste mês. Use “Gerar mês” ou toque em “Lançar gasto”.</div>
+            @endforelse
+        </div>
+        <div class="table-responsive d-none d-md-block">
             <table class="table">
                 <thead>
                     <tr>
@@ -101,19 +127,7 @@
                                     <span class="selo selo-atencao">Em aberto</span>
                                 @endif
                             </td>
-                            <td class="text-nowrap"><div class="acoes">
-                                <form method="POST" action="{{ route($lancamento->estaPago() ? 'lancamentos.estornar' : 'lancamentos.pagar', $lancamento) }}" class="d-inline">
-                                    @csrf
-                                    @method('PATCH')
-                                    <button class="btn btn-sm {{ $lancamento->estaPago() ? 'btn-outline-secondary' : 'btn-success' }}">{{ $lancamento->estaPago() ? 'Estornar' : 'Pagar' }}</button>
-                                </form>
-                                <a class="btn btn-sm btn-outline-primary" href="{{ route('lancamentos.edit', $lancamento) }}">Editar</a>
-                                <form method="POST" action="{{ route('lancamentos.destroy', $lancamento) }}" class="d-inline" onsubmit="return confirm('Excluir este lançamento?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="btn btn-sm btn-outline-danger">Excluir</button>
-                                </form>
-                            </div></td>
+                            <td class="text-nowrap">@include('painel.acoes-lancamento')</td>
                         </tr>
                     @empty
                         <tr class="lista-vazia"><td colspan="{{ $admin ? 7 : 6 }}">Nenhum lançamento neste mês. Use “Gerar mês” ou inclua abaixo.</td></tr>
@@ -121,7 +135,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="card-footer">
+        <div class="card-footer d-none d-md-block">
             <form method="POST" action="{{ route('lancamentos.store') }}" class="row g-2 align-items-end">
                 @csrf
                 <input type="hidden" name="mes" value="{{ $mes }}">
@@ -219,4 +233,68 @@
             </form>
         </div>
     </div>
+
+    {{-- Lançamento rápido do celular: botão fixo que abre o formulário por cima da tela. --}}
+    <button type="button" class="btn btn-primary botao-lancar d-md-none" data-bs-toggle="offcanvas" data-bs-target="#lancar" aria-controls="lancar">+ Lançar gasto</button>
+
+    <div class="offcanvas offcanvas-bottom folha-lancar" tabindex="-1" id="lancar" aria-labelledby="lancar-titulo"
+        data-abrir="{{ request()->boolean('lancar') || old('origem') === 'rapido' ? '1' : '0' }}">
+        <div class="offcanvas-header">
+            <h2 class="offcanvas-title fs-5" id="lancar-titulo">Lançar gasto em {{ Competencia::rotulo($competencia) }}</h2>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Fechar"></button>
+        </div>
+        <div class="offcanvas-body">
+            @if ($contas->isEmpty())
+                <p class="mb-3">Cadastre uma conta antes de lançar um gasto.</p>
+                <a class="btn btn-primary w-100" href="{{ route('contas.create') }}">Nova conta</a>
+            @else
+                <form method="POST" action="{{ route('lancamentos.store') }}">
+                    @csrf
+                    <input type="hidden" name="mes" value="{{ $mes }}">
+                    <input type="hidden" name="origem" value="rapido">
+                    <div class="mb-3">
+                        <label class="form-label" for="rapido_valor">Valor (R$)</label>
+                        <input class="form-control form-control-lg" id="rapido_valor" name="valor" inputmode="numeric" data-reais autocomplete="off" placeholder="0,00" value="{{ old('origem') === 'rapido' ? old('valor') : '' }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="rapido_conta">Conta</label>
+                        <select class="form-select form-select-lg" id="rapido_conta" name="conta_id" required>
+                            <option value="">Escolha…</option>
+                            @foreach ($contas as $conta)
+                                <option value="{{ $conta->id }}" @selected(old('origem') === 'rapido' && (int) old('conta_id') === $conta->id)>{{ $conta->nome }}@if ($admin) ({{ $conta->usuario->nome }})@endif</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="rapido_observacao">Observação <span class="text-muted">(opcional)</span></label>
+                        <input class="form-control" id="rapido_observacao" name="observacao" maxlength="255" value="{{ old('origem') === 'rapido' ? old('observacao') : '' }}">
+                    </div>
+                    <div class="form-check form-switch mb-3">
+                        <input class="form-check-input" type="checkbox" role="switch" id="rapido_pago" name="pago" value="1" @checked(old('origem') === 'rapido' && old('pago'))>
+                        <label class="form-check-label" for="rapido_pago">Já está pago</label>
+                    </div>
+                    <button class="btn btn-primary btn-lg w-100">Incluir</button>
+                </form>
+            @endif
+        </div>
+    </div>
 @endsection
+
+@push('scripts')
+    <script>
+        (() => {
+            const folha = document.getElementById('lancar');
+
+            folha.addEventListener('shown.bs.offcanvas', () => document.getElementById('rapido_valor')?.focus());
+
+            if (folha.dataset.abrir === '1') {
+                // Tira o "?lancar=1" do endereço para a folha não reabrir depois de salvar.
+                const endereco = new URL(location.href);
+                endereco.searchParams.delete('lancar');
+                history.replaceState(null, '', endereco);
+
+                bootstrap.Offcanvas.getOrCreateInstance(folha).show();
+            }
+        })();
+    </script>
+@endpush

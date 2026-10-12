@@ -248,6 +248,36 @@ class MesTest extends TestCase
         $this->get('/categorias?busca=Viagem')->assertSee('Nenhuma categoria com “Viagem” no nome')->assertSee('Incluir “Viagem”');
     }
 
+    public function test_app_de_celular_instalavel_e_com_lancamento_rapido(): void
+    {
+        $conta = $this->conta(['nome' => 'Mercado']);
+
+        $manifesto = json_decode(file_get_contents(public_path('manifest.json')), true, flags: JSON_THROW_ON_ERROR);
+        $this->assertSame('standalone', $manifesto['display']);
+        foreach ($manifesto['icons'] as $icone) {
+            $this->assertFileExists(public_path($icone['src']));
+        }
+        $this->assertFileExists(public_path('sw.js'));
+        $this->assertFileExists(public_path('offline.html'));
+
+        $this->get('/login')->assertDontSee('id="lancar"', false);
+        $this->get('/?mes=2026-10')
+            ->assertSee('rel="manifest"', false)
+            ->assertSee('Lançar gasto em Outubro/2026')
+            ->assertSee('data-abrir="0"', false);
+        $this->get('/?mes=2026-10&lancar=1')->assertSee('data-abrir="1"', false);
+
+        $this->post('/lancamentos', ['conta_id' => $conta->id, 'mes' => '2026-10', 'valor' => '12,50', 'origem' => 'rapido', 'pago' => '1']);
+        $this->post('/lancamentos', ['conta_id' => $conta->id, 'mes' => '2026-10', 'valor' => '30,00']);
+
+        $this->assertSame(today()->toDateString(), Lancamento::query()->where('valor', 12.5)->sole()->pago_em->toDateString());
+        $this->assertNull(Lancamento::query()->where('valor', 30)->sole()->pago_em);
+
+        // Um erro no lançamento rápido volta com a folha aberta e o que foi digitado.
+        $this->from('/?mes=2026-10')->post('/lancamentos', ['mes' => '2026-10', 'valor' => '9,90', 'origem' => 'rapido']);
+        $this->get('/?mes=2026-10')->assertSee('data-abrir="1"', false);
+    }
+
     public function test_telas_abrem(): void
     {
         Lancamento::factory()->for($this->conta(['dedutivel_ir' => true]))->pago()->create();

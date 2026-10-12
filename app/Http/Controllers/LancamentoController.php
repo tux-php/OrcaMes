@@ -27,6 +27,8 @@ class LancamentoController extends Controller
             'competencia' => Competencia::deTexto($dados['mes'])->toDateString(),
             'valor' => $dados['valor'],
             'lancado_em' => CarbonImmutable::today()->toDateString(),
+            // O lançamento rápido do celular pode registrar um gasto que já foi pago.
+            'pago_em' => $request->boolean('pago') ? CarbonImmutable::today()->toDateString() : null,
             'observacao' => $dados['observacao'] ?? null,
         ]);
 

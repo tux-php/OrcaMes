@@ -143,6 +143,49 @@ main .table .acoes {
 .selo-info { background: #e6f0fe; color: #1849a9; }
 .selo-destaque { background: #efe9fd; color: #5b3cc4; }
 
+/* Celular -------------------------------------------------------------------
+   O painel do mês troca a tabela de lançamentos por blocos e ganha um botão fixo
+   para lançar gasto. A área segura evita a barra de gestos dos aparelhos. */
+
+.lancamento-celular {
+    padding: .875rem 1.25rem;
+    border-bottom: 1px solid var(--orca-borda-suave);
+}
+
+.lancamento-celular:last-child {
+    border-bottom: 0;
+}
+
+.lancamento-celular .acoes {
+    display: inline-flex;
+    gap: .375rem;
+}
+
+.botao-lancar {
+    position: fixed;
+    right: 1rem;
+    bottom: calc(1rem + env(safe-area-inset-bottom));
+    z-index: 1030;
+    padding: .75rem 1.25rem;
+    border-radius: 2rem;
+    font-weight: 600;
+    box-shadow: 0 6px 16px rgba(13, 110, 253, .35);
+}
+
+.folha-lancar {
+    --bs-offcanvas-height: auto;
+    max-height: 90vh;
+    border-radius: 1rem 1rem 0 0;
+    padding-bottom: env(safe-area-inset-bottom);
+}
+
+@media (max-width: 767.98px) {
+    /* Espaço para o botão fixo não cobrir o fim da página. */
+    main.container {
+        padding-bottom: 6rem !important;
+    }
+}
+
 /* Contagem animada (js/contagem.js): dígitos de largura fixa para o valor não tremer. */
 
 .contagem {
