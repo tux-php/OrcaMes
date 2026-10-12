@@ -29,6 +29,15 @@ docker compose exec app php artisan orcames:importar storage/app/private/orcamen
 O comando mostra uma conferência por usuário e as senhas provisórias, que precisam ser trocadas
 no primeiro acesso. As regras da importação estão descritas em `app/Importacao/MapeadorLegado.php`.
 
+O sistema antigo não guardava o salário de cada mês, então o histórico chega sem receitas. Para
+repetir o salário mais recente nos meses anteriores que têm lançamentos (as receitas criadas
+ficam marcadas como "(estimado)"):
+
+```sh
+docker compose exec app php artisan orcames:preencher-salarios            # só mostra
+docker compose exec app php artisan orcames:preencher-salarios --aplicar  # grava
+```
+
 ## Testes
 
 ```sh
