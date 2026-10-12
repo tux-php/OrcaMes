@@ -65,6 +65,7 @@
 
 <script src="{{ asset('vendor/bootstrap/bootstrap.bundle.min.js') }}"></script>
 <script src="{{ asset('js/mascara-reais.js') }}"></script>
+<script src="{{ asset('js/contagem.js') }}"></script>
 @stack('scripts')
 </body>
 </html>

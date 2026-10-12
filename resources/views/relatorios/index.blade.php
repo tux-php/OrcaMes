@@ -54,7 +54,7 @@
                 <div class="card h-100 indicador-principal">
                     <div class="card-body">
                         <div class="indicador-rotulo">Despesas lançadas no ano</div>
-                        <div class="indicador-valor">R$ {{ Dinheiro::br($indicadores['total']) }}</div>
+                        <div class="indicador-valor contagem" data-contagem="{{ $indicadores['total'] }}">R$ {{ Dinheiro::br($indicadores['total']) }}</div>
                         @if ($variacao !== null)
                             <div class="indicador-nota">
                                 <span class="{{ $variacao > 0 ? 'subiu' : 'desceu' }} fw-semibold">{{ $variacao > 0 ? '▲' : '▼' }} {{ number_format(abs($variacao), 1, ',', '.') }}%</span>
@@ -73,7 +73,7 @@
                     <div class="card h-100">
                         <div class="card-body">
                             <div class="indicador-rotulo">{{ $rotulo }}</div>
-                            <div class="indicador-valor">R$ {{ Dinheiro::br($valor) }}</div>
+                            <div class="indicador-valor contagem" data-contagem="{{ $valor }}">R$ {{ Dinheiro::br($valor) }}</div>
                             @if ($nota)<div class="indicador-nota">{{ $nota }}</div>@endif
                         </div>
                     </div>

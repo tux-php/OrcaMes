@@ -143,6 +143,12 @@ main .table .acoes {
 .selo-info { background: #e6f0fe; color: #1849a9; }
 .selo-destaque { background: #efe9fd; color: #5b3cc4; }
 
+/* Contagem animada (js/contagem.js): dígitos de largura fixa para o valor não tremer. */
+
+.contagem {
+    font-variant-numeric: tabular-nums;
+}
+
 /* Paginação ---------------------------------------------------------------- */
 
 main .card-footer nav .pagination {

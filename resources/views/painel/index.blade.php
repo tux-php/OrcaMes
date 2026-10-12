@@ -45,7 +45,7 @@
                 <div class="card border-{{ $cor }} h-100">
                     <div class="card-body py-2">
                         <div class="small text-muted">{{ $rotulo }}</div>
-                        <div class="fs-5 fw-semibold @if($valor < 0) text-danger @endif">R$ {{ Dinheiro::br($valor) }}</div>
+                        <div class="fs-5 fw-semibold contagem @if($valor < 0) text-danger @endif" data-contagem="{{ $valor }}">R$ {{ Dinheiro::br($valor) }}</div>
                     </div>
                 </div>
             </div>

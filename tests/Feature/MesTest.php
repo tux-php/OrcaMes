@@ -252,7 +252,8 @@ class MesTest extends TestCase
     {
         Lancamento::factory()->for($this->conta(['dedutivel_ir' => true]))->pago()->create();
 
-        $this->get('/?mes=2026-10')->assertOk()->assertSee('Outubro/2026')->assertSee('data-reais')->assertSee('js/mascara-reais.js');
+        $this->get('/?mes=2026-10')->assertOk()->assertSee('Outubro/2026')->assertSee('data-reais')->assertSee('js/mascara-reais.js')
+            ->assertSee('data-contagem')->assertSee('js/contagem.js');
         $this->get('/contas')->assertOk();
         $this->get('/contas/create')->assertOk();
         $this->get('/relatorio?ano=2026')->assertOk()->assertSee('Painel de 2026')->assertSee('grafico-meses');
