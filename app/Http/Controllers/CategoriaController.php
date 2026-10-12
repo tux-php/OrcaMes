@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Categoria;
+use App\Support\NomePadrao;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -19,6 +20,8 @@ class CategoriaController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
+        $request->merge(['nome' => NomePadrao::aoDigitar($request->input('nome'))]);
+
         Categoria::create($request->validate([
             'nome' => ['required', 'string', 'max:255', 'unique:categorias,nome'],
         ]));
@@ -28,6 +31,8 @@ class CategoriaController extends Controller
 
     public function update(Request $request, Categoria $categoria): RedirectResponse
     {
+        $request->merge(['nome' => NomePadrao::aoDigitar($request->input('nome'))]);
+
         $categoria->update($request->validate([
             'nome' => ['required', 'string', 'max:255', Rule::unique('categorias', 'nome')->ignore($categoria)],
         ]));

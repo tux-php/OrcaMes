@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Categoria;
 use App\Models\Conta;
 use App\Models\Usuario;
+use App\Support\NomePadrao;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -77,6 +78,8 @@ class ContaController extends Controller
      */
     private function validar(Request $request): array
     {
+        $request->merge(['nome' => NomePadrao::aoDigitar($request->input('nome'))]);
+
         $dados = $request->validate([
             'nome' => ['required', 'string', 'max:255'],
             'categoria_id' => ['nullable', 'integer', 'exists:categorias,id'],
