@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Categoria;
+use App\Support\Busca;
 use App\Support\NomePadrao;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -11,10 +12,18 @@ use Illuminate\View\View;
 
 class CategoriaController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
+        $busca = $request->string('busca')->trim()->toString();
+
         return view('categorias.index', [
-            'categorias' => Categoria::query()->withCount('contas')->orderBy('nome')->paginate(10),
+            'busca' => $busca,
+            'categorias' => Categoria::query()
+                ->withCount('contas')
+                ->when($busca !== '', fn ($query) => Busca::contendo($query, 'nome', $busca))
+                ->orderBy('nome')
+                ->paginate(10)
+                ->withQueryString(),
         ]);
     }
 

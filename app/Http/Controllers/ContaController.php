@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Categoria;
 use App\Models\Conta;
 use App\Models\Usuario;
+use App\Support\Busca;
 use App\Support\NomePadrao;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -15,14 +16,17 @@ class ContaController extends Controller
     public function index(Request $request): View
     {
         $categoria = Categoria::query()->find($request->integer('categoria'));
+        $busca = $request->string('busca')->trim()->toString();
 
         return view('contas.index', [
             'categoriaFiltrada' => $categoria,
+            'busca' => $busca,
             'contas' => Conta::query()
                 ->with('categoria', 'usuario')
                 ->withCount('lancamentos')
                 ->dosUsuarios($this->donosVisiveis($request))
                 ->when($categoria, fn ($query) => $query->where('categoria_id', $categoria->id))
+                ->when($busca !== '', fn ($query) => Busca::contendo($query, 'nome', $busca))
                 ->orderByDesc('ativa')
                 ->orderBy('nome')
                 ->paginate(10)
@@ -32,7 +36,10 @@ class ContaController extends Controller
 
     public function create(Request $request): View
     {
-        return view('contas.form', $this->dadosDoFormulario($request, new Conta(['recorrente' => true, 'ativa' => true])));
+        // A busca da lista manda o nome procurado quando não encontra a conta.
+        $conta = new Conta(['nome' => $request->string('nome')->trim()->toString() ?: null, 'recorrente' => true, 'ativa' => true]);
+
+        return view('contas.form', $this->dadosDoFormulario($request, $conta));
     }
 
     public function store(Request $request): RedirectResponse

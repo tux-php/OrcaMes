@@ -224,6 +224,30 @@ class MesTest extends TestCase
         $this->get('/categorias')->assertSee('1 conta')->assertSee('contas?categoria='.$casa->id, false);
     }
 
+    public function test_listas_de_contas_e_categorias_tem_busca_pelo_nome(): void
+    {
+        $casa = \App\Models\Categoria::factory()->create(['nome' => 'Casa']);
+        \App\Models\Categoria::factory()->create(['nome' => 'Lazer']);
+        $this->conta(['nome' => 'Aluguel', 'categoria_id' => $casa->id]);
+        $this->conta(['nome' => 'Aluguel Garagem']);
+        $this->conta(['nome' => 'Academia']);
+        $this->conta(['nome' => 'Cartao_BB']);
+        $this->conta(['nome' => 'CartaoXBB']);
+
+        $this->get('/contas?busca=alug')->assertSee('Aluguel Garagem')->assertDontSee('Academia')->assertSee('Ver todas');
+        $this->get('/contas?busca=alug&categoria='.$casa->id)->assertSee('Aluguel')->assertDontSee('Aluguel Garagem');
+        $this->get('/contas?busca=o_b')->assertSee('Cartao_BB')->assertDontSee('CartaoXBB');
+        $this->get('/contas?busca=%25')->assertSee('Nenhuma conta com “%” no nome');
+        $this->get('/contas?busca=Netflix')
+            ->assertSee('Nenhuma conta com “Netflix” no nome')
+            ->assertSee('contas/create?nome=Netflix', false);
+        $this->get('/contas/create?nome=Netflix')->assertSee('value="Netflix"', false);
+
+        $this->actingAs(Usuario::factory()->admin()->create());
+        $this->get('/categorias?busca=cas')->assertSee('Casa')->assertDontSee('Lazer')->assertSee('Ver todas');
+        $this->get('/categorias?busca=Viagem')->assertSee('Nenhuma categoria com “Viagem” no nome')->assertSee('Incluir “Viagem”');
+    }
+
     public function test_telas_abrem(): void
     {
         Lancamento::factory()->for($this->conta(['dedutivel_ir' => true]))->pago()->create();

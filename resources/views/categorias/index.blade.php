@@ -16,8 +16,24 @@
         </div>
     </form>
 
+    <form method="GET" action="{{ route('categorias.index') }}" class="row g-2 mb-3" role="search">
+        <div class="col-sm-6 col-md-4">
+            <input class="form-control" type="search" name="busca" maxlength="255" value="{{ $busca }}" placeholder="Buscar categoria pelo nome" aria-label="Buscar categoria pelo nome">
+        </div>
+        <div class="col-auto">
+            <button class="btn btn-outline-primary">Buscar</button>
+        </div>
+    </form>
+
+    @if ($busca !== '')
+        <p class="mb-3">
+            Mostrando só as categorias com <strong>{{ $busca }}</strong> no nome.
+            <a href="{{ route('categorias.index') }}">Ver todas</a>
+        </p>
+    @endif
+
     <div class="card">
-        <div class="card-header"><strong>Todas as categorias</strong><span class="lista-nota">{{ $categorias->total() }} {{ $categorias->total() === 1 ? 'categoria' : 'categorias' }}</span></div>
+        <div class="card-header"><strong>{{ $busca !== '' ? 'Resultado da busca' : 'Todas as categorias' }}</strong><span class="lista-nota">{{ $categorias->total() }} {{ $categorias->total() === 1 ? 'categoria' : 'categorias' }}</span></div>
         <div class="table-responsive">
             <table class="table">
                 <thead>
@@ -52,7 +68,18 @@
                             </div></td>
                         </tr>
                     @empty
-                        <tr class="lista-vazia"><td colspan="3">Nenhuma categoria cadastrada.</td></tr>
+                        <tr class="lista-vazia"><td colspan="3">
+                            @if ($busca !== '')
+                                Nenhuma categoria com “{{ $busca }}” no nome.
+                                <form method="POST" action="{{ route('categorias.store') }}" class="d-inline">
+                                    @csrf
+                                    <input type="hidden" name="nome" value="{{ $busca }}">
+                                    <button class="btn btn-link p-0 align-baseline">Incluir “{{ $busca }}”</button>
+                                </form>
+                            @else
+                                Nenhuma categoria cadastrada.
+                            @endif
+                        </td></tr>
                     @endforelse
                 </tbody>
             </table>
