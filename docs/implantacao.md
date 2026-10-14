@@ -35,7 +35,7 @@ curl -fsSL https://get.docker.com | sh
 ## 3. Baixar o projeto e configurar
 
 ```sh
-git clone -b laravel https://github.com/tux-php/OrcaMes.git /opt/orcames
+git clone https://github.com/tux-php/OrcaMes.git /opt/orcames
 cd /opt/orcames
 cp .env.producao.example .env
 ```
