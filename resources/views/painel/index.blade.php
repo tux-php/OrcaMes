@@ -18,6 +18,7 @@
             <a class="btn btn-outline-secondary" href="{{ route('painel', ['mes' => $competencia->subMonth()->format('Y-m')] + $filtro) }}" aria-label="Mês anterior">&laquo;</a>
             <h1 class="h4 mb-0">{{ Competencia::rotulo($competencia) }}</h1>
             <a class="btn btn-outline-secondary" href="{{ route('painel', ['mes' => $competencia->addMonth()->format('Y-m')] + $filtro) }}" aria-label="Próximo mês">&raquo;</a>
+            <a class="btn btn-outline-secondary" href="{{ route('relatorio.pagamentos', ['de' => $mes, 'ate' => $mes] + $filtro) }}" title="Extrato de pagamentos do mês em PDF">PDF</a>
         </div>
 
         @if ($admin)

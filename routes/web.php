@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\ContaController;
+use App\Http\Controllers\ExtratoController;
 use App\Http\Controllers\ImpostoRendaController;
 use App\Http\Controllers\LancamentoController;
 use App\Http\Controllers\PainelController;
@@ -25,6 +26,7 @@ Route::middleware(['auth', 'acesso'])->group(function () {
 
     Route::get('/', [PainelController::class, 'index'])->name('painel');
     Route::get('/relatorio', [RelatorioController::class, 'index'])->name('relatorio');
+    Route::get('/relatorio/pagamentos', [ExtratoController::class, 'pagamentos'])->name('relatorio.pagamentos');
 
     Route::post('/meses/gerar', [LancamentoController::class, 'gerar'])->name('meses.gerar');
 

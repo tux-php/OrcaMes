@@ -7,6 +7,8 @@
     $filtro = $filtroUsuario ? ['usuario' => $filtroUsuario] : [];
     $colunas = ['receitas' => 'Receitas', 'pago' => 'Pago', 'aberto' => 'Em aberto', 'sobra_prevista' => 'Sobra prevista'];
     $variacao = $indicadores['variacao'];
+    $hoje = now();
+    $extratoAte = $ano === $hoje->year ? $hoje->format('Y-m') : "{$ano}-12";
 @endphp
 
 @section('titulo', "Painel de {$ano} — OrcaMes")
@@ -44,6 +46,32 @@
                 </select>
             </form>
         @endcan
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="GET" action="{{ route('relatorio.pagamentos') }}" class="row g-2 align-items-end">
+                @if ($filtroUsuario)<input type="hidden" name="usuario" value="{{ $filtroUsuario }}">@endif
+                <div class="col-12 col-md">
+                    <div class="grafico-titulo">Extrato de pagamentos em PDF</div>
+                    <div class="grafico-nota">O que foi pago e o que está em aberto, pelo mês de referência</div>
+                </div>
+                <div class="col-6 col-md-auto">
+                    <label class="form-label small mb-1" for="extrato-de">De</label>
+                    <input class="form-control @error('de') is-invalid @enderror" type="month" id="extrato-de" name="de" value="{{ old('de', "{$ano}-01") }}" required>
+                </div>
+                <div class="col-6 col-md-auto">
+                    <label class="form-label small mb-1" for="extrato-ate">Até</label>
+                    <input class="form-control @error('ate') is-invalid @enderror" type="month" id="extrato-ate" name="ate" value="{{ old('ate', $extratoAte) }}" required>
+                </div>
+                <div class="col-12 col-md-auto">
+                    <button class="btn btn-primary w-100" type="submit">Baixar PDF</button>
+                </div>
+                @if ($errors->has('de') || $errors->has('ate'))
+                    <div class="col-12 text-danger small">{{ $errors->first('ate') ?: $errors->first('de') }}</div>
+                @endif
+            </form>
+        </div>
     </div>
 
     @if ($indicadores['total'] <= 0)
