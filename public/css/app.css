@@ -202,3 +202,27 @@ main .card-footer nav p {
     margin-bottom: 0;
     color: var(--orca-rotulo);
 }
+
+/* Busca em listas (js/busca-select.js) -------------------------------------- */
+
+.busca-select {
+    position: relative;
+}
+
+.busca-select .dropdown-menu {
+    position: fixed;
+    z-index: 1060;
+    overflow-y: auto;
+    box-shadow: 0 8px 24px rgba(16, 24, 40, .12);
+}
+
+.busca-select .dropdown-item {
+    white-space: normal;
+}
+
+/* Na folha do celular a lista empurra o conteúdo em vez de ficar por cima e ser cortada. */
+.offcanvas .busca-select .dropdown-menu {
+    position: static;
+    width: 100%;
+    max-height: 40vh;
+}

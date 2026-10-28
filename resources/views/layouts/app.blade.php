@@ -72,6 +72,7 @@
 <script src="{{ asset('vendor/bootstrap/bootstrap.bundle.min.js') }}"></script>
 <script src="{{ asset('js/mascara-reais.js') }}"></script>
 <script src="{{ asset('js/contagem.js') }}"></script>
+<script src="{{ asset('js/busca-select.js') }}"></script>
 @stack('scripts')
 <script>
     // Torna o site instalável como app; ver public/sw.js.

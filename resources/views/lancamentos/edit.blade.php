@@ -13,7 +13,7 @@
                 @method('PUT')
                 <div class="mb-3">
                     <label class="form-label" for="conta_id">Conta</label>
-                    <select class="form-select" id="conta_id" name="conta_id" required>
+                    <select class="form-select" id="conta_id" name="conta_id" required data-busca>
                         @foreach ($contas as $conta)
                             <option value="{{ $conta->id }}" @selected((int) old('conta_id', $lancamento->conta_id) === $conta->id)>{{ $conta->nome }}</option>
                         @endforeach

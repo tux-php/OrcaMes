@@ -142,7 +142,7 @@
                 <input type="hidden" name="mes" value="{{ $mes }}">
                 <div class="col-md-4">
                     <label class="form-label small mb-1" for="conta_id">Conta</label>
-                    <select class="form-select" id="conta_id" name="conta_id" required>
+                    <select class="form-select" id="conta_id" name="conta_id" required data-busca>
                         <option value="">Escolha…</option>
                         @foreach ($contas as $conta)
                             <option value="{{ $conta->id }}" @selected((int) old('conta_id') === $conta->id)>{{ $conta->nome }}@if ($admin) ({{ $conta->usuario->nome }})@endif</option>
@@ -259,7 +259,7 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label" for="rapido_conta">Conta</label>
-                        <select class="form-select form-select-lg" id="rapido_conta" name="conta_id" required>
+                        <select class="form-select form-select-lg" id="rapido_conta" name="conta_id" required data-busca>
                             <option value="">Escolha…</option>
                             @foreach ($contas as $conta)
                                 <option value="{{ $conta->id }}" @selected(old('origem') === 'rapido' && (int) old('conta_id') === $conta->id)>{{ $conta->nome }}@if ($admin) ({{ $conta->usuario->nome }})@endif</option>
