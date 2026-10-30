@@ -1,7 +1,7 @@
 // Service worker do OrcaMes. Existe para o app ser instalável e para mostrar um aviso
 // quando o celular está sem internet. De propósito não guarda páginas nem dados: tudo
 // o que aparece vem sempre do servidor, então os valores nunca ficam desatualizados.
-const CACHE = 'orcames-sem-conexao-v1';
+const CACHE = 'orcames-sem-conexao-v2';
 const PAGINA_SEM_CONEXAO = '/offline.html';
 
 self.addEventListener('install', (evento) => {

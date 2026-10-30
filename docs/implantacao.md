@@ -136,6 +136,10 @@ orca exec -T app tar -xzf - -C /app/storage/app < /var/backups/orcames/arquivos_
 
 ## 8. Publicar uma versão nova
 
+A versão exibida na tela de login fica em `versao`, no `config/app.php`. Atualize-a no commit da
+novidade: funcionalidade nova sobe o número do meio (2.8.0 → 2.9.0) e correção sobe o último
+(2.8.0 → 2.8.1).
+
 ```sh
 cd /opt/orcames
 scripts/backup.sh

@@ -7,10 +7,104 @@
     --orca-fundo-suave: #f8fafc;
     --orca-rotulo: #667085;
     --orca-texto: #1d2939;
+
+    /* Cores da marca, as mesmas do logotipo. */
+    --orca-marinho: #0b2545;
+    --orca-azul: #1e40af;
+    --orca-azul-escuro: #1a3798;
+    --orca-oceano: #0d8ac4;
+    --orca-oceano-escuro: #0b78ab;
+    --orca-ceu: #7dd3fc;
+    --orca-foco: rgba(30, 64, 175, .25);
+
+    --bs-primary: #1e40af;
+    --bs-primary-rgb: 30, 64, 175;
+    --bs-link-color: #1e40af;
+    --bs-link-color-rgb: 30, 64, 175;
+    --bs-link-hover-color: #1a3798;
+    --bs-link-hover-color-rgb: 26, 55, 152;
 }
 
 body {
     color: var(--orca-texto);
+}
+
+/* Marca: o Bootstrap traz o azul dele fixo nestes componentes ------------------ */
+
+.barra-topo {
+    --bs-navbar-color: rgba(255, 255, 255, .85);
+    --bs-navbar-hover-color: #fff;
+    background: linear-gradient(90deg, var(--orca-marinho), var(--orca-azul) 60%, var(--orca-oceano-escuro));
+}
+
+.barra-topo .navbar-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    font-weight: 700;
+    letter-spacing: -.02em;
+}
+
+.barra-topo .navbar-brand span {
+    color: var(--orca-ceu);
+}
+
+.btn-primary {
+    --bs-btn-border-color: transparent;
+    --bs-btn-hover-border-color: transparent;
+    --bs-btn-active-border-color: transparent;
+    --bs-btn-disabled-border-color: transparent;
+    --bs-btn-bg: var(--orca-azul);
+    --bs-btn-hover-bg: var(--orca-azul-escuro);
+    --bs-btn-active-bg: var(--orca-azul-escuro);
+    --bs-btn-disabled-bg: var(--orca-azul);
+    --bs-btn-focus-shadow-rgb: 30, 64, 175;
+    background-image: linear-gradient(90deg, var(--orca-azul), var(--orca-oceano));
+    background-origin: border-box;
+}
+
+.btn-primary:hover,
+.btn-primary:active,
+.btn-primary:focus-visible {
+    background-image: linear-gradient(90deg, var(--orca-azul-escuro), var(--orca-oceano-escuro));
+}
+
+.btn-outline-primary {
+    --bs-btn-color: var(--orca-azul);
+    --bs-btn-border-color: var(--orca-azul);
+    --bs-btn-hover-bg: var(--orca-azul);
+    --bs-btn-hover-border-color: var(--orca-azul);
+    --bs-btn-active-bg: var(--orca-azul);
+    --bs-btn-active-border-color: var(--orca-azul);
+    --bs-btn-disabled-color: var(--orca-azul);
+    --bs-btn-disabled-border-color: var(--orca-azul);
+    --bs-btn-focus-shadow-rgb: 30, 64, 175;
+}
+
+.pagination {
+    --bs-pagination-active-bg: var(--orca-azul);
+    --bs-pagination-active-border-color: var(--orca-azul);
+    --bs-pagination-focus-box-shadow: 0 0 0 .25rem var(--orca-foco);
+}
+
+.dropdown-menu {
+    --bs-dropdown-link-active-bg: var(--orca-azul);
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--orca-oceano);
+    box-shadow: 0 0 0 .25rem var(--orca-foco);
+}
+
+.form-check-input:focus {
+    border-color: var(--orca-oceano);
+    box-shadow: 0 0 0 .25rem var(--orca-foco);
+}
+
+.form-check-input:checked {
+    background-color: var(--orca-azul);
+    border-color: var(--orca-azul);
 }
 
 /* Cartões ------------------------------------------------------------------ */
@@ -169,7 +263,7 @@ main .table .acoes {
     padding: .75rem 1.25rem;
     border-radius: 2rem;
     font-weight: 600;
-    box-shadow: 0 6px 16px rgba(13, 110, 253, .35);
+    box-shadow: 0 6px 16px rgba(30, 64, 175, .35);
 }
 
 .folha-lancar {
@@ -184,6 +278,74 @@ main .table .acoes {
     main.container {
         padding-bottom: 6rem !important;
     }
+}
+
+/* Tela de login ------------------------------------------------------------- */
+
+.tela-login {
+    background: linear-gradient(150deg, var(--orca-marinho) 0%, var(--orca-azul) 55%, #0d9bd8 100%) fixed;
+}
+
+.tela-login main.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100dvh;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem !important;
+}
+
+.tela-login main > .alert,
+.login-coluna {
+    width: 100%;
+    max-width: 24rem;
+}
+
+.tela-login main .card {
+    border: 0;
+    border-radius: 1rem;
+    box-shadow: 0 20px 48px rgba(11, 37, 69, .4) !important;
+}
+
+.tela-login main .card-body {
+    padding: 2rem;
+}
+
+.login-marca {
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.login-nome {
+    margin: .625rem 0 0;
+    color: var(--orca-marinho);
+    font-size: 1.875rem;
+    font-weight: 700;
+    letter-spacing: -.02em;
+}
+
+.login-nome span {
+    color: var(--orca-oceano);
+}
+
+.login-lema {
+    margin: 0;
+    color: var(--orca-rotulo);
+    font-size: .875rem;
+}
+
+.login-entrar {
+    padding-block: .625rem;
+    font-weight: 600;
+}
+
+.login-versao {
+    margin: .75rem .25rem 0;
+    color: #e0f2fe;
+    font-size: .8125rem;
+    font-style: italic;
+    text-align: right;
 }
 
 /* Contagem animada (js/contagem.js): dígitos de largura fixa para o valor não tremer. */

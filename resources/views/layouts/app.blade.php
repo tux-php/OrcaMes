@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>@yield('titulo', 'OrcaMes')</title>
     <link rel="manifest" href="{{ asset('manifest.json') }}">
-    <meta name="theme-color" content="#0d6efd">
+    <meta name="theme-color" content="#0b2545">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="OrcaMes">
     <link rel="apple-touch-icon" href="{{ asset('icones/icone-apple-180.png') }}">
@@ -14,11 +14,14 @@
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     @stack('estilos')
 </head>
-<body class="bg-light">
+<body class="@yield('classe_corpo', 'bg-light')">
 @auth
-    <nav class="navbar navbar-expand-md navbar-dark bg-primary mb-4">
+    <nav class="navbar navbar-expand-md navbar-dark barra-topo mb-4">
         <div class="container">
-            <a class="navbar-brand" href="{{ route('painel') }}">OrcaMes</a>
+            <a class="navbar-brand" href="{{ route('painel') }}">
+                <img src="{{ asset('imagens/logo-orcames.svg') }}" alt="" width="32" height="32">
+                <b class="fw-bold">Orca<span>Mes</span></b>
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu" aria-controls="menu" aria-expanded="false" aria-label="Abrir menu">
                 <span class="navbar-toggler-icon"></span>
             </button>

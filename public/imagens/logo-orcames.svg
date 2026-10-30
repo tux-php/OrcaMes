@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Logotipo do OrcaMes">
+    <defs>
+        <linearGradient id="oceano" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#2dd4bf"/>
+            <stop offset=".55" stop-color="#0d9bd8"/>
+            <stop offset="1" stop-color="#1d4ed8"/>
+        </linearGradient>
+        <clipPath id="moeda"><circle cx="100" cy="100" r="96"/></clipPath>
+    </defs>
+
+    <!-- Moeda: o orçamento do mês. -->
+    <circle cx="100" cy="100" r="96" fill="url(#oceano)"/>
+    <circle cx="100" cy="100" r="84" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="3"/>
+
+    <!-- Orca saltando. -->
+    <g transform="rotate(-24 100 100) translate(0 2)">
+        <path fill="#0b2545" d="M112 76C107 58 100 42 88 28c1 19-2 37-9 53z"/>
+        <path fill="#0b2545" d="M180 101c-7-15-30-27-61-28-30-1-58 11-80 26-4 2-8 3-12 2-6-4-14-6-23-5 4 7 9 12 15 15-4 6-6 13-5 21 8-3 15-8 20-14 7 2 14 2 21 1 16 8 38 15 62 13 28-2 53-13 63-31z"/>
+        <path fill="#fff" d="M178 104c-14 9-34 12-56 10-14-1-27-4-37-1 15 9 36 14 55 12 19-2 32-10 38-21z"/>
+        <path fill="#0b2545" d="M131 120c-3 11-9 21-20 28 12 2 25-3 31-13 3-5 4-12 3-18z"/>
+        <ellipse cx="146" cy="88" rx="10" ry="5" transform="rotate(14 146 88)" fill="#fff"/>
+        <path fill="#fff" fill-opacity=".85" d="M73 85c-7 3-13 7-19 11 8 2 18 1 28-4-4-2-7-4-9-7z"/>
+    </g>
+
+    <!-- Onda. -->
+    <g clip-path="url(#moeda)">
+        <path fill="#bae6fd" d="M0 150c17 10 33 10 50 0s33-10 50 0 33 10 50 0 33-10 50 0v50H0z"/>
+        <path fill="#1e40af" d="M0 162c17-9 33-9 50 0s33 9 50 0 33-9 50 0 33 9 50 0v38H0z"/>
+    </g>
+</svg>
