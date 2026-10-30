@@ -16,7 +16,7 @@ return [
     'name' => env('APP_NAME', 'Laravel'),
 
     // Versão exibida na tela de login; ver docs/implantacao.md.
-    'versao' => '2.8.0',
+    'versao' => '2.8.1',
 
     /*
     |--------------------------------------------------------------------------

@@ -1,3 +1,7 @@
+@php
+    // O servidor não define Cache-Control: sem isto, o navegador segue usando a cópia antiga depois de uma publicação.
+    $comVersao = fn (string $arquivo) => asset($arquivo).'?v='.filemtime(public_path($arquivo));
+@endphp
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -11,7 +15,7 @@
     <link rel="apple-touch-icon" href="{{ asset('icones/icone-apple-180.png') }}">
     <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('icones/icone-192.png') }}">
     <link rel="stylesheet" href="{{ asset('vendor/bootstrap/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <link rel="stylesheet" href="{{ $comVersao('css/app.css') }}">
     @stack('estilos')
 </head>
 <body class="@yield('classe_corpo', 'bg-light')">
@@ -73,9 +77,9 @@
 </main>
 
 <script src="{{ asset('vendor/bootstrap/bootstrap.bundle.min.js') }}"></script>
-<script src="{{ asset('js/mascara-reais.js') }}"></script>
-<script src="{{ asset('js/contagem.js') }}"></script>
-<script src="{{ asset('js/busca-select.js') }}"></script>
+<script src="{{ $comVersao('js/mascara-reais.js') }}"></script>
+<script src="{{ $comVersao('js/contagem.js') }}"></script>
+<script src="{{ $comVersao('js/busca-select.js') }}"></script>
 @stack('scripts')
 <script>
     // Torna o site instalável como app; ver public/sw.js.
